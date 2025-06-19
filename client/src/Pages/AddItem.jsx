@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
 import { app } from '../firebase';
 import { useSelector } from 'react-redux';
 import { getStorage, uploadBytesResumable, ref, getDownloadURL } from 'firebase/storage';
-import './css/addpet.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function AddItem() {
   const [imagePercent, setImagePercent] = useState(0);
@@ -19,28 +19,20 @@ export default function AddItem() {
 
   const [formData, setFormData] = useState({
     userId: currentUser._id,
-    petname: "",
-    species: "",
-    breed: "",
-    age: "",
-    gender: "",
-    color: "",
-    weight: "",
+    Name: "",
+    date: "",
+    Description: "",
+    Title: "",
     profilePicture: "",
     alternateProfilePicture: "",
-    price: ""
   });
 
   useEffect(() => {
-    if (image1) {
-      handleFileUpload(image1, 'profilePicture');
-    }
+    if (image1) handleFileUpload(image1, 'profilePicture');
   }, [image1]);
 
   useEffect(() => {
-    if (image2) {
-      handleFileUpload(image2, 'alternateProfilePicture');
-    }
+    if (image2) handleFileUpload(image2, 'alternateProfilePicture');
   }, [image2]);
 
   const handleFileUpload = async (image, field) => {
@@ -55,28 +47,20 @@ export default function AddItem() {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setImagePercent(Math.round(progress));
       },
-      (error) => {
+      () => {
         setImageError(true);
         setError('Image upload failed');
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setFormData((prev) => ({
-            ...prev,
-            [field]: downloadURL
-          }));
+          setFormData((prev) => ({ ...prev, [field]: downloadURL }));
         });
       }
     );
   };
 
-  const handleImage1Click = () => {
-    fileRef1.current.click();
-  };
-
-  const handleImage2Click = () => {
-    fileRef2.current.click();
-  };
+  const handleImage1Click = () => fileRef1.current.click();
+  const handleImage2Click = () => fileRef2.current.click();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,9 +68,7 @@ export default function AddItem() {
     try {
       const res = await fetch('/api/auth/store', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
@@ -97,58 +79,93 @@ export default function AddItem() {
 
       alert('Item added successfully');
       navigate('/items');
-    } catch (error) {
+    } catch {
       setError('Something went wrong!');
     }
   };
 
   return (
-    <div className="add-pet-container">
-      <h1>Add Pet</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="text" placeholder='Pet Name' onChange={(e) => setFormData({ ...formData, petname: e.target.value })} />
-        <input type="text" placeholder='Species' onChange={(e) => setFormData({ ...formData, species: e.target.value })} />
-        <input type="text" placeholder='Breed' onChange={(e) => setFormData({ ...formData, breed: e.target.value })} />
-        <input type="text" placeholder='Age' onChange={(e) => setFormData({ ...formData, age: e.target.value })} />
-        <input type="text" placeholder='Gender' onChange={(e) => setFormData({ ...formData, gender: e.target.value })} />
-        <input type="text" placeholder='Color' onChange={(e) => setFormData({ ...formData, color: e.target.value })} />
-        <input type="text" placeholder='Weight' onChange={(e) => setFormData({ ...formData, weight: e.target.value })} />
-        <input type="text" placeholder='Price' onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
-
-        <input type='file' ref={fileRef1} id='profilePicture' hidden accept='image/*' onChange={(e) => setImage1(e.target.files[0])} />
-        <input type='file' ref={fileRef2} id='alternateProfilePicture' hidden accept='image/*' onChange={(e) => setImage2(e.target.files[0])} />
-
-        <div>
-          <button className="upload-button" type="button" onClick={handleImage1Click}>
-            Upload Profile Picture
-          </button>
-          <button className="upload-button" type="button" onClick={handleImage2Click}>
-            Upload Alternate Profile Picture
-          </button>
+    <div className="container mt-5">
+      <div className="card shadow-lg">
+        <div className="card-header bg-primary text-white">
+          <h3 className="mb-0">Add Product Information</h3>
         </div>
+        <div className="card-body">
+          <form onSubmit={handleSubmit}>
+            <div className="row g-3">
+              <div className="col-md-6">
+                <input className="form-control" type="text" placeholder="Product Name" onChange={(e) => setFormData({ ...formData, Name: e.target.value })} />
+              </div>
+              <div className="col-md-6">
+                <input className="form-control" type="date" placeholder="Release Date" onChange={(e) => setFormData({ ...formData, date: e.target.value })} />
+              </div>
+              <div className="col-md-6">
+                <input className="form-control" type="text" placeholder="Short Description" onChange={(e) => setFormData({ ...formData, Description: e.target.value })} />
+              </div>
+              <div className="col-md-6">
+                <input className="form-control" type="text" placeholder="Title" onChange={(e) => setFormData({ ...formData, Title: e.target.value })} />
+              </div>
 
-        <div>
-          <img src={formData.profilePicture || 'https://media.istockphoto.com/id/1294866141/vector/picture-reload.jpg?s=612x612&w=is&k=20&c=Ei6q4n6VkP3B0R30d1VdZ4i11CFbyaEoAFy6_WEbArE='} alt='Profile' onClick={handleImage1Click} />
-          <img src={formData.alternateProfilePicture || 'https://media.istockphoto.com/id/1294866141/vector/picture-reload.jpg?s=612x612&w=is&k=20&c=Ei6q4n6VkP3B0R30d1VdZ4i11CFbyaEoAFy6_WEbArE='} alt='Alternate Profile' onClick={handleImage2Click} />
+              <input type="file" ref={fileRef1} hidden accept="image/*" onChange={(e) => setImage1(e.target.files[0])} />
+              <input type="file" ref={fileRef2} hidden accept="image/*" onChange={(e) => setImage2(e.target.files[0])} />
+
+              <div className="col-md-6 text-center">
+                <img
+                  src={formData.profilePicture || 'https://media.istockphoto.com/id/1294866141/vector/picture-reload.jpg'}
+                  alt="Main"
+                  className="img-thumbnail"
+                  style={{ height: '200px', cursor: 'pointer' }}
+                  onClick={handleImage1Click}
+                />
+                <button type="button" className="btn btn-outline-primary mt-2" onClick={handleImage1Click}>
+                  Upload Main Picture
+                </button>
+              </div>
+
+              <div className="col-md-6 text-center">
+                <img
+                  src={formData.alternateProfilePicture || 'https://media.istockphoto.com/id/1294866141/vector/picture-reload.jpg'}
+                  alt="Alternate"
+                  className="img-thumbnail"
+                  style={{ height: '200px', cursor: 'pointer' }}
+                  onClick={handleImage2Click}
+                />
+                <button type="button" className="btn btn-outline-secondary mt-2" onClick={handleImage2Click}>
+                  Upload Alternate Picture
+                </button>
+              </div>
+            </div>
+
+            {imagePercent > 0 && (
+              <div className="progress mt-3">
+                <div className="progress-bar" role="progressbar" style={{ width: `${imagePercent}%` }} aria-valuenow={imagePercent} aria-valuemin="0" aria-valuemax="100">
+                  {imagePercent}%
+                </div>
+              </div>
+            )}
+
+            {imageError && (
+              <div className="alert alert-danger mt-3" role="alert">
+                Error uploading image. File must be under 2MB.
+              </div>
+            )}
+
+            {error && (
+              <div className="alert alert-danger mt-3" role="alert">
+                {error}
+              </div>
+            )}
+
+            <button type="submit" className="btn btn-success mt-4 w-100">
+              Add Product
+            </button>
+
+            <div className="mt-3">
+      
+            </div>
+          </form>
         </div>
-
-        <p className="upload-progress-errors">
-          {imageError ? (
-            <span>Error uploading image (file size must be less than 2 MB)</span>
-          ) : imagePercent > 0 && imagePercent < 100 ? (
-            <span>{`Uploading: ${imagePercent}%`}</span>
-          ) : imagePercent === 100 ? (
-            <span>Image uploaded successfully</span>
-          ) : (
-            ''
-          )}
-        </p>
-
-        <button id='submit-button' type="submit">Add Pet</button><br></br><br></br>
-        <OAuth />
-      </form>
-
-      {error && <p>{error}</p>}
+      </div>
     </div>
   );
 }

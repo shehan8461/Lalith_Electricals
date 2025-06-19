@@ -12,46 +12,27 @@ const itemSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    petname: {
+    Name: {
         type: String,
         required: true,
         trim: true
     },
-    species: {
+    date: {
         type: String,
         required: true,
         trim: true
     },
-    breed: {
+    Description: {
         type: String,
         required: true,
         trim: true
     },
-    age: {
+    Title: {
         type: String,
         required: true,
         trim: true
     },
-    gender: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    color: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    weight: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    price: {
-        type: String,
-        required: true,
-        trim: true
-    },
+   
     profilePicture: {
         type: String,
         default: 'https://media.istockphoto.com/id/1294866141/vector/picture-reload.jpg?s=612x612&w=is&k=20&c=Ei6q4n6VkP3B0R30d1VdZ4i11CFbyaEoAFy6_WEbArE=',
@@ -62,6 +43,6 @@ const itemSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-const Item = mongoose.model("Pets", itemSchema);
+const Item = mongoose.model("Products", itemSchema);
 
 export default Item;

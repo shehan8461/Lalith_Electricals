@@ -113,50 +113,110 @@ export default function Profile() {
     }
   }
   return (
+<div className="container mt-5 mb-5">
+  <div className="row justify-content-center">
+    <div className="col-md-8">
+      <div className="card shadow p-4">
+        <h2 className="text-center text-primary mb-4">User Profile</h2>
+        
+        <form onSubmit={handleSubmit}>
+          <div className="text-center mb-4">
+            <input
+              type="file"
+              ref={fileRef}
+              hidden
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files[0])}
+            />
+            <img
+              src={formData.profilePicture || currentUser.profilePicture}
+              alt="Profile"
+              className="rounded-circle shadow border border-3 border-primary"
+              style={{ width: '130px', height: '130px', cursor: 'pointer', objectFit: 'cover' }}
+              onClick={() => fileRef.current.click()}
+            />
+            <div className="mt-2 text-muted small">
+              {imageError ? (
+                <div className="text-danger">Error uploading (Max: 2MB)</div>
+              ) : imagePercent > 0 && imagePercent < 100 ? (
+                <div>Uploading: {imagePercent}%</div>
+              ) : imagePercent === 100 ? (
+                <div className="text-success">Image uploaded successfully</div>
+              ) : null}
+            </div>
+          </div>
 
-    <div className='user-profile'>
-      <h1 className='user-profile-name'>Profile</h1>
-      <form  onSubmit={handleSubmit}className='user-profile-form' >
-        <input type='file' ref={fileRef} hidden accept='image/*' onChange={(e)=>setImage(e.target.files[0])}></input>
+          <div className="mb-3">
+            <label htmlFor="username" className="form-label">Username</label>
+            <input
+              defaultValue={currentUser.username}
+              type="text"
+              id="username"
+              className="form-control"
+              onChange={handlechange}
+            />
+          </div>
 
-          {/*allow read;
-                allow write:if
-                request.resource.size < 2 * 1024 * 1024 &&
-                request.resource.contentType.matches('image/.*')*/}
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">Email</label>
+            <input
+              defaultValue={currentUser.email}
+              type="email"
+              id="email"
+              className="form-control"
+              onChange={handlechange}
+            />
+          </div>
 
-      <img src={formData.profilePicture||currentUser.profilePicture} alt='profile' className=''
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">Password</label>
+            <input
+              type="password"
+              id="password"
+              className="form-control"
+              onChange={handlechange}
+              placeholder="Enter new password"
+            />
+          </div>
 
-      onClick={()=>fileRef.current.click()}></img>
+          <div className="d-grid mb-3">
+            <button className="btn btn-primary" type="submit">
+              {loading ? 'Updating...' : 'Update Profile'}
+            </button>
+          </div>
+        </form>
 
-      <p className='user-profile-emage uploading error'>
-            {imageError ?(
-              <span className=''>Error uploading image (file size must be less than 2 MB)</span>
-            ):imagePercent>0&&imagePercent<100?(
-              <span className=''>{`uploading:${imagePercent} %`}</span>
-            ):imagePercent===100?(
-              <span className=''>Image uploaded successfully</span>
-            ):(
-              ''
-            )}
+        {error && (
+          <div className="alert alert-danger text-center" role="alert">
+            Something went wrong!
+          </div>
+        )}
+        {updateSuccess && (
+          <div className="alert alert-success text-center" role="alert">
+            Profile updated successfully.
+          </div>
+        )}
 
-      </p>
+        <hr />
 
-      <input defaultValue={currentUser.username} type='text' id='username' placeholder='Username' className='user-profile-username' onChange={handlechange}></input>
-      <input defaultValue={currentUser.email} type='email' id='email' placeholder='Email' className='user-profile-email' onChange={handlechange}></input>
-      <input type='password' id='password' placeholder='password' className='user-profile-password' onChange={handlechange}></input>
-
-      <button className=''>{loading ? 'loading...':'update'}</button>
-
-      </form>
-      <div className='flex justify-between mt-5'>
-        <span onClick={handledeleteAccount} className='user-profile-delete-button'>Close Account</span>
-        <span onClick={handleSignOut}className='user-profile-signout-button'>Sign Out</span>
-        <Link className='navigate-button-additem' to='/additem'><li>List Pet for Sale</li></Link> 
-        <Link className='my-items-button' to='/items'><li>My Inventory</li></Link> 
+        <div className="d-flex justify-content-between flex-wrap gap-2">
+          <button onClick={handledeleteAccount} className="btn btn-outline-danger w-100">
+            Close Account
+          </button>
+          <button onClick={handleSignOut} className="btn btn-outline-secondary w-100">
+            Sign Out
+          </button>
+          <Link to="/additem" className="btn btn-outline-success w-100">
+            List Product for Sale
+          </Link>
+          <Link to="/items" className="btn btn-outline-primary w-100">
+            My Inventory
+          </Link>
+        </div>
       </div>
-        <p className='user-profile-errors-button'>{error && 'Something went wrong'}</p>
-        <p className='user-profile-update-success-button'>{updateSuccess  && 'user  updated successfully'}</p>
-     
     </div>
+  </div>
+</div>
+
   )
 }

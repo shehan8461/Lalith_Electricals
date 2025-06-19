@@ -41,9 +41,9 @@ export const signin =async(req,res,next)=>{
 
 //item register
 export const store=async(req,res,next)=>{
-    const {userId,petname,species,breed,age,gender,color,weight,
+    const {userId, Name,date,Description,Title,
         profilePicture,
-        alternateProfilePicture,price}=req.body;
+        alternateProfilePicture}=req.body;
 
     //create auto id for orderid
     function idGen(userId){
@@ -54,7 +54,7 @@ export const store=async(req,res,next)=>{
     const petId=idGen(userId)
    
 
-    const newItem=new Item({petId,userId, petname,species,breed,age,gender,color,weight,profilePicture,alternateProfilePicture,price});
+    const newItem=new Item({petId,userId, Name,date,Description,Title,profilePicture,alternateProfilePicture});
     try{
         await newItem.save();
         res.status(202).json({message:"item created successfully"});
