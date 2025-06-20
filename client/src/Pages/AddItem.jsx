@@ -10,9 +10,11 @@ export default function AddItem() {
   const [imagePercent, setImagePercent] = useState(0);
   const fileRef1 = useRef(null);
   const fileRef2 = useRef(null);
+  const fileRefVideo = useRef(null);
   const [imageError, setImageError] = useState(false);
   const [image1, setImage1] = useState(undefined);
   const [image2, setImage2] = useState(undefined);
+  const [video, setVideo] = useState(undefined);
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
@@ -25,6 +27,7 @@ export default function AddItem() {
     Title: "",
     profilePicture: "",
     alternateProfilePicture: "",
+    productVideo: "",
   });
 
   useEffect(() => {
@@ -35,11 +38,15 @@ export default function AddItem() {
     if (image2) handleFileUpload(image2, 'alternateProfilePicture');
   }, [image2]);
 
-  const handleFileUpload = async (image, field) => {
+  useEffect(() => {
+    if (video) handleFileUpload(video, 'productVideo');
+  }, [video]);
+
+  const handleFileUpload = async (file, field) => {
     const storage = getStorage(app);
-    const fileName = new Date().getTime() + image.name;
+    const fileName = new Date().getTime() + file.name;
     const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, image);
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
       'state_changed',
@@ -49,7 +56,7 @@ export default function AddItem() {
       },
       () => {
         setImageError(true);
-        setError('Image upload failed');
+        setError('File upload failed');
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -108,6 +115,7 @@ export default function AddItem() {
 
               <input type="file" ref={fileRef1} hidden accept="image/*" onChange={(e) => setImage1(e.target.files[0])} />
               <input type="file" ref={fileRef2} hidden accept="image/*" onChange={(e) => setImage2(e.target.files[0])} />
+              <input type="file" ref={fileRefVideo} hidden accept="video/*" onChange={(e) => setVideo(e.target.files[0])} />
 
               <div className="col-md-6 text-center">
                 <img
@@ -134,6 +142,22 @@ export default function AddItem() {
                   Upload Alternate Picture
                 </button>
               </div>
+
+              <div className="col-md-12 text-center mt-3">
+                {formData.productVideo ? (
+                  <video controls width="320" height="180" style={{borderRadius: '10px', background: '#eee'}}>
+                    <source src={formData.productVideo} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <div style={{height: '180px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8f9fa', borderRadius: '10px'}}>
+                    <span className="text-muted">No video uploaded</span>
+                  </div>
+                )}
+                <button type="button" className="btn btn-outline-info mt-2" onClick={() => fileRefVideo.current.click()}>
+                  Upload Product Video
+                </button>
+              </div>
             </div>
 
             {imagePercent > 0 && (
@@ -146,7 +170,7 @@ export default function AddItem() {
 
             {imageError && (
               <div className="alert alert-danger mt-3" role="alert">
-                Error uploading image. File must be under 2MB.
+                Error uploading file. Please try again or check your network connection.
               </div>
             )}
 

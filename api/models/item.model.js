@@ -40,6 +40,10 @@ const itemSchema = new mongoose.Schema({
     alternateProfilePicture: {
         type: String,
         default: 'https://media.istockphoto.com/id/1294866141/vector/picture-reload.jpg?s=612x612&w=is&k=20&c=Ei6q4n6VkP3B0R30d1VdZ4i11CFbyaEoAFy6_WEbArE='
+    },
+    productVideo: {
+        type: String,
+        default: ''
     }
 }, { timestamps: true });
 
