@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import './header.css';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Navbar, Nav, NavDropdown, Image, Badge } from 'react-bootstrap';
 import { 
@@ -9,9 +9,17 @@ import {
   FaInfoCircle, 
   FaShoppingCart,
   FaBell,
-  FaStore
+  FaStore,
+  FaBolt,
+  FaLightbulb,
+  FaTools
 } from 'react-icons/fa';
 import { RiFlashlightFill } from 'react-icons/ri';
+import img1 from './images/1.jpeg'; // Adjust the path as needed
+import img2 from './images/2.jpeg';
+import img3 from './images/3.jpeg';
+import img4 from './images/4.jpeg';
+import img5 from './images/5.jpeg';
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
@@ -19,18 +27,108 @@ export default function Header() {
   return (
     <>
       {/* Top Announcement Bar */}
-      <div className="announcement-bar bg-dark text-white py-1 text-center small">
-        <Container>
-          <span className="d-inline-flex align-items-center">
-            <RiFlashlightFill className="me-2 text-warning" />
-            <strong>Power Up Your Home with Top Deals on Electricals & Appliances in Sri Lanka</strong>
+  
+      <style>{`
+        .announcement-text-nowrap {
+          white-space: nowrap !important;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        @media (max-width: 768px) {
+          .announcement-bar .announcement-phone {
+            margin-left: auto !important;
+            margin-top: 8px;
+            width: auto;
+            display: flex;
+            justify-content: flex-end;
+          }
+          .announcement-bar .announcement-text-nowrap {
+            font-size: 0.98rem !important;
+            max-width: 60vw;
+            white-space: nowrap !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          .announcement-bar .position-relative {
+            flex-direction: row !important;
+            align-items: center !important;
+          }
+        }
+      `}</style>
 
-          </span>
-        </Container>
+      {/* Animated Brand Name - very top of the page, no space between phone number and animation */}
+      <div className="w-100 d-flex flex-column justify-content-center align-items-center position-fixed header-bg-blur" style={{zIndex: 2000, background: 'rgba(15,23,42,0.92)', minHeight: '160px', top: 0, left: 0, boxShadow:'0 8px 32px rgba(0,0,0,0.18)'}}>
+        <span className="animated-brand-name fw-bold moving-text d-flex align-items-center gap-4" style={{
+          fontSize:'3.6rem',
+          letterSpacing:'0.7em',
+          textShadow:'0 6px 32px #fff, 0 0 24px #2563eb',
+          whiteSpace:'nowrap',
+          display:'inline-flex',
+          width:'auto',
+          color:'#fff',
+          fontFamily: 'Montserrat, Arial, sans-serif',
+          fontStyle: 'italic',
+          fontWeight: 700,
+          background:'none',
+        }}>
+          Lalith Electricals
+        </span>
+        {/* Animated image row */}
+        <div className="brand-image-marquee mt-3 w-100 overflow-hidden d-flex justify-content-center align-items-center" style={{maxWidth:'100vw', minHeight:'64px'}}>
+          <div className="marquee-track d-flex align-items-center gap-5" style={{animation: 'brand-marquee 18s linear infinite'}}>
+            <img src={img1} alt="Brand 1" className="brand-marquee-img" style={{height:'72px', width:'72px', borderRadius:'14px', objectFit:'cover', boxShadow:'0 2px 8px #222', border:'2px solid #fbbf24', background:'#fff', padding:'2px'}} />
+            <img src={img2} alt="Brand 2" className="brand-marquee-img" style={{height:'72px', width:'72px', borderRadius:'14px', objectFit:'cover', boxShadow:'0 2px 8px #222', border:'2px solid #60a5fa', background:'#fff', padding:'2px'}} />
+            <img src={img3} alt="Brand 3" className="brand-marquee-img" style={{height:'72px', width:'72px', borderRadius:'14px', objectFit:'cover', boxShadow:'0 2px 8px #222', border:'2px solid #f472b6', background:'#fff', padding:'2px'}} />
+            <img src={img4} alt="Brand 4" className="brand-marquee-img" style={{height:'72px', width:'72px', borderRadius:'14px', objectFit:'cover', boxShadow:'0 2px 8px #222', border:'2px solid #22d3ee', background:'#fff', padding:'2px'}} />
+            <img src={img5} alt="Brand 5" className="brand-marquee-img" style={{height:'72px', width:'72px', borderRadius:'14px', objectFit:'cover', boxShadow:'0 2px 8px #222', border:'2px solid #a3e635', background:'#fff', padding:'2px'}} />
+          </div>
+        </div>
       </div>
+      <style>{`
+        .header-bg-blur {
+          background: url('../components/images/1.jpeg') center center/cover no-repeat, rgba(15,23,42,0.92);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+        }
+        @keyframes brand-glow {
+          0% { text-shadow: 0 6px 32px #fff, 0 0 0 #3b82f6; }
+          50% { text-shadow: 0 12px 48px #fbbf24, 0 0 48px #f472b6; }
+          100% { text-shadow: 0 6px 32px #fff, 0 0 0 #3b82f6; }
+        }
+        .animated-brand-name {
+          animation: brand-glow 2.5s infinite ease-in-out;
+          transition: color 0.3s;
+        }
+        @keyframes move-text {
+          0% { transform: translateX(100vw); }
+          100% { transform: translateX(-100vw); }
+        }
+        .moving-text {
+          animation: move-text 10s linear infinite;
+        }
+        @keyframes brand-marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-60%); }
+        }
+        .brand-image-marquee {
+          width: 100vw;
+          overflow: hidden;
+        }
+        .marquee-track {
+          min-width: 800px;
+        }
+        .brand-marquee-img {
+          transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .brand-marquee-img:hover {
+          transform: scale(1.15) rotate(-3deg);
+          box-shadow: 0 8px 32px #3b82f6, 0 0 24px #fbbf24;
+        }
+        body { padding-top: 160px !important; }
+      `}</style>
 
       {/* Main Navbar */}
-      <Navbar bg="white" expand="lg" sticky="top" className="main-navbar shadow-sm py-3">
+      <Navbar bg="white" expand="lg" sticky="top" className="main-navbar shadow-sm py-3 position-relative">
         <Container>
           <Navbar.Brand as={Link} to="/" className="d-flex align-items-center brand-logo">
             <FaStore className="text-primary me-2" size={30} />
@@ -65,13 +163,7 @@ export default function Header() {
                 <FaHome className="me-1" /> Home
               </Nav.Link>
 
-              <Nav.Link 
-                as={Link} 
-                to="/about" 
-                className="nav-link-hover d-flex align-items-center px-3 fw-medium text-dark"
-              >
-                <FaInfoCircle className="me-1" /> About
-              </Nav.Link>
+     
 
               {currentUser ? (
                 <>
@@ -123,6 +215,14 @@ export default function Header() {
               )}
             </Nav>
           </Navbar.Collapse>
+              <a href="tel:0779189558" className="text-decoration-none announcement-phone ms-3" style={{minWidth:'fit-content'}}>
+            <span className="bg-primary text-white px-3 py-1 rounded-pill shadow-sm fw-bold d-flex align-items-center gap-2" style={{letterSpacing:'1px', fontSize:'1.08rem', transition:'background 0.2s'}}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-telephone-fill me-2" viewBox="0 0 16 16">
+                <path d="M3.654 1.328a.678.678 0 0 1 1.015-.063l2.29 2.29c.329.329.445.81.302 1.234l-.547 1.64a.678.678 0 0 0 .145.67l2.457 2.457a.678.678 0 0 0 .67.145l1.64-.547c.424-.143.905-.027 1.234.302l2.29 2.29a.678.678 0 0 1-.063 1.015l-2.013 1.51c-.29.218-.667.246-.98.07a17.634 17.634 0 0 1-7.01-7.01c-.176-.313-.148-.69.07-.98l1.51-2.013z"/>
+              </svg>
+              077 -918 9558
+            </span>
+          </a>
         </Container>
       </Navbar>
     </>

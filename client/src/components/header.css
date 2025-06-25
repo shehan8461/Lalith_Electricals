@@ -1,30 +1,40 @@
-/* header.css */
-.nav-link-hover:hover,
-.dropdown-item-hover:hover {
-  background-color: rgba(0, 123, 255, 0.1);
-  color: #0d6efd !important;
-  border-radius: 8px;
-  transition: all 0.2s ease-in-out;
+.navbar-bg-slideshow {
+  position: relative;
+  width: 100%;
+  min-height: 80px;
+  z-index: 10;
+  overflow: hidden;
 }
 
-.search-container input:focus {
-  outline: none;
-  box-shadow: none;
+.navbar-bg-slideshow::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  animation: navbarSlideshow 25s infinite linear;
 }
 
-.dropdown-item-hover i {
-  color: #0d6efd;
-}
-
-.announcement-bar {
-  font-size: 0.9rem;
-  letter-spacing: 0.4px;
+.navbar-bg-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(20, 33, 61, 0.75);
+  z-index: 2;
 }
 
 .main-navbar {
-  transition: all 0.3s ease;
+  position: relative;
+  z-index: 3;
+  background: transparent !important;
 }
 
-.main-navbar:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+@keyframes navbarSlideshow {
+  0%    { background-image: url('./images/1.jpeg'); }
+  20%   { background-image: url('./images/2.jpeg'); }
+  40%   { background-image: url('./images/3.jpeg'); }
+  60%   { background-image: url('./images/4.jpeg'); }
+  80%   { background-image: url('./images/5.jpeg'); }
+  100%  { background-image: url('./images/1.jpeg'); }
 }
