@@ -12,10 +12,12 @@ import {
   FaStore,
   FaBolt,
   FaLightbulb,
-  FaTools
+  FaTools,
+  FaSearch,
+  FaPhone
 } from 'react-icons/fa';
 import { RiFlashlightFill } from 'react-icons/ri';
-import img1 from './images/1.jpeg'; // Adjust the path as needed
+import img1 from './images/1.jpeg';
 import img2 from './images/2.jpeg';
 import img3 from './images/3.jpeg';
 import img4 from './images/4.jpeg';
@@ -26,203 +28,508 @@ export default function Header() {
 
   return (
     <>
-      {/* Top Announcement Bar */}
-  
       <style>{`
-        .announcement-text-nowrap {
-          white-space: nowrap !important;
-          overflow: hidden;
-          text-overflow: ellipsis;
+        /* Import Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        /* Global Styles */
+        * {
+          box-sizing: border-box;
         }
+        
+        body { 
+          padding-top: 180px !important; 
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* Top Brand Section */
+        .brand-header {
+          background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .brand-header::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: url('../components/images/1.jpeg') center/cover;
+          opacity: 0.05;
+          z-index: -1;
+        }
+
+        /* Brand Name Animation */
+        .animated-brand-name {
+          font-family: 'Poppins', sans-serif;
+          font-weight: 500;
+          font-size: clamp(2.5rem, 5vw, 4rem);
+          letter-spacing: 0.15em;
+          background: linear-gradient(45deg, #ffffff, #60a5fa, #fbbf24, #ffffff);
+          background-size: 400% 400%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+          animation: gradientShift 4s ease-in-out infinite, gentleFloat 3s ease-in-out infinite;
+          text-align: center;
+          position: relative;
+        }
+
+        .animated-brand-name::after {
+          content: '';
+          position: absolute;
+          bottom: -8px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 60%;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #60a5fa, #fbbf24, transparent);
+          border-radius: 2px;
+        }
+
+        @keyframes gradientShift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+
+        @keyframes gentleFloat {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-3px); }
+        }
+
+        /* Brand Images */
+        .brand-showcase {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 12px;
+          padding: 12px 0;
+          margin-top: 20px;
+          overflow: hidden;
+          position: relative;
+        }
+
+        .brand-showcase::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+          animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+          0% { left: -100%; }
+          100% { left: 100%; }
+        }
+
+        .marquee-container {
+          overflow: hidden;
+          width: 100%;
+        }
+
+        .marquee-track {
+          display: flex;
+          animation: smoothMarquee 25s linear infinite;
+          gap: 2rem;
+          align-items: center;
+          min-width: calc(100% * 4);
+        }
+
+        @keyframes smoothMarquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-25%); }
+        }
+
+        .brand-img {
+          height: 60px;
+          width: 60px;
+          border-radius: 12px;
+          object-fit: cover;
+          border: 2px solid rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.9);
+          padding: 4px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          flex-shrink: 0;
+        }
+
+        .brand-img:hover {
+          transform: scale(1.1) rotate(2deg);
+          border-color: #60a5fa;
+          box-shadow: 0 8px 25px rgba(96, 165, 250, 0.4);
+        }
+
+        /* Main Navbar */
+        .main-navbar {
+          background: rgba(255, 255, 255, 0.95) !important;
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+          transition: all 0.3s ease;
+          padding: 1rem 0 !important;
+        }
+
+        .navbar-brand {
+          font-weight: 600;
+          color: #1e293b !important;
+          transition: color 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+          color: #3b82f6 !important;
+        }
+
+        /* Search Bar */
+        .search-container {
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          border-radius: 50px;
+          overflow: hidden;
+          transition: all 0.3s ease;
+          min-width: 300px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-container:focus-within {
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+          background: #ffffff;
+        }
+
+        .search-input {
+          border: none !important;
+          background: transparent !important;
+          padding: 12px 20px !important;
+          font-size: 14px;
+          color: #374151;
+        }
+
+        .search-input:focus {
+          outline: none !important;
+          box-shadow: none !important;
+        }
+
+        .search-btn {
+          background: #3b82f6 !important;
+          border: none !important;
+          padding: 12px 16px !important;
+          transition: background 0.3s ease;
+        }
+
+        .search-btn:hover {
+          background: #2563eb !important;
+        }
+
+        /* Navigation Links */
+        .nav-link-custom {
+          color: #374151 !important;
+          font-weight: 500;
+          padding: 8px 12px !important;
+          border-radius: 8px;
+          transition: all 0.3s ease;
+          text-decoration: none;
+          position: relative;
+          display: inline-flex !important;
+          align-items: center;
+          white-space: nowrap;
+          min-width: fit-content;
+        }
+
+        .nav-link-custom:hover {
+          color: #3b82f6 !important;
+          background: rgba(59, 130, 246, 0.08);
+        }
+
+        /* User Dropdown */
+        .dropdown-toggle {
+          display: inline-flex !important;
+          align-items: center;
+          white-space: nowrap;
+          padding: 8px 12px !important;
+          border-radius: 8px;
+          transition: all 0.3s ease;
+          text-decoration: none;
+          border: none;
+          background: transparent;
+          color: #374151 !important;
+          font-weight: 500;
+        }
+
+        .dropdown-toggle:hover {
+          background: rgba(59, 130, 246, 0.08);
+          color: #3b82f6 !important;
+        }
+
+        .dropdown-toggle::after {
+          margin-left: 8px;
+        }
+
+        .dropdown-menu {
+          border: none;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+          border-radius: 12px;
+          padding: 8px 0;
+          margin-top: 8px;
+        }
+
+        .dropdown-item {
+          padding: 10px 20px;
+          font-weight: 500;
+          transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+          background: #f8fafc;
+          color: #3b82f6;
+        }
+
+        /* Phone Button */
+        .phone-btn {
+          background: linear-gradient(135deg, #10b981, #059669);
+          border: none;
+          color: white;
+          padding: 8px 16px;
+          border-radius: 25px;
+          font-weight: 600;
+          font-size: 14px;
+          letter-spacing: 0.5px;
+          transition: all 0.3s ease;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
+          position: relative;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+
+        .phone-btn::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          transition: left 0.5s;
+        }
+
+        .phone-btn:hover::before {
+          left: 100%;
+        }
+
+        .phone-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+          color: white;
+          text-decoration: none;
+        }
+
+        /* Sign In Button */
+        .signin-btn {
+          background: linear-gradient(135deg, #3b82f6, #2563eb);
+          border: none;
+          color: white;
+          padding: 8px 20px;
+          border-radius: 25px;
+          font-weight: 600;
+          transition: all 0.3s ease;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          white-space: nowrap;
+          font-size: 14px;
+        }
+
+        .signin-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+          color: white;
+          text-decoration: none;
+        }
+
+        /* Mobile Responsiveness */
         @media (max-width: 768px) {
-          .announcement-bar .announcement-phone {
-            margin-left: auto !important;
-            margin-top: 8px;
-            width: auto;
-            display: flex;
-            justify-content: flex-end;
+          .animated-brand-name {
+            font-size: 2rem;
+            letter-spacing: 0.1em;
           }
-          .announcement-bar .announcement-text-nowrap {
-            font-size: 0.98rem !important;
-            max-width: 60vw;
-            white-space: nowrap !important;
-            overflow: hidden;
-            text-overflow: ellipsis;
+
+          .search-container {
+            min-width: auto;
+            width: 100%;
+            margin: 10px 0;
           }
-          .announcement-bar .position-relative {
-            flex-direction: row !important;
-            align-items: center !important;
+
+          .brand-showcase {
+            margin-top: 15px;
+          }
+
+          .brand-img {
+            height: 50px;
+            width: 50px;
+          }
+
+          .phone-btn {
+            font-size: 13px;
+            padding: 8px 16px;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .animated-brand-name {
+            font-size: 1.8rem;
+          }
+          
+          body {
+            padding-top: 160px !important;
           }
         }
       `}</style>
 
-      {/* Animated Brand Name - very top of the page, no space between phone number and animation */}
-      <div className="w-100 d-flex flex-column justify-content-center align-items-center position-fixed header-bg-blur" style={{zIndex: 2000, background: 'rgba(15,23,42,0.92)', minHeight: '160px', top: 0, left: 0, boxShadow:'0 8px 32px rgba(0,0,0,0.18)'}}>
-        <span className="animated-brand-name fw-bold moving-text d-flex align-items-center gap-4" style={{
-          fontSize:'3.6rem',
-          letterSpacing:'0.7em',
-          textShadow:'0 6px 32px #fff, 0 0 24px #2563eb',
-          whiteSpace:'nowrap',
-          display:'inline-flex',
-          width:'auto',
-          color:'#fff',
-          fontFamily: 'Montserrat, Arial, sans-serif',
-          fontStyle: 'italic',
-          fontWeight: 700,
-          background:'none',
-        }}>
+      {/* Top Brand Header */}
+      <div className="brand-header position-fixed w-100 d-flex flex-column justify-content-center align-items-center" 
+           style={{zIndex: 2000, minHeight: '140px', top: 0, left: 0}}>
+        
+        {/* Animated Brand Name */}
+        <div className="animated-brand-name">
           Lalith Electricals
-        </span>
-        {/* Animated image row */}
-        <div className="brand-image-marquee mt-3 w-100 overflow-hidden d-flex justify-content-center align-items-center" style={{maxWidth:'100vw', minHeight:'64px'}}>
-          <div className="marquee-track d-flex align-items-center gap-5" style={{animation: 'brand-marquee 18s linear infinite'}}>
-            <img src={img1} alt="Brand 1" className="brand-marquee-img" style={{height:'72px', width:'72px', borderRadius:'14px', objectFit:'cover', boxShadow:'0 2px 8px #222', border:'2px solid #fbbf24', background:'#fff', padding:'2px'}} />
-            <img src={img2} alt="Brand 2" className="brand-marquee-img" style={{height:'72px', width:'72px', borderRadius:'14px', objectFit:'cover', boxShadow:'0 2px 8px #222', border:'2px solid #60a5fa', background:'#fff', padding:'2px'}} />
-            <img src={img3} alt="Brand 3" className="brand-marquee-img" style={{height:'72px', width:'72px', borderRadius:'14px', objectFit:'cover', boxShadow:'0 2px 8px #222', border:'2px solid #f472b6', background:'#fff', padding:'2px'}} />
-            <img src={img4} alt="Brand 4" className="brand-marquee-img" style={{height:'72px', width:'72px', borderRadius:'14px', objectFit:'cover', boxShadow:'0 2px 8px #222', border:'2px solid #22d3ee', background:'#fff', padding:'2px'}} />
-            <img src={img5} alt="Brand 5" className="brand-marquee-img" style={{height:'72px', width:'72px', borderRadius:'14px', objectFit:'cover', boxShadow:'0 2px 8px #222', border:'2px solid #a3e635', background:'#fff', padding:'2px'}} />
+        </div>
+
+        {/* Brand Showcase Images */}
+        <div className="brand-showcase container-fluid">
+          <div className="marquee-container">
+            <div className="marquee-track">
+              <img src={img1} alt="Brand 1" className="brand-img" />
+              <img src={img2} alt="Brand 2" className="brand-img" />
+              <img src={img3} alt="Brand 3" className="brand-img" />
+              <img src={img4} alt="Brand 4" className="brand-img" />
+              <img src={img5} alt="Brand 5" className="brand-img" />
+              <img src={img1} alt="Brand 1" className="brand-img" />
+              <img src={img2} alt="Brand 2" className="brand-img" />
+              <img src={img3} alt="Brand 3" className="brand-img" />
+              <img src={img4} alt="Brand 4" className="brand-img" />
+              <img src={img5} alt="Brand 5" className="brand-img" />
+              <img src={img1} alt="Brand 1" className="brand-img" />
+              <img src={img2} alt="Brand 2" className="brand-img" />
+              <img src={img3} alt="Brand 3" className="brand-img" />
+              <img src={img4} alt="Brand 4" className="brand-img" />
+              <img src={img5} alt="Brand 5" className="brand-img" />
+              <img src={img1} alt="Brand 1" className="brand-img" />
+              <img src={img2} alt="Brand 2" className="brand-img" />
+              <img src={img3} alt="Brand 3" className="brand-img" />
+              <img src={img4} alt="Brand 4" className="brand-img" />
+              <img src={img5} alt="Brand 5" className="brand-img" />
+            </div>
           </div>
         </div>
       </div>
-      <style>{`
-        .header-bg-blur {
-          background: url('../components/images/1.jpeg') center center/cover no-repeat, rgba(15,23,42,0.92);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-        }
-        @keyframes brand-glow {
-          0% { text-shadow: 0 6px 32px #fff, 0 0 0 #3b82f6; }
-          50% { text-shadow: 0 12px 48px #fbbf24, 0 0 48px #f472b6; }
-          100% { text-shadow: 0 6px 32px #fff, 0 0 0 #3b82f6; }
-        }
-        .animated-brand-name {
-          animation: brand-glow 2.5s infinite ease-in-out;
-          transition: color 0.3s;
-        }
-        @keyframes move-text {
-          0% { transform: translateX(100vw); }
-          100% { transform: translateX(-100vw); }
-        }
-        .moving-text {
-          animation: move-text 10s linear infinite;
-        }
-        @keyframes brand-marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-60%); }
-        }
-        .brand-image-marquee {
-          width: 100vw;
-          overflow: hidden;
-        }
-        .marquee-track {
-          min-width: 800px;
-        }
-        .brand-marquee-img {
-          transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .brand-marquee-img:hover {
-          transform: scale(1.15) rotate(-3deg);
-          box-shadow: 0 8px 32px #3b82f6, 0 0 24px #fbbf24;
-        }
-        body { padding-top: 160px !important; }
-      `}</style>
 
-      {/* Main Navbar */}
-      <Navbar bg="white" expand="lg" sticky="top" className="main-navbar shadow-sm py-3 position-relative">
+      {/* Main Navigation */}
+      <Navbar expand="lg" sticky="top" className="main-navbar">
         <Container>
-          <Navbar.Brand as={Link} to="/" className="d-flex align-items-center brand-logo">
-            <FaStore className="text-primary me-2" size={30} />
-            <span className="text-dark fs-4 fw-bold">Lalith Electricals</span>
+          {/* Brand Logo */}
+          <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
+            <FaStore className="text-primary me-2" size={28} />
+            <span className="fs-4">Lalith Electricals</span>
           </Navbar.Brand>
 
-          {/* Search Bar */}
-          <div className="d-flex align-items-center ms-auto me-3 search-container shadow-sm rounded-pill">
-            <input 
-              type="text" 
-              placeholder="Search products..." 
-              className="form-control border-0 shadow-none rounded-start-pill px-3 py-2"
-            />
-            <button className="btn btn-primary rounded-end-pill px-3">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-              </svg>
-            </button>
-          </div>
-
-          <Navbar.Toggle aria-controls="basic-navbar-nav" className="border-0">
+          {/* Mobile Toggle */}
+          <Navbar.Toggle aria-controls="navbar-nav" className="border-0 shadow-none">
             <span className="navbar-toggler-icon"></span>
           </Navbar.Toggle>
 
-          <Navbar.Collapse id="basic-navbar-nav">
+          <Navbar.Collapse id="navbar-nav">
+            {/* Search Bar - Desktop */}
+            <div className="d-none d-lg-flex align-items-center mx-auto">
+              <div className="search-container d-flex">
+                <input 
+                  type="text" 
+                  placeholder="Search electrical products..." 
+                  className="form-control search-input"
+                />
+                <button className="btn search-btn">
+                  <FaSearch size={14} />
+                </button>
+              </div>
+            </div>
+
+            {/* Navigation Links */}
             <Nav className="ms-auto align-items-center gap-2">
-              <Nav.Link 
-                as={Link} 
-                to="/" 
-                className="nav-link-hover d-flex align-items-center px-3 fw-medium text-dark"
-              >
-                <FaHome className="me-1" /> Home
+              <Nav.Link as={Link} to="/" className="nav-link-custom d-flex align-items-center">
+                <FaHome className="me-1" size={16} />
+                <span>Home</span>
               </Nav.Link>
 
-     
+              {/* Search Bar - Mobile */}
+              <div className="d-lg-none w-100 my-2">
+                <div className="search-container d-flex">
+                  <input 
+                    type="text" 
+                    placeholder="Search products..." 
+                    className="form-control search-input"
+                  />
+                  <button className="btn search-btn">
+                    <FaSearch size={14} />
+                  </button>
+                </div>
+              </div>
 
+              {/* User Account Section */}
               {currentUser ? (
-                <>
-                  <NavDropdown
-                    title={
-                      <div className="d-inline-flex align-items-center">
-                        {currentUser.profilePicture ? (
-                          <Image 
-                            src={currentUser.profilePicture} 
-                            alt="Profile" 
-                            roundedCircle 
-                            width="32"
-                            height="32"
-                            className="me-2 border border-2 border-primary"
-                          />
-                        ) : (
-                          <FaUserCircle className="me-2" size={24} />
-                        )}
-                        <span className="fw-medium">{currentUser.username || 'My Account'}</span>
-                      </div>
-                    }
-                    id="basic-nav-dropdown"
-                    align="end"
-                    className="dropdown-hover"
-                  >
-                    <NavDropdown.Item as={Link} to="/profile" className="dropdown-item-hover">
-                      <i className="bi bi-person me-2"></i> Profile
-                    </NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/orders" className="dropdown-item-hover">
-                      <i className="bi bi-bag me-2"></i> My Orders
-                    </NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item as={Link} to="/logout" className="dropdown-item-hover text-danger">
-                      <i className="bi bi-box-arrow-right me-2"></i> Logout
-                    </NavDropdown.Item>
-                  </NavDropdown>
-
-                  {/* Optional: Notification or Cart */}
-                 
-                </>
-              ) : (
-                <Nav.Link 
-                  as={Link} 
-                  to="/profile" 
-                  className="btn btn-outline-primary rounded-pill px-4 fw-medium"
+                <NavDropdown
+                  title={
+                    <div className="d-inline-flex align-items-center">
+                      {currentUser.profilePicture ? (
+                        <Image 
+                          src={currentUser.profilePicture} 
+                          alt="Profile" 
+                          roundedCircle 
+                          width="28"
+                          height="28"
+                          className="me-2 border border-2 border-primary"
+                        />
+                      ) : (
+                        <FaUserCircle className="me-2 text-primary" size={20} />
+                      )}
+                      <span className="fw-medium text-dark">{currentUser.username || 'Account'}</span>
+                    </div>
+                  }
+                  id="user-dropdown"
+                  align="end"
                 >
-                  <FaUserCircle className="me-2" /> Sign In
+                  <NavDropdown.Item as={Link} to="/profile">
+                    <FaUserCircle className="me-2" /> Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/orders">
+                    <FaShoppingCart className="me-2" /> My Orders
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item as={Link} to="/logout" className="text-danger">
+                    <i className="bi bi-box-arrow-right me-2"></i> Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <Nav.Link as={Link} to="/profile" className="signin-btn">
+                  <FaUserCircle size={14} />
+                  <span>Sign In</span>
                 </Nav.Link>
               )}
+
+              {/* Phone Button */}
+              <a href="tel:0779189558" className="phone-btn">
+                <FaPhone size={12} />
+                <span>077-918-9558</span>
+              </a>
             </Nav>
           </Navbar.Collapse>
-              <a href="tel:0779189558" className="text-decoration-none announcement-phone ms-3" style={{minWidth:'fit-content'}}>
-            <span className="bg-primary text-white px-3 py-1 rounded-pill shadow-sm fw-bold d-flex align-items-center gap-2" style={{letterSpacing:'1px', fontSize:'1.08rem', transition:'background 0.2s'}}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-telephone-fill me-2" viewBox="0 0 16 16">
-                <path d="M3.654 1.328a.678.678 0 0 1 1.015-.063l2.29 2.29c.329.329.445.81.302 1.234l-.547 1.64a.678.678 0 0 0 .145.67l2.457 2.457a.678.678 0 0 0 .67.145l1.64-.547c.424-.143.905-.027 1.234.302l2.29 2.29a.678.678 0 0 1-.063 1.015l-2.013 1.51c-.29.218-.667.246-.98.07a17.634 17.634 0 0 1-7.01-7.01c-.176-.313-.148-.69.07-.98l1.51-2.013z"/>
-              </svg>
-              077 -918 9558
-            </span>
-          </a>
         </Container>
       </Navbar>
     </>
