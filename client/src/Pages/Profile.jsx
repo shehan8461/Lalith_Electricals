@@ -207,10 +207,10 @@ export default function Profile() {
             Sign Out
           </button>
           <Link to="/additem" className="btn btn-outline-success w-100">
-            List Product for Sale
+           Add Post
           </Link>
           <Link to="/items" className="btn btn-outline-primary w-100">
-            My Inventory
+            My Posts
           </Link>
         </div>
       </div>

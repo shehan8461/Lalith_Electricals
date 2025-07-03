@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import certificate1 from '../components/images/cetificate1_page-0002.jpg';
 import certificate2 from '../components/images/cetificate2_page-0001.jpg';
+import { useDispatch } from 'react-redux';
+import { signout } from '../redux/User/userSlice';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function AllDetails() {
   const [orders, setOrders] = useState([]);
@@ -9,10 +12,26 @@ export default function AllDetails() {
   const [showModal, setShowModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showMap, setShowMap] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const searchParam = params.get('search') || '';
 
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  useEffect(() => {
+    if (searchParam && orders.length > 0) {
+      const filtered = orders.filter(order =>
+        order.Name && order.Name.toLowerCase().includes(searchParam.toLowerCase())
+      );
+      setFilteredOrders(filtered);
+    } else {
+      setFilteredOrders(orders);
+    }
+  }, [searchParam, orders]);
 
   const fetchOrders = async () => {
     try {
@@ -56,8 +75,20 @@ export default function AllDetails() {
     setFilteredOrders(updatedOrders);
   };
 
+  const handleSignOut = async () => {
+    try {
+      await fetch('/api/auth/signout');
+      dispatch(signout());
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="d-flex flex-column min-vh-100">
+      {/* Logout Button Top Right */}
+  
       <div className="container my-5 flex-grow-1" style={{minHeight: 'calc(100vh - 180px)'}}>
         <h2 className="text-center mb-5 text-primary fw-bold display-5" style={{letterSpacing: '1px'}}>Explore Our Featured Electrical Products</h2>
         {/* Orders Display */}
@@ -161,22 +192,20 @@ export default function AllDetails() {
                   <button type="button" className="btn-close btn-close-white ms-2" aria-label="Close" style={{filter:'brightness(2)', fontSize:'1.2rem'}} onClick={()=>setShowModal(false)}></button>
                 </div>
                 <div className="modal-body pt-3 pb-4 px-4">
-                  <div className="mb-4 w-100 d-flex justify-content-center align-items-center flex-nowrap overflow-auto" style={{height:'220px', gap:'16px', whiteSpace:'nowrap'}}>
+                  <div className="mb-4 w-100 d-flex justify-content-center align-items-center flex-nowrap overflow-auto media-scrollbar" style={{height:'220px', gap:'16px', whiteSpace:'nowrap'}}>
                     {selectedOrder.productVideo && (
-                      <div style={{boxShadow:'0 4px 24px rgba(59,130,246,0.12)', borderRadius:'18px', overflow:'hidden', background:'#000', display:'inline-block', position:'relative'}}>
-                        <video src={selectedOrder.productVideo} controls style={{height:'180px', width:'180px', minWidth:'120px', maxWidth:'220px', borderRadius:'18px', background:'#000', boxShadow:'0 0 16px #3b82f6, 0 2px 24px #60a5fa55'}} />
+                      <div className="media-box">
+                        <video src={selectedOrder.productVideo} controls className="media-content" />
                       </div>
                     )}
                     {selectedOrder.profilePicture && (
-                      <div style={{boxShadow:'0 4px 24px rgba(59,130,246,0.18)', borderRadius:'18px', overflow:'hidden', display:'inline-block', position:'relative', background:'linear-gradient(135deg,#fff 60%,#dbeafe 100%)'}}>
-                        <img src={selectedOrder.profilePicture} alt="Main" style={{height:'180px', width:'90px', minWidth:'60px', maxWidth:'120px', objectFit:'cover', borderRadius:'18px', transition:'transform 0.3s', boxShadow:'0 0 12px #2563eb88'}} />
-                        <div style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',borderRadius:'18px',boxShadow:'0 0 0 4px #3b82f6aa inset',pointerEvents:'none'}}></div>
+                      <div className="media-box">
+                        <img src={selectedOrder.profilePicture} alt="Main" className="media-content" />
                       </div>
                     )}
                     {selectedOrder.alternateProfilePicture && (
-                      <div style={{boxShadow:'0 4px 24px rgba(59,130,246,0.18)', borderRadius:'18px', overflow:'hidden', display:'inline-block', position:'relative', background:'linear-gradient(135deg,#fff 60%,#dbeafe 100%)'}}>
-                        <img src={selectedOrder.alternateProfilePicture} alt="Alt" style={{height:'180px', width:'90px', minWidth:'60px', maxWidth:'120px', objectFit:'cover', borderRadius:'18px', transition:'transform 0.3s', boxShadow:'0 0 12px #2563eb88'}} />
-                        <div style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',borderRadius:'18px',boxShadow:'0 0 0 4px #60a5fa99 inset',pointerEvents:'none'}}></div>
+                      <div className="media-box">
+                        <img src={selectedOrder.alternateProfilePicture} alt="Alt" className="media-content" />
                       </div>
                     )}
                   </div>
@@ -211,8 +240,8 @@ export default function AllDetails() {
       <footer className="bg-dark text-white py-2 px-0 border-top border-primary" style={{fontSize: '0.85rem', lineHeight: '1.1'}}>
         <div className="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 px-2">
           <div className="mb-0 col-12 col-md-6 text-center text-md-start" style={{fontSize:'0.85rem'}}>
-            <div className="mb-1"><i className="bi bi-envelope me-2 text-primary"></i> <a href="mailto:lalithelectricals@gmail.com" className="text-white text-decoration-none">lalithelectricals@gmail.com</a></div>
-            <div className="mb-1"><i className="bi bi-geo-alt me-2 text-primary"></i> 123 Main Street, Colombo, Sri Lanka</div>
+            <div className="mb-1"><i className="bi bi-envelope me-2 text-primary"></i> <a href="mailto:lalithelectricals@gmail.com" className="text-white text-decoration-none">lalitabesinha@gmail.com</a></div>
+            <div className="mb-1"><i className="bi bi-geo-alt me-2 text-primary"></i> 8 Familiy Point, Thoraya, Kurunegala</div>
             <div className="mb-1"><i className="bi bi-geo me-2 text-primary"></i> <button onClick={() => setShowMap(true)} className="btn btn-link p-0 m-0 align-baseline text-white text-decoration-underline" style={{fontSize:'inherit'}}>View Location</button></div>
           </div>
           <div className="mb-0 col-12 col-md-6 text-center text-md-end" style={{fontSize:'0.85rem'}}>
@@ -257,6 +286,111 @@ export default function AllDetails() {
           box-shadow: 0 8px 32px rgba(0,0,0,0.18) !important;
         }
         .modal-backdrop { display: none; }
+        .media-box {
+          width: 180px;
+          height: 180px;
+          min-width: 110px;
+          max-width: 220px;
+          border-radius: 18px;
+          overflow: hidden;
+          background: #000;
+          box-shadow: 0 4px 24px rgba(59,130,246,0.12), 0 0 16px #3b82f6, 0 2px 24px #60a5fa55;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 12px;
+        }
+        .media-content {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 18px;
+          background: #000;
+          display: block;
+        }
+        .media-box video.media-content {
+          object-fit: contain;
+          width: 100%;
+          height: 100%;
+          border-radius: 18px;
+          background: #000;
+          display: block;
+        }
+        @media (max-width: 600px) {
+          .media-box {
+            width: 110px;
+            height: 110px;
+            min-width: 70px;
+            max-width: 120px;
+            border-radius: 10px;
+            margin-right: 6px;
+          }
+          .media-content, .media-box video.media-content {
+            border-radius: 10px;
+          }
+          .modal-body.pt-3.pb-4.px-4 > .mb-4 {
+            gap: 6px !important;
+            height: 120px !important;
+          }
+          .modal-dialog {
+            max-width: 98vw !important;
+            width: 98vw !important;
+            margin: 48px auto 8px auto !important;
+          }
+          .modal-content {
+            border-radius: 12px !important;
+            width: 100vw !important;
+            min-width: 0 !important;
+          }
+          .modal-header, .modal-body, .modal-footer {
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+          }
+        }
+        @media (max-width: 400px) {
+          .media-box {
+            width: 70px;
+            height: 70px;
+            min-width: 40px;
+            max-width: 80px;
+            border-radius: 6px;
+            margin-right: 3px;
+          }
+          .media-content, .media-box video.media-content {
+            border-radius: 6px;
+          }
+          .modal-body.pt-3.pb-4.px-4 > .mb-4 {
+            gap: 3px !important;
+            height: 70px !important;
+          }
+          .modal-dialog {
+            max-width: 100vw !important;
+            width: 100vw !important;
+            margin: 16px auto 2px auto !important;
+          }
+          .modal-content {
+            border-radius: 6px !important;
+            width: 100vw !important;
+            min-width: 0 !important;
+          }
+        }
+        .media-scrollbar {
+          overflow-x: auto !important;
+          overflow-y: hidden;
+          scrollbar-width: thin;
+          scrollbar-color: #2563eb #e0e7ef;
+          width: 100%;
+          scroll-behavior: smooth;
+        }
+        .media-scrollbar::-webkit-scrollbar {
+          height: 8px;
+          background: #e0e7ef;
+          border-radius: 8px;
+        }
+        .media-scrollbar::-webkit-scrollbar-thumb {
+          background: #2563eb;
+          border-radius: 8px;
+        }
       `}</style>
     </div>
   );

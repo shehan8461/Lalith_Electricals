@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Modal, Table } from 'flowbite-react';
-import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { Link } from 'react-router-dom';
 import { getDownloadURL, ref } from 'firebase/storage';
-import { storage } from '../firebase'; // Adjust the path as per your project structure
-import './css/itemprofile.css';
+import { storage } from '../firebase';
+import { Table, Button, Modal } from 'react-bootstrap';
+import { FaEdit, FaTrashAlt, FaExclamationTriangle } from 'react-icons/fa';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function ItemProfile() {
   const { currentUser } = useSelector((state) => state.user);
@@ -19,14 +19,12 @@ export default function ItemProfile() {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch(`/api/auth/user/${currentUser._id}`);
+      const response = await fetch(`/api/auth/users/items`);
       if (!response.ok) {
         throw new Error('Failed to fetch orders');
       }
       const data = await response.json();
       setOrders(data);
-
-      // Fetch images from Firebase for each order
       data.forEach(order => {
         if (order.profilePicture) {
           fetchFirebaseImage(order.profilePicture, 'profilePicture', order._id);
@@ -71,7 +69,6 @@ export default function ItemProfile() {
           prevOrders.filter((order) => order._id !== orderIdToDelete)
         );
       }
-      
       setShowModal(false);
     } catch (error) {
       console.log(error.message);
@@ -79,79 +76,110 @@ export default function ItemProfile() {
   };
 
   return (
-    <div className='table-auto'>
-   <h2 className="my-8 text-center font-bold text-4xl text-gray-800">Pet Information</h2>
-
-
-      {orders.length > 0 ? (
-        <Table hoverable className='shadow-md'>
-          <Table.Head>
-            <Table.HeadCell>Pet Name</Table.HeadCell>
-            <Table.HeadCell>Species</Table.HeadCell>
-            <Table.HeadCell>Breed</Table.HeadCell>
-            <Table.HeadCell>Age</Table.HeadCell>
-            <Table.HeadCell>Gender</Table.HeadCell>
-            <Table.HeadCell>Color</Table.HeadCell>
-            <Table.HeadCell>Weight</Table.HeadCell>
-            <Table.HeadCell>Price</Table.HeadCell>
-            <Table.HeadCell>Photos</Table.HeadCell>
-            <Table.HeadCell>Action</Table.HeadCell>
-          </Table.Head>
-          <Table.Body>
-            {orders.map((order) => (
-              <Table.Row key={order._id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                <Table.Cell>{order.petname}</Table.Cell>
-                <Table.Cell>{order.species}</Table.Cell>
-                <Table.Cell>{order.breed}</Table.Cell>
-                <Table.Cell>{order.age}</Table.Cell>
-                <Table.Cell>{order.gender}</Table.Cell>
-                <Table.Cell>{order.color}</Table.Cell>
-                <Table.Cell>{order.weight}</Table.Cell>
-                <Table.Cell>{order.price}</Table.Cell>
-                <Table.Cell>
-                  <div className="flex gap-2">
-                    {order.profilePicture && (
-                      <img src={order.profilePicture} alt="Profile" className="h-20 w-20 object-cover rounded" />
-                    )}
-                    {order.alternateProfilePicture && (
-                      <img src={order.alternateProfilePicture} alt="Alternate Profile" className="h-20 w-20 object-cover rounded" />
-                    )}
-                  </div>
-                </Table.Cell>
-                <Table.Cell>
-                  <Link to={`/update-item/${order._id}`}>
-                    <Button id='edit-btn' className="text-green-500"><b>Edit Item</b></Button>
-                  </Link>
-                  <Button id='delete-btn' className="text-red-500" onClick={() => {
-                    setShowModal(true);
-                    setOrderIdToDelete(order._id);
-                  }}><b>Delete Order</b></Button>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
-      ) : (
-        <p>You have no orders yet!</p>
-      )}
-
-      <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
-        <Modal.Header />
-        <Modal.Body>
-          <div className="text-center-alert">
-            <HiOutlineExclamationCircle  />
-            <h3 >Are you sure you want to delete this order?</h3>
+    <div className="item-profile-bg min-vh-100 py-5">
+      <div className="container">
+        <h2 className="mb-4 text-center fw-bold display-5 text-primary">My Items</h2>
+        {orders.length > 0 ? (
+          <div className="card shadow-lg border-0 rounded-4 p-3 fade-in-table">
+            <div className="table-responsive rounded-4">
+              <Table hover bordered className="align-middle mb-0 bg-white">
+                <thead className="table-primary">
+                  <tr>
+                   
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Title</th>
+                    <th className="text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map((order) => (
+                    <tr key={order._id} className="row-border-left">
+                   
+                      <td className="fw-semibold">{order.Name}</td>
+                      <td>{order.date}</td>
+                      <td>{order.Description}</td>
+                      <td><span className="badge bg-info bg-gradient text-dark fs-6 px-3 py-2 shadow-sm">{order.Title}</span></td>
+                      <td className="text-center">
+                        <Link to={`/update-item/${order._id}`} className="me-2">
+                          <Button variant="outline-success" size="sm" className="d-inline-flex align-items-center gap-1 action-btn">
+                            <FaEdit /> Edit
+                          </Button>
+                        </Link>
+                        <Button
+                          variant="outline-danger"
+                          size="sm"
+                          className="d-inline-flex align-items-center gap-1 ms-1 action-btn"
+                          onClick={() => {
+                            setShowModal(true);
+                            setOrderIdToDelete(order._id);
+                          }}
+                        >
+                          <FaTrashAlt /> Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
           </div>
-          <div >
-            <Button color='failure' onClick={handleDeleteOrder}>
-              Yes, I am sure
-            </Button>
-            <Button color='gray' onClick={() => setShowModal(false)}>
-              No, cancel
-            </Button>
-          </div>
-        </Modal.Body>
-      </Modal>
+        ) : (
+          <div className="alert alert-info text-center mt-4">You have no items yet!</div>
+        )}
+
+        <Modal show={showModal} onHide={() => setShowModal(false)} centered dialogClassName="modal-soft-shadow">
+          <Modal.Header closeButton className="bg-danger bg-opacity-10 border-0">
+            <Modal.Title className="text-danger d-flex align-items-center gap-2">
+              <FaExclamationTriangle /> Confirm Delete
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="text-center">
+            <p className="mb-4 fs-5">Are you sure you want to delete this item?</p>
+            <div className="d-flex justify-content-center gap-3">
+              <Button variant="danger" onClick={handleDeleteOrder} className="fw-bold px-4">
+                Yes, Delete
+              </Button>
+              <Button variant="secondary" onClick={() => setShowModal(false)} className="fw-bold px-4">
+                Cancel
+              </Button>
+            </div>
+          </Modal.Body>
+        </Modal>
+      </div>
+      <style>{`
+        .item-profile-bg {
+          background: linear-gradient(120deg, #f8fafc 60%, #e0e7ef 100%);
+        }
+        .fade-in-table {
+          animation: fadeIn 0.8s;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(24px); }
+          to { opacity: 1; transform: none; }
+        }
+        .row-border-left {
+          border-left: 6px solid #0d6efd !important;
+        }
+        .action-btn {
+          transition: box-shadow 0.2s, background 0.2s;
+        }
+        .action-btn:hover, .action-btn:focus {
+          box-shadow: 0 2px 12px #0d6efd33;
+          background: #e7f1ff !important;
+        }
+        .modal-soft-shadow .modal-content {
+          box-shadow: 0 8px 48px rgba(13,110,253,0.12), 0 2px 24px #0d6efd22;
+        }
+        .avatar-placeholder {
+          width: 44px;
+          height: 44px;
+          font-size: 1.1rem;
+          font-weight: 600;
+          background: #adb5bd;
+        }
+      `}</style>
     </div>
   );
 }

@@ -1,5 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { signout } from '../redux/User/userSlice';
+import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Navbar, Nav, NavDropdown, Image, Badge } from 'react-bootstrap';
@@ -14,7 +18,8 @@ import {
   FaLightbulb,
   FaTools,
   FaSearch,
-  FaPhone
+  FaPhone,
+  FaMapMarkerAlt
 } from 'react-icons/fa';
 import { RiFlashlightFill } from 'react-icons/ri';
 import img1 from './images/1.jpeg';
@@ -25,6 +30,28 @@ import img5 from './images/5.jpeg';
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [showMap, setShowMap] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSignOut = async () => {
+    try {
+      await fetch('/api/auth/signout');
+      dispatch(signout());
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/alldetails?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
+  };
 
   return (
     <>
@@ -448,39 +475,48 @@ export default function Header() {
 
           <Navbar.Collapse id="navbar-nav">
             {/* Search Bar - Desktop */}
-            <div className="d-none d-lg-flex align-items-center mx-auto">
-              <div className="search-container d-flex">
-                <input 
-                  type="text" 
-                  placeholder="Search electrical products..." 
-                  className="form-control search-input"
-                />
-                <button className="btn search-btn">
-                  <FaSearch size={14} />
-                </button>
-              </div>
-            </div>
+            <form className="d-none d-lg-flex align-items-center ms-auto me-3 search-container" onSubmit={handleSearchSubmit}>
+              <input
+                type="text"
+                placeholder="Search products..."
+                className="form-control search-input"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+              />
+              <button className="btn search-btn d-flex align-items-center" type="submit">
+                <FaSearch />
+              </button>
+            </form>
 
             {/* Navigation Links */}
             <Nav className="ms-auto align-items-center gap-2">
+              <Nav.Link
+                className="nav-link-custom d-flex align-items-center"
+                style={{ fontWeight: 600, color: '#2563eb' }}
+                onClick={() => setShowMap(true)}
+              >
+                <FaMapMarkerAlt className="me-1" /> View Location
+              </Nav.Link>
               <Nav.Link as={Link} to="/" className="nav-link-custom d-flex align-items-center">
                 <FaHome className="me-1" size={16} />
                 <span>Home</span>
               </Nav.Link>
 
               {/* Search Bar - Mobile */}
-              <div className="d-lg-none w-100 my-2">
+              <form className="d-lg-none w-100 my-2" onSubmit={handleSearchSubmit}>
                 <div className="search-container d-flex">
-                  <input 
-                    type="text" 
-                    placeholder="Search products..." 
+                  <input
+                    type="text"
+                    placeholder="Search products..."
                     className="form-control search-input"
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
                   />
-                  <button className="btn search-btn">
-                    <FaSearch size={14} />
+                  <button className="btn search-btn d-flex align-items-center" type="submit">
+                    <FaSearch />
                   </button>
                 </div>
-              </div>
+              </form>
 
               {/* User Account Section */}
               {currentUser ? (
@@ -508,11 +544,11 @@ export default function Header() {
                   <NavDropdown.Item as={Link} to="/profile">
                     <FaUserCircle className="me-2" /> Profile
                   </NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/orders">
+                  <NavDropdown.Item as={Link} to="/items">
                     <FaShoppingCart className="me-2" /> My Orders
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item as={Link} to="/logout" className="text-danger">
+                  <NavDropdown.Item onClick={handleSignOut} className="text-danger" style={{ cursor: 'pointer' }}>
                     <i className="bi bi-box-arrow-right me-2"></i> Logout
                   </NavDropdown.Item>
                 </NavDropdown>
@@ -532,6 +568,43 @@ export default function Header() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+
+      {/* Location Modal */}
+      {showMap && (
+        <div className="modal fade show d-flex align-items-center justify-content-center"
+          style={{
+            position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+            display: 'flex', background: 'rgba(0,0,0,0.5)', zIndex: 2000
+          }}
+          tabIndex="-1" role="dialog" onClick={() => setShowMap(false)}
+        >
+          <div className="modal-dialog modal-dialog-centered"
+            style={{ maxWidth: '90vw', width: '90vw', height: '80vh', margin: 'auto' }}
+            role="document" onClick={e => e.stopPropagation()}
+          >
+            <div className="modal-content rounded-4 border-0 shadow-lg p-0" style={{ height: '80vh', width: '100%', overflow: 'hidden' }}>
+              <div className="modal-header border-0 pb-0 align-items-start d-flex justify-content-between"
+                style={{ background: '#2563eb', borderTopLeftRadius: '1.5rem', borderTopRightRadius: '1.5rem', minHeight: '0', paddingTop: '0.5rem', paddingBottom: '0.5rem' }}>
+                <h5 className="modal-title text-white fw-bold m-0" style={{ letterSpacing: '1px', fontSize: '1.1rem' }}>Lalith Electricals Location</h5>
+                <button type="button" className="btn-close btn-close-white ms-2" aria-label="Close"
+                  style={{ filter: 'brightness(2)', fontSize: '1.2rem' }} onClick={() => setShowMap(false)}></button>
+              </div>
+              <div className="modal-body p-0" style={{ height: 'calc(80vh - 48px)', width: '100%' }}>
+                <iframe
+                  title="Lalith Electricals Kurunegala Map"
+                  src="https://www.google.com/maps?q=Lalith+Electricals+Kurunegala&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

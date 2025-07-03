@@ -1,7 +1,9 @@
 import {useEffect, useState,useRef} from 'react'
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import './css/updateitem.css';
+import { Card, Form, Button, Row, Col, Alert, Spinner } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { app } from '../firebase';
 import { useSelector } from 'react-redux';
 import { getStorage, uploadBytesResumable, ref, getDownloadURL } from 'firebase/storage';
@@ -10,181 +12,200 @@ import { getStorage, uploadBytesResumable, ref, getDownloadURL } from 'firebase/
 
 function UpdateUser(){
   const [imagePercent, setImagePercent] = useState(0);
-    const navigate=useNavigate();
-    const { id } = useParams();
-    const fileRef1 = useRef(null);
-    const fileRef2 = useRef(null);
-    const [image1, setImage1] = useState(undefined);
-    const [image2, setImage2] = useState(undefined);
-    const [updatediscount,setupdatediscount]=useState({
-      petname:"",
-      species:"",
-      breed:"",
-      age:"",
-      gender:"",
-      color:"",
-      weight:"",
-      profilePicture: "",
+  const [imageError, setImageError] = useState(false);
+  const [error, setError] = useState('');
+  const navigate=useNavigate();
+  const { id } = useParams();
+  const fileRef1 = useRef(null);
+  const fileRef2 = useRef(null);
+  const [image1, setImage1] = useState(undefined);
+  const [image2, setImage2] = useState(undefined);
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [updatediscount,setupdatediscount]=useState({
+    petname:"",
+    species:"",
+    breed:"",
+    age:"",
+    gender:"",
+    color:"",
+    weight:"",
+    profilePicture: "",
     alternateProfilePicture: "",
     price:""
         
         
-    })
-    useEffect(() => {
-      if (image1) {
-        handleFileUpload(image1, 'profilePicture');
-      }
-    }, [image1]);
-  
-    useEffect(() => {
-      if (image2) {
-        handleFileUpload(image2, 'alternateProfilePicture');
-      }
-    }, [image2]);
-  
-    const handleFileUpload = async (image, field) => {
-      const storage = getStorage(app);
-      const fileName = new Date().getTime() + image.name;
-      const storageRef = ref(storage, fileName);
-      const uploadTask = uploadBytesResumable(storageRef, image);
-  
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setImagePercent(Math.round(progress));
-        },
-        (error) => {
-          setImageError(true);
-          setError('Image upload failed');
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setupdatediscount((prev) => ({
-              ...prev,
-              [field]: downloadURL
-            }));
-          });
-        }
-      );
-    };
-  
-    const handleImage1Click = () => {
-      fileRef1.current.click();
-    };
-  
-    const handleImage2Click = () => {
-      fileRef2.current.click();
-    };
-  
-    useEffect(() => {
-        const fetchUserData = async () => {
-          try {
-            const response = await fetch(`/api/user/getitem/${id}`);
-            const data = await response.json();
-            console.log(data);
-    
-            if (data.success) {
-                setupdatediscount(data.data);
-            } else {
-              console.error(data.message);
-            }
-          } catch (error) {
-            console.error('Error fetching user data:', error);
-          }
-        };
-    
-        fetchUserData();
-      }, []);
+  })
+  useEffect(() => {
+    if (image1) {
+      handleFileUpload(image1, 'profilePicture');
+    }
+  }, [image1]);
 
+  useEffect(() => {
+    if (image2) {
+      handleFileUpload(image2, 'alternateProfilePicture');
+    }
+  }, [image2]);
 
-
-      const handleInputChange = (e) => {
-        setupdatediscount({
-          ...updatediscount,
-          [e.target.name]: e.target.value,
+  const handleFileUpload = async (image, field) => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + image.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, image);
+    setLoading(true);
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setImagePercent(Math.round(progress));
+      },
+      (error) => {
+        setImageError(true);
+        setError('Image upload failed');
+        setLoading(false);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setupdatediscount((prev) => ({
+            ...prev,
+            [field]: downloadURL
+          }));
+          setLoading(false);
         });
-      };
-      const handleUpdate = async () => {
-        try {
-          const response = await fetch(`/api/user/updateitem`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              id: updatediscount._id,
-              ...updatediscount,
-            }),
-          });
-    
-          const data = await response.json();
-    
-          if (data.success) {
-            
-            console.log('user  updated successfully');
-           alert("updated successfully");
-       
+      }
+    );
+  };
 
-          } else {
-            console.error(data.message);
-          }
-         navigate('/items')
-        } catch (error) {
-          console.error('Error updating user:', error);
+  const handleImage1Click = () => {
+    fileRef1.current.click();
+  };
+
+  const handleImage2Click = () => {
+    fileRef2.current.click();
+  };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`/api/user/getitem/${id}`);
+        const data = await response.json();
+        console.log(data);
+
+        if (data.success) {
+            setupdatediscount(data.data);
+        } else {
+          console.error(data.message);
         }
-      };
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
 
+    fetchUserData();
+  }, []);
 
-    return(
-        <div className='service-update'>
+  const handleInputChange = (e) => {
+    setupdatediscount({
+      ...updatediscount,
+      [e.target.name]: e.target.value,
+    });
+  };
 
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess(false);
+    try {
+      const response = await fetch(`/api/user/updateitem`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: updatediscount._id,
+          ...updatediscount,
+        }),
+      });
 
-    <lable>Pet Name:</lable>
-    <input type="text" id="petname" name="petname" onChange={handleInputChange} value={updatediscount?.petname }/><br></br>
-    <lable>Species:</lable>
-    <input type="text" id="species" name="species" onChange={handleInputChange} value={updatediscount?.species }/><br></br>
-    <lable>Breed:</lable>
-    <input type="text" id="breed" name="breed" onChange={handleInputChange} value={updatediscount?.breed }/><br></br>
-    <lable>Age:</lable>
-    <input type="text" id="age" name="age" onChange={handleInputChange} value={updatediscount?.age }/><br></br>
-    <lable>Gender:</lable>
-    <input type="text" id="gender" name="gender" onChange={handleInputChange} value={updatediscount?.gender }/><br></br>
-    <lable>Color:</lable>
-    <input type="text" id="color" name="color" onChange={handleInputChange} value={updatediscount?.color }/><br></br>    
-    <lable>Weight:</lable>
-    <input type="text" id="weight" name="weight" onChange={handleInputChange} value={updatediscount?.weight }/><br></br>
-    <lable>Price:</lable>
-    <input type="text" id="price" name="price" onChange={handleInputChange} value={updatediscount?.price }/><br></br>
-    <input type='file' ref={fileRef1} id='profilePicture' hidden accept='image/*' onChange={(e) => setImage1(e.target.files[0])} />
-        <input type='file' ref={fileRef2} id='alternateProfilePicture' hidden accept='image/*' onChange={(e) => setImage2(e.target.files[0])} />
+      const data = await response.json();
 
-    <div className='flex justify-center items-center gap-4'>
-          <button type="button" onClick={handleImage1Click} className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Upload First Picture
-          </button>
-          <button type="button" onClick={handleImage2Click} className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Upload Alternate  Picture
-          </button>
-        </div>
+      if (data.success) {
+        setSuccess(true);
+        setTimeout(() => navigate('/items'), 1200);
+      } else {
+        console.error(data.message);
+      }
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
+    setLoading(false);
+  };
 
-        <div className='flex justify-center items-center gap-4'>
-          <img onChange={handleInputChange} value={updatediscount?.profilePicture } src={updatediscount.profilePicture || 'https://media.istockphoto.com/id/1294866141/vector/picture-reload.jpg?s=612x612&w=is&k=20&c=Ei6q4n6VkP3B0R30d1VdZ4i11CFbyaEoAFy6_WEbArE='} alt='Profile' className='h-20 w-20 self-center cursor-pointer object-cover border border-gray-300' onClick={handleImage1Click} />
-          <img onChange={handleInputChange} value={updatediscount?.alternateProfilePicture } src={updatediscount.alternateProfilePicture || 'https://media.istockphoto.com/id/1294866141/vector/picture-reload.jpg?s=612x612&w=is&k=20&c=Ei6q4n6VkP3B0R30d1VdZ4i11CFbyaEoAFy6_WEbArE='} alt='Alternate Profile' className='h-20 w-20 self-center cursor-pointer object-cover border border-gray-300' onClick={handleImage2Click} />
-        </div>
-
-    
-
-
-  
-
-
-
-  
-    <button className='update-btn' onClick={handleUpdate}>Update Pet Details</button><br></br> <br></br> 
-
+  return (
  
-        </div>
-    )
+  
+    <div className="update-bg min-vh-100 py-5 d-flex align-items-center fade-in-table">
+      <div className="container">
+        <Row className="justify-content-center">
+          <Col md={8} lg={7}>
+            <Card className="shadow-lg border-0 rounded-4 p-4">
+              <Card.Body>
+                <h2 className="mb-4 text-center fw-bold display-6 text-primary">Update Item</h2>
+                <Form onSubmit={handleUpdate}>
+                  <Row className="mb-3">
+                    <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label> Name</Form.Label>
+                        <Form.Control type="text" name="Name" value={updatediscount.Name} onChange={handleInputChange} required />
+                      </Form.Group>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Date</Form.Label>
+                        <Form.Control type="Date" name="date" value={updatediscount.date} onChange={handleInputChange} />
+                      </Form.Group>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Description</Form.Label>
+                        <Form.Control type="text" name="Description" value={updatediscount.Description} onChange={handleInputChange} />
+                      </Form.Group>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Title</Form.Label>
+                        <Form.Control type="text" name="Title" value={updatediscount.Title} onChange={handleInputChange} />
+                      </Form.Group>
+                    
+                    </Col>
+               
+                  </Row>
+                
+                  <div className="d-grid mt-3">
+                    <Button type="submit" variant="success" size="lg" className="fw-bold shadow-sm">
+                      {loading ? <Spinner animation="border" size="sm" className="me-2" /> : null}
+                      Update Information
+                    </Button>
+                  </div>
+                </Form>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+      <style>{`
+        .update-bg {
+          background: linear-gradient(120deg, #f8fafc 60%, #e0e7ef 100%);
+        }
+        .fade-in-table {
+          animation: fadeIn 0.8s;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(24px); }
+          to { opacity: 1; transform: none; }
+        }
+        .avatar-img:hover {
+          box-shadow: 0 2px 12px #0d6efd33;
+          border-color: #0d6efd !important;
+        }
+      `}</style>
+    </div>
+  )
 }
 export default UpdateUser;
