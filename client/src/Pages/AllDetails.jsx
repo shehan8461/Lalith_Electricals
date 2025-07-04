@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import certificate1 from '../components/images/cetificate1_page-0002.jpg';
 import certificate2 from '../components/images/cetificate2_page-0001.jpg';
+import bgImg1 from '../components/images/BackgroundImages/repair.webp';
+import bgImg2 from '../components/images/BackgroundImages/back2.webp';
+import bgImg3 from '../components/images/BackgroundImages/back3.png';
+import bgImg4 from '../components/images/BackgroundImages/back4.jpg';
+import bgImg5 from '../components/images/BackgroundImages/back5.jpg';
 import { useDispatch } from 'react-redux';
 import { signout } from '../redux/User/userSlice';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -12,14 +17,23 @@ export default function AllDetails() {
   const [showModal, setShowModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showMap, setShowMap] = useState(false);
+  const [bgIndex, setBgIndex] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const searchParam = params.get('search') || '';
 
+  // Background images array for animation
+  const backgroundImages = [bgImg1];
+
   useEffect(() => {
     fetchOrders();
+  }, []);
+
+  useEffect(() => {
+    // Static background - no animation needed since only one image
+    setBgIndex(0);
   }, []);
 
   useEffect(() => {
@@ -86,11 +100,49 @@ export default function AllDetails() {
   };
 
   return (
-    <div className="d-flex flex-column min-vh-100">
+    <div className="d-flex flex-column min-vh-100 position-relative" style={{ minHeight: '100vh' }}>
+      {/* Blurred Background Layer */}
+      <div 
+        className="position-fixed top-0 start-0 w-100 h-100"
+        style={{
+          background: `url(${backgroundImages[bgIndex]}) center center/cover no-repeat`,
+          transition: 'background-image 1.5s cubic-bezier(0.4,0,0.2,1)',
+          filter: 'blur(7px)',
+          zIndex: -1
+        }}
+      ></div>
+      
+      {/* Content Layer */}
+      <div className="d-flex flex-column min-vh-100 animated-bg">
       {/* Logout Button Top Right */}
+      
+      {/* Top Heading Section - Full Top */}
+      <div className="w-100 d-flex justify-content-center pt-3 pb-4">
+        <div className="heading-container d-flex justify-content-center">
+          <h2 className="text-center text-white fw-bold heading-with-bg px-3 py-2 mx-auto" style={{
+            letterSpacing: '0.4px', 
+            textShadow: '2px 2px 6px rgba(0,0,0,0.8)', 
+            background: 'linear-gradient(135deg, rgba(75,85,99,0.95) 0%, rgba(107,114,128,0.95) 25%, rgba(156,163,175,0.95) 50%, rgba(209,213,219,0.95) 75%, rgba(255,255,255,0.95) 100%)',
+            borderRadius: '20px',
+            border: '2px solid rgba(255,255,255,0.4)',
+            backdropFilter: 'blur(15px)',
+            boxShadow: '0 12px 28px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.3)',
+            position: 'relative',
+            overflow: 'hidden',
+            fontSize: 'clamp(0.9rem, 4vw, 2rem)',
+            maxWidth: '95%',
+            width: 'fit-content',
+            whiteSpace: 'nowrap',
+            transform: 'perspective(1000px) rotateX(5deg)',
+            background: 'linear-gradient(135deg, rgba(75,85,99,0.95) 0%, rgba(107,114,128,0.95) 30%, rgba(156,163,175,0.95) 70%, rgba(255,255,255,0.1) 100%)'
+          }}>
+            ⚡ Expert Generator Repair & Maintenance Services ⚡
+          </h2>
+        </div>
+      </div>
   
-      <div className="container my-5 flex-grow-1" style={{minHeight: 'calc(100vh - 180px)'}}>
-        <h2 className="text-center mb-5 text-primary fw-bold display-5" style={{letterSpacing: '1px'}}>Explore Our Featured Electrical Products</h2>
+      <div className="container my-3 flex-grow-1" style={{minHeight: 'calc(100vh - 200px)'}}>
+        
         {/* Orders Display */}
         <div className="row g-4">
           {filteredOrders.length > 0 ? (
@@ -219,38 +271,114 @@ export default function AllDetails() {
           </div>
         )}
       </div>
-      {/* Certificates Section - Owner's Credentials */}
-      <section className="container my-5 py-4">
-        <h3 className="text-center text-primary fw-bold mb-4" style={{letterSpacing:'1px'}}>Our Certifications & Owner's Credentials</h3>
-        <p className="text-center text-secondary mb-4" style={{maxWidth:'600px', margin:'0 auto', fontSize:'1.08rem'}}>
-          Lalith Electricals is led by a highly qualified owner, recognized for excellence and trust in the electrical industry. Our certifications and awards are a testament to our commitment to quality and customer satisfaction.
-        </p>
-        <div className="row justify-content-center g-4">
-          <div className="col-12 col-md-5 d-flex flex-column align-items-center">
-            <img src={certificate1} alt="Government Electrical License" className="img-fluid rounded-3 shadow border border-2 border-primary mb-2" style={{maxHeight:'140px', objectFit:'cover', background:'#fff'}} />
-            <span className="fw-semibold text-primary" style={{fontSize:'0.98rem'}}>Government Electrical License</span>
-          </div>
-          <div className="col-12 col-md-5 d-flex flex-column align-items-center">
-            <img src={certificate2} alt="Award of Excellence" className="img-fluid rounded-3 shadow border border-2 border-success mb-2" style={{maxHeight:'140px', objectFit:'cover', background:'#fff'}} />
-            <span className="fw-semibold text-success" style={{fontSize:'0.98rem'}}>Award of Excellence</span>
-          </div>
-        </div>
-      </section>
       {/* Footer - appears at the bottom after content, not fixed */}
-      <footer className="bg-dark text-white py-2 px-0 border-top border-primary" style={{fontSize: '0.85rem', lineHeight: '1.1'}}>
-        <div className="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 px-2">
-          <div className="mb-0 col-12 col-md-6 text-center text-md-start" style={{fontSize:'0.85rem'}}>
-            <div className="mb-1"><i className="bi bi-envelope me-2 text-primary"></i> <a href="mailto:lalithelectricals@gmail.com" className="text-white text-decoration-none">lalitabesinha@gmail.com</a></div>
-            <div className="mb-1"><i className="bi bi-geo-alt me-2 text-primary"></i> 8 Familiy Point, Thoraya, Kurunegala</div>
-            <div className="mb-1"><i className="bi bi-geo me-2 text-primary"></i> <button onClick={() => setShowMap(true)} className="btn btn-link p-0 m-0 align-baseline text-white text-decoration-underline" style={{fontSize:'inherit'}}>View Location</button></div>
+      <footer className="text-white py-2 py-md-2 py-sm-1 px-0 border-top border-primary" style={{fontSize: '0.85rem', lineHeight: '1.1', background: 'linear-gradient(135deg, rgba(31,41,55,0.95) 0%, rgba(17,24,39,0.95) 50%, rgba(15,23,42,0.95) 100%)', backdropFilter: 'blur(10px)', borderTop: '2px solid rgba(59,130,246,0.6) !important'}}>
+        <div className="container">
+          <div className="row g-2 g-md-3 align-items-center">
+            {/* Contact Information */}
+            <div className="col-12 col-md-4 order-1">
+              <h6 className="fw-bold mb-1 mb-md-2 text-primary" style={{fontSize:'0.9rem', letterSpacing:'0.3px'}}>
+                <i className="bi bi-lightning-charge-fill me-2"></i>Contact Us
+              </h6>
+              <div className="mb-1">
+                <i className="bi bi-envelope-fill me-1 text-primary"></i>
+                <a href="mailto:lalitabesinha@gmail.com" className="text-white text-decoration-none hover-link">
+                  lalitabesinha@gmail.com
+                </a>
+              </div>
+              <div className="mb-1">
+                <i className="bi bi-telephone-fill me-1 text-success"></i>
+                <a href="tel:+94123456789" className="text-white text-decoration-none hover-link">
+                  +94 123 456 789
+                </a>
+              </div>
+              <div className="mb-1">
+                <i className="bi bi-geo-alt-fill me-1 text-warning"></i>
+                <span className="text-light">8 Family Point, Thoraya, Kurunegala</span>
+              </div>
+              <div className="mb-0">
+                <i className="bi bi-map me-1 text-info"></i>
+                <button onClick={() => setShowMap(true)} className="btn btn-link p-0 m-0 align-baseline text-info text-decoration-none hover-link" style={{fontSize:'inherit'}}>
+                  📍 View on Google Maps
+                </button>
+              </div>
+            </div>
+            
+            {/* Certificates & Credentials */}
+            <div className="col-12 col-md-4 text-center order-3 order-md-2">
+              <h6 className="fw-bold mb-1 mb-md-2 text-warning" style={{fontSize:'0.9rem', letterSpacing:'0.3px'}}>
+                <i className="bi bi-award-fill me-2"></i>Certified & Trusted
+              </h6>
+              <div className="d-flex justify-content-center gap-2 gap-md-3 mb-1 mb-md-2">
+                <div className="d-flex flex-column align-items-center certificate-item">
+                  <div className="certificate-frame position-relative">
+                    <img src={certificate1} alt="Government Electrical License" className="img-fluid rounded-2 shadow border border-1 border-warning mb-1" style={{maxHeight:'60px', objectFit:'cover', background:'#fff'}} />
+                    <div className="certificate-badge">
+                      <i className="bi bi-patch-check-fill text-warning"></i>
+                    </div>
+                  </div>
+                  <span className="fw-bold text-warning" style={{fontSize:'0.65rem', textShadow: '1px 1px 2px rgba(0,0,0,0.5)'}}>Government License</span>
+                </div>
+                <div className="d-flex flex-column align-items-center certificate-item">
+                  <div className="certificate-frame position-relative">
+                    <img src={certificate2} alt="Award of Excellence" className="img-fluid rounded-2 shadow border border-1 border-success mb-1" style={{maxHeight:'60px', objectFit:'cover', background:'#fff'}} />
+                    <div className="certificate-badge">
+                      <i className="bi bi-trophy-fill text-success"></i>
+                    </div>
+                  </div>
+                  <span className="fw-bold text-success" style={{fontSize:'0.65rem', textShadow: '1px 1px 2px rgba(0,0,0,0.5)'}}>Excellence Award</span>
+                </div>
+              </div>
+              <div className="text-center">
+                <span className="badge text-white fw-bold px-2 py-1" style={{fontSize:'0.7rem', background: 'linear-gradient(45deg, #f59e0b, #d97706)', textShadow: '1px 1px 2px rgba(0,0,0,0.7)', boxShadow: '0 2px 8px rgba(245,158,11,0.3)'}}>
+                  🏆 15+ Years Experience 🏆
+                </span>
+              </div>
+            </div>
+            
+            {/* Services & Hours */}
+            <div className="col-12 col-md-4 text-center text-md-end order-2 order-md-3">
+              <h6 className="fw-bold mb-1 mb-md-2 text-success" style={{fontSize:'0.9rem', letterSpacing:'0.3px'}}>
+                <i className="bi bi-clock-fill me-2"></i>Service Hours
+              </h6>
+              <div className="mb-1">
+                <i className="bi bi-calendar-check me-1 text-success"></i>
+                <span className="text-success fw-bold">Mon - Sat:</span>
+                <span className="text-light ms-1">8:00 AM - 6:00 PM</span>
+              </div>
+              <div className="mb-1">
+                <i className="bi bi-calendar-x me-1 text-danger"></i>
+                <span className="text-danger fw-bold">Sunday:</span>
+                <span className="text-light ms-1">Closed</span>
+              </div>
+              <div className="mb-1">
+                <i className="bi bi-tools me-1 text-primary"></i>
+                <span className="text-primary fw-bold">Emergency Service:</span>
+              </div>
+              <div className="mb-0">
+                <span className="badge bg-danger px-2 py-1" style={{fontSize:'0.65rem'}}>
+                  🚨 24/7 Available
+                </span>
+              </div>
+            </div>
           </div>
-          <div className="mb-0 col-12 col-md-6 text-center text-md-end" style={{fontSize:'0.85rem'}}>
-            <h6 className="fw-bold mb-1" style={{fontSize:'0.92rem'}}>Working Hours</h6>
-            <div className="mb-1"><span className="text-success fw-bold">Mon - Sat:</span> 8:00 AM - 6:00 PM</div>
-            <div className="mb-1"><span className="text-danger fw-bold">Sunday:</span> Closed</div>
+          
+          {/* Bottom Section */}
+          <hr className="my-2 my-md-3 border-secondary" />
+          <div className="row align-items-center">
+            <div className="col-12 col-md-6 text-center text-md-start mb-1 mb-md-0">
+              <span className="text-light" style={{fontSize:'0.8rem'}}>
+                &copy; {new Date().getFullYear()} <strong className="text-primary">Lalith Electricals</strong>. All rights reserved.
+              </span>
+            </div>
+            <div className="col-12 col-md-6 text-center text-md-end">
+              <span className="text-muted" style={{fontSize:'0.75rem'}}>
+                <i className="bi bi-shield-check me-1 text-success"></i>
+                Trusted • Professional • Reliable
+              </span>
+            </div>
           </div>
         </div>
-        <div className="text-center mt-1 small text-secondary" style={{fontSize:'0.75rem', lineHeight:'1'}}>&copy; {new Date().getFullYear()} Lalith Electricals. All rights reserved.</div>
       </footer>
       {/* Google Maps Popup */}
       {showMap && (
@@ -278,12 +406,103 @@ export default function AllDetails() {
         </div>
       )}
       <style>{`
-        .card-hover:hover .card-img-top {
-          transform: scale(1.08);
-          filter: brightness(0.95) saturate(1.1);
+        body { padding-top: 160px !important; }
+        .heading-container {
+          position: relative;
+          display: inline-block;
         }
-        .card-hover:hover {
-          box-shadow: 0 8px 32px rgba(0,0,0,0.18) !important;
+        .heading-container::before {
+          content: '';
+          position: absolute;
+          top: -10px;
+          left: -10px;
+          right: -10px;
+          bottom: -10px;
+          background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899, #10b981, #3b82f6);
+          background-size: 400% 400%;
+          border-radius: 35px;
+          z-index: -2;
+          animation: gradientFlow 4s ease infinite;
+          opacity: 0.7;
+          filter: blur(8px);
+        }
+        .heading-with-bg {
+          animation: headingFloat 6s ease-in-out infinite, headingGlow 3s ease-in-out infinite alternate;
+          position: relative;
+          z-index: 1;
+        }
+        .heading-with-bg::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+          background-size: 200% 200%;
+          border-radius: 25px;
+          z-index: -1;
+          animation: shimmer 3s ease-in-out infinite;
+        }
+        @keyframes headingFloat {
+          0%, 100% { transform: perspective(1000px) rotateX(5deg) translateY(0px); }
+          50% { transform: perspective(1000px) rotateX(5deg) translateY(-8px); }
+        }
+        @keyframes gradientFlow {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        @keyframes headingGlow {
+          0% { 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.3), 0 0 30px rgba(75,85,99,0.4);
+          }
+          100% { 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4), inset 0 3px 0 rgba(255,255,255,0.4), 0 0 50px rgba(107,114,128,0.6);
+          }
+        }
+        @keyframes gradientShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .animated-bg::before {
+          content: '';
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(45deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.08) 100%);
+          z-index: -1;
+          animation: bg-shimmer 10s ease-in-out infinite, bg-pulse 8s ease-in-out infinite;
+          pointer-events: none;
+        }
+        @keyframes bg-shimmer {
+          0%, 100% { opacity: 0.1; transform: translateX(-15px) scale(1); }
+          50% { opacity: 0.4; transform: translateX(15px) scale(1.02); }
+        }
+        @keyframes bg-pulse {
+          0%, 100% { filter: brightness(1) saturate(1); }
+          50% { filter: brightness(1.1) saturate(1.2); }
+        }
+        .card-hover {
+          backdrop-filter: blur(3px);
+          background: linear-gradient(145deg, rgba(255,255,255,0.98) 0%, rgba(248,250,252,0.95) 100%) !important;
+          border: 2px solid rgba(255,255,255,0.5) !important;
+          transform: translateY(0px);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 0 20px rgba(59,130,246,0.1);
+        }
+        .certificates-section {
+          background: linear-gradient(135deg, rgba(75,85,99,0.85) 0%, rgba(107,114,128,0.85) 30%, rgba(156,163,175,0.85) 70%, rgba(209,213,219,0.85) 100%);
+          backdrop-filter: blur(10px);
+          border-radius: 15px;
+          border: 1px solid rgba(255,255,255,0.2);
+          box-shadow: 0 6px 24px rgba(0,0,0,0.15);
         }
         .modal-backdrop { display: none; }
         .media-box {
@@ -317,6 +536,16 @@ export default function AllDetails() {
           display: block;
         }
         @media (max-width: 600px) {
+          .heading-with-bg {
+            font-size: 0.9rem !important;
+            padding: 0.5rem 1rem !important;
+            border-radius: 15px !important;
+            letter-spacing: 0.2px !important;
+            max-width: 98% !important;
+          }
+          .heading-container::before {
+            border-radius: 25px !important;
+          }
           .media-box {
             width: 110px;
             height: 110px;
@@ -348,6 +577,16 @@ export default function AllDetails() {
           }
         }
         @media (max-width: 400px) {
+          .heading-with-bg {
+            font-size: 0.8rem !important;
+            padding: 0.4rem 0.8rem !important;
+            border-radius: 12px !important;
+            letter-spacing: 0.1px !important;
+            max-width: 99% !important;
+          }
+          .heading-container::before {
+            border-radius: 22px !important;
+          }
           .media-box {
             width: 70px;
             height: 70px;
@@ -391,7 +630,248 @@ export default function AllDetails() {
           background: #2563eb;
           border-radius: 8px;
         }
+        .background-animation {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          z-index: -1;
+        }
+        .background-animation img {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 120%;
+          height: 120%;
+          object-fit: cover;
+          transform: translate(-50%, -50%);
+          animation: zoomInOut 8s ease-in-out infinite;
+        }
+        @keyframes zoomInOut {
+          0%, 100% {
+            transform: translate(-50%, -50%) scale(1);
+          }
+          50% {
+            transform: translate(-50%, -50%) scale(1.05);
+          }
+        }
+        .certificate-showcase {
+          animation: certificateFloat 4s ease-in-out infinite;
+        }
+        @keyframes certificateFloat {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-5px); }
+        }
+        .certificate-item {
+          transition: all 0.3s ease;
+        }
+        .certificate-item:hover {
+          transform: translateY(-3px) scale(1.05);
+        }
+        .certificate-frame {
+          position: relative;
+          overflow: hidden;
+          border-radius: 12px;
+          box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+          transition: all 0.3s ease;
+        }
+        .certificate-frame:hover {
+          box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        .certificate-frame::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+          transition: left 0.5s;
+        }
+        .certificate-frame:hover::before {
+          left: 100%;
+        }
+        .certificate-badge {
+          position: absolute;
+          top: -5px;
+          right: -5px;
+          background: rgba(0,0,0,0.8);
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.7rem;
+        }
+        .hover-link {
+          transition: all 0.3s ease;
+        }
+        .hover-link:hover {
+          color: #60a5fa !important;
+          text-shadow: 0 0 5px rgba(96,165,250,0.5);
+        }
+        footer {
+          box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
+          border-top: 2px solid rgba(59,130,246,0.6) !important;
+        }
+        footer h6 {
+          text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        footer .badge {
+          animation: badgePulse 3s ease-in-out infinite;
+        }
+        @keyframes badgePulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+        }
+        @media (max-width: 768px) {
+          footer {
+            padding: 0.4rem 0 !important;
+            font-size: 0.7rem !important;
+            line-height: 1.1 !important;
+          }
+          footer .container {
+            padding: 0 0.4rem !important;
+          }
+          footer .row.g-4 {
+            gap: 0.3rem !important;
+          }
+          footer h6 {
+            font-size: 0.75rem !important;
+            margin-bottom: 0.2rem !important;
+            line-height: 1 !important;
+          }
+          footer .certificate-frame img {
+            max-height: 70px !important;
+          }
+          footer .badge {
+            font-size: 0.65rem !important;
+            padding: 0.2rem 0.4rem !important;
+          }
+          footer .mb-2, footer .mb-3 {
+            margin-bottom: 0.15rem !important;
+          }
+          footer .col-12.col-md-4 {
+            margin-bottom: 0.4rem !important;
+            padding: 0 0.2rem !important;
+          }
+          footer .d-flex.gap-4 {
+            gap: 0.6rem !important;
+          }
+          footer .certificate-badge {
+            width: 16px !important;
+            height: 16px !important;
+            font-size: 0.6rem !important;
+          }
+          footer hr {
+            margin: 0.3rem 0 !important;
+          }
+          footer .certificate-item span {
+            font-size: 0.65rem !important;
+          }
+        }
+        @media (max-width: 576px) {
+          footer {
+            padding: 0.3rem 0 !important;
+            font-size: 0.65rem !important;
+            line-height: 1 !important;
+          }
+          footer .container {
+            padding: 0 0.2rem !important;
+          }
+          footer .row.g-4 {
+            gap: 0.2rem !important;
+          }
+          footer h6 {
+            font-size: 0.7rem !important;
+            margin-bottom: 0.15rem !important;
+            line-height: 1 !important;
+          }
+          footer .certificate-frame img {
+            max-height: 55px !important;
+          }
+          footer .d-flex.gap-4 {
+            gap: 0.4rem !important;
+          }
+          footer .badge {
+            font-size: 0.6rem !important;
+            padding: 0.15rem 0.3rem !important;
+          }
+          footer .mb-2, footer .mb-3, footer .mb-0 {
+            margin-bottom: 0.1rem !important;
+          }
+          footer .certificate-item span {
+            font-size: 0.6rem !important;
+          }
+          footer hr {
+            margin: 0.2rem 0 !important;
+          }
+          footer .col-12.col-md-4 {
+            margin-bottom: 0.3rem !important;
+            padding: 0 0.1rem !important;
+          }
+          footer .certificate-badge {
+            width: 14px !important;
+            height: 14px !important;
+            font-size: 0.55rem !important;
+          }
+          footer .row.align-items-center > div {
+            margin-bottom: 0.1rem !important;
+          }
+          footer .row.align-items-center > div:last-child {
+            margin-bottom: 0 !important;
+          }
+        }
+        @media (max-width: 400px) {
+          footer {
+            padding: 0.25rem 0 !important;
+            font-size: 0.6rem !important;
+            line-height: 0.9 !important;
+          }
+          footer .container {
+            padding: 0 0.15rem !important;
+          }
+          footer .row.g-4 {
+            gap: 0.1rem !important;
+          }
+          footer h6 {
+            font-size: 0.65rem !important;
+            margin-bottom: 0.1rem !important;
+          }
+          footer .certificate-frame img {
+            max-height: 45px !important;
+          }
+          footer .d-flex.gap-4 {
+            gap: 0.3rem !important;
+          }
+          footer .badge {
+            font-size: 0.55rem !important;
+            padding: 0.1rem 0.2rem !important;
+          }
+          footer .mb-2, footer .mb-3, footer .mb-0 {
+            margin-bottom: 0.05rem !important;
+          }
+          footer .certificate-item span {
+            font-size: 0.55rem !important;
+          }
+          footer hr {
+            margin: 0.15rem 0 !important;
+          }
+          footer .col-12.col-md-4 {
+            margin-bottom: 0.2rem !important;
+            padding: 0 0.05rem !important;
+          }
+          footer .certificate-badge {
+            width: 12px !important;
+            height: 12px !important;
+            font-size: 0.5rem !important;
+          }
+        }
       `}</style>
+      </div>
     </div>
   );
 }
