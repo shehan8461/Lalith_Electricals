@@ -18,6 +18,11 @@ export default function AllDetails() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showMap, setShowMap] = useState(false);
   const [bgIndex, setBgIndex] = useState(0);
+  const [filterOptions, setFilterOptions] = useState({
+    showFeatured: false,
+    showOnSale: false,
+    showAll: true
+  });
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,11 +46,49 @@ export default function AllDetails() {
       const filtered = orders.filter(order =>
         order.Name && order.Name.toLowerCase().includes(searchParam.toLowerCase())
       );
-      setFilteredOrders(filtered);
+      applyFilters(filtered);
     } else {
-      setFilteredOrders(orders);
+      applyFilters(orders);
     }
-  }, [searchParam, orders]);
+  }, [searchParam, orders, filterOptions, location.search]);
+
+  const applyFilters = (ordersToFilter) => {
+    let filtered = ordersToFilter;
+    
+    if (!filterOptions.showAll) {
+      if (filterOptions.showFeatured && filterOptions.showOnSale) {
+        filtered = ordersToFilter.filter(order => order.featured || order.onSale);
+      } else if (filterOptions.showFeatured) {
+        filtered = ordersToFilter.filter(order => order.featured);
+      } else if (filterOptions.showOnSale) {
+        filtered = ordersToFilter.filter(order => order.onSale);
+      }
+    }
+    
+    setFilteredOrders(filtered);
+  };
+
+  const handleFilterChange = (filterType) => {
+    setFilterOptions(prev => {
+      const newFilters = { ...prev };
+      
+      if (filterType === 'showAll') {
+        newFilters.showAll = true;
+        newFilters.showFeatured = false;
+        newFilters.showOnSale = false;
+      } else {
+        newFilters.showAll = false;
+        newFilters[filterType] = !prev[filterType];
+        
+        // If no filters are selected, default to showing all
+        if (!newFilters.showFeatured && !newFilters.showOnSale) {
+          newFilters.showAll = true;
+        }
+      }
+      
+      return newFilters;
+    });
+  };
 
   const fetchOrders = async () => {
     try {
@@ -147,6 +190,140 @@ export default function AllDetails() {
   
       <div className="container-fluid my-3 flex-grow-1" style={{minHeight: 'calc(100vh - 200px)', paddingLeft: '0.5rem', paddingRight: '0.5rem'}}>
         
+        {/* Search Status Indicator */}
+        {searchParam && (
+          <div className="mb-3 d-flex justify-content-center">
+            <div className="d-flex align-items-center px-3 py-2 rounded-pill" style={{
+              background: 'linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%)',
+              color: 'white',
+              fontSize: '0.9rem',
+              boxShadow: '0 4px 12px rgba(59,130,246,0.3)'
+            }}>
+              <i className="bi bi-search me-2"></i>
+              <span>Searching for: "<strong>{searchParam}</strong>"</span>
+              <button 
+                className="btn btn-link text-white p-0 ms-2"
+                onClick={() => navigate('/')}
+                style={{fontSize: '1.2rem', lineHeight: 1}}
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
+        
+        {/* Filter Options - Full Width Tab Style */}
+        <div className="mb-4 w-100">
+          <div className="d-flex justify-content-center align-items-center w-100" style={{
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.9) 100%)',
+            backdropFilter: 'blur(15px)',
+            border: '1px solid rgba(255,255,255,0.8)',
+            borderRadius: '15px',
+            boxShadow: '0 8px 25px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.9)',
+            padding: '8px',
+            maxWidth: '600px',
+            margin: '0 auto'
+          }}>
+            <div className="d-flex w-100 justify-content-center gap-1">
+              <button
+                className={`flex-fill btn fw-semibold transition-all border-0 ${filterOptions.showAll ? 'filter-tab-active' : 'filter-tab-inactive'}`}
+                style={{
+                  borderRadius: '12px',
+                  fontSize: '0.9rem',
+                  letterSpacing: '0.3px',
+                  padding: '12px 20px',
+                  background: filterOptions.showAll 
+                    ? 'linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%)' 
+                    : 'transparent',
+                  color: filterOptions.showAll ? 'white' : '#64748b',
+                  boxShadow: filterOptions.showAll ? '0 4px 12px rgba(59,130,246,0.3)' : 'none',
+                  transform: filterOptions.showAll ? 'translateY(-2px)' : 'translateY(0)',
+                  fontWeight: filterOptions.showAll ? '600' : '500'
+                }}
+                onClick={() => handleFilterChange('showAll')}
+                onMouseEnter={(e) => {
+                  if (!filterOptions.showAll) {
+                    e.target.style.background = 'rgba(59,130,246,0.1)';
+                    e.target.style.color = '#3b82f6';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!filterOptions.showAll) {
+                    e.target.style.background = 'transparent';
+                    e.target.style.color = '#64748b';
+                  }
+                }}
+              >
+                All
+              </button>
+              
+              <button
+                className={`flex-fill btn fw-semibold transition-all border-0 ${filterOptions.showFeatured ? 'filter-tab-active' : 'filter-tab-inactive'}`}
+                style={{
+                  borderRadius: '12px',
+                  fontSize: '0.9rem',
+                  letterSpacing: '0.3px',
+                  padding: '12px 20px',
+                  background: filterOptions.showFeatured 
+                    ? 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)' 
+                    : 'transparent',
+                  color: filterOptions.showFeatured ? 'white' : '#64748b',
+                  boxShadow: filterOptions.showFeatured ? '0 4px 12px rgba(245,158,11,0.3)' : 'none',
+                  transform: filterOptions.showFeatured ? 'translateY(-2px)' : 'translateY(0)',
+                  fontWeight: filterOptions.showFeatured ? '600' : '500'
+                }}
+                onClick={() => handleFilterChange('showFeatured')}
+                onMouseEnter={(e) => {
+                  if (!filterOptions.showFeatured) {
+                    e.target.style.background = 'rgba(245,158,11,0.1)';
+                    e.target.style.color = '#f59e0b';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!filterOptions.showFeatured) {
+                    e.target.style.background = 'transparent';
+                    e.target.style.color = '#64748b';
+                  }
+                }}
+              >
+                Featured
+              </button>
+              
+              <button
+                className={`flex-fill btn fw-semibold transition-all border-0 ${filterOptions.showOnSale ? 'filter-tab-active' : 'filter-tab-inactive'}`}
+                style={{
+                  borderRadius: '12px',
+                  fontSize: '0.9rem',
+                  letterSpacing: '0.3px',
+                  padding: '12px 20px',
+                  background: filterOptions.showOnSale 
+                    ? 'linear-gradient(135deg, #10b981 0%, #34d399 100%)' 
+                    : 'transparent',
+                  color: filterOptions.showOnSale ? 'white' : '#64748b',
+                  boxShadow: filterOptions.showOnSale ? '0 4px 12px rgba(16,185,129,0.3)' : 'none',
+                  transform: filterOptions.showOnSale ? 'translateY(-2px)' : 'translateY(0)',
+                  fontWeight: filterOptions.showOnSale ? '600' : '500'
+                }}
+                onClick={() => handleFilterChange('showOnSale')}
+                onMouseEnter={(e) => {
+                  if (!filterOptions.showOnSale) {
+                    e.target.style.background = 'rgba(16,185,129,0.1)';
+                    e.target.style.color = '#10b981';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!filterOptions.showOnSale) {
+                    e.target.style.background = 'transparent';
+                    e.target.style.color = '#64748b';
+                  }
+                }}
+              >
+                On Sale
+              </button>
+            </div>
+          </div>
+        </div>
+        
         {/* Orders Display */}
         <div className="row g-2 g-md-3" style={{marginLeft: '0', marginRight: '0'}}>
           {filteredOrders.length > 0 ? (
@@ -227,6 +404,42 @@ export default function AllDetails() {
                       </div>
                     ) : null}
                     <div className="position-absolute top-0 start-0 w-100 h-100" style={{background: 'linear-gradient(180deg,rgba(0,0,0,0.15) 60%,rgba(0,0,0,0.5) 100%)', pointerEvents: 'none'}}></div>
+                    
+                    {/* Featured and On Sale Badges */}
+                    <div className="position-absolute top-0 end-0 p-2 d-flex flex-column gap-1" style={{zIndex: 3}}>
+                      {order.featured && (
+                        <span className="badge badge-featured d-flex align-items-center" style={{
+                          background: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)',
+                          color: 'white',
+                          fontSize: '0.7rem',
+                          fontWeight: '600',
+                          borderRadius: '12px',
+                          padding: '4px 8px',
+                          boxShadow: '0 2px 8px rgba(245,158,11,0.4)',
+                          border: '1px solid rgba(255,255,255,0.3)',
+                          backdropFilter: 'blur(10px)'
+                        }}>
+                          <i className="bi bi-star-fill me-1" style={{fontSize: '0.6rem'}}></i>
+                          Featured
+                        </span>
+                      )}
+                      {order.onSale && (
+                        <span className="badge badge-on-sale d-flex align-items-center" style={{
+                          background: 'linear-gradient(135deg, #10b981 0%, #34d399 100%)',
+                          color: 'white',
+                          fontSize: '0.7rem',
+                          fontWeight: '600',
+                          borderRadius: '12px',
+                          padding: '4px 8px',
+                          boxShadow: '0 2px 8px rgba(16,185,129,0.4)',
+                          border: '1px solid rgba(255,255,255,0.3)',
+                          backdropFilter: 'blur(10px)'
+                        }}>
+                          <i className="bi bi-tag-fill me-1" style={{fontSize: '0.6rem'}}></i>
+                          Sale
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="card-body p-3 premium-card-content">
                     <div className="card-title-wrapper mb-2">
@@ -267,7 +480,23 @@ export default function AllDetails() {
               </div>
             ))
           ) : (
-            <p className="text-center fs-5 mt-5 text-danger">No matching items found!</p>
+            <div className="text-center mt-5">
+              <p className="fs-5 text-danger mb-2">
+                {searchParam 
+                  ? `No products found for "${searchParam}"` 
+                  : 'No matching items found!'
+                }
+              </p>
+              {searchParam && (
+                <button 
+                  className="btn btn-primary btn-sm"
+                  onClick={() => navigate('/')}
+                >
+                  <i className="bi bi-arrow-left me-1"></i>
+                  Show All Products
+                </button>
+              )}
+            </div>
           )}
         </div>
         {/* Modal Popup */}
@@ -405,7 +634,7 @@ export default function AllDetails() {
               </div>
               <div className="text-center mb-2">
                 <span className="badge text-white fw-bold px-1 py-0" style={{fontSize:'0.6rem', background: 'linear-gradient(45deg, #f59e0b, #d97706)', textShadow: '1px 1px 2px rgba(0,0,0,0.7)', boxShadow: '0 2px 8px rgba(245,158,11,0.3)'}}>
-                  🏆 15+ Years Experience 🏆
+                  🏆 28+ Years Experience 🏆
                 </span>
               </div>
             </div>
@@ -481,6 +710,92 @@ export default function AllDetails() {
       )}
       <style>{`
         body { padding-top: 160px !important; }
+        
+        /* Filter Animation */
+        .transition-all {
+          transition: all 0.3s ease;
+        }
+        .transition-all:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
+        }
+        
+        /* Badge Animations */
+        .badge-featured {
+          animation: featuredPulse 2s ease-in-out infinite;
+        }
+        .badge-on-sale {
+          animation: saleBounce 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes featuredPulse {
+          0%, 100% { 
+            transform: scale(1);
+            box-shadow: 0 2px 8px rgba(245,158,11,0.4);
+          }
+          50% { 
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(245,158,11,0.6);
+          }
+        }
+        
+        @keyframes saleBounce {
+          0%, 100% { 
+            transform: translateY(0px) scale(1);
+            box-shadow: 0 2px 8px rgba(16,185,129,0.4);
+          }
+          50% { 
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 16px rgba(16,185,129,0.6);
+          }
+        }
+        
+        /* Filter Tab Styles */
+        .filter-tab-active {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .filter-tab-inactive {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .filter-tab-inactive:hover {
+          transform: translateY(-1px) !important;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+        }
+        
+        /* Active tab animation */
+        .filter-tab-active {
+          animation: tabActivate 0.4s ease-out;
+        }
+        
+        @keyframes tabActivate {
+          0% {
+            transform: translateY(0) scale(0.95);
+            opacity: 0.8;
+          }
+          50% {
+            transform: translateY(-3px) scale(1.02);
+          }
+          100% {
+            transform: translateY(-2px) scale(1);
+            opacity: 1;
+          }
+        }
+        
+        /* Filter container responsive */
+        @media (max-width: 768px) {
+          .filter-tab-active, .filter-tab-inactive {
+            font-size: 0.8rem !important;
+            padding: 10px 15px !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .filter-tab-active, .filter-tab-inactive {
+            font-size: 0.75rem !important;
+            padding: 8px 12px !important;
+          }
+        }
+        
         .heading-container {
           position: relative;
           display: inline-block;

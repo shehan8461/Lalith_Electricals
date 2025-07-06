@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { signout } from '../redux/User/userSlice';
 import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Navbar, Nav, NavDropdown, Image, Badge } from 'react-bootstrap';
@@ -34,6 +34,7 @@ export default function Header() {
   const navigate = useNavigate();
   const [showMap, setShowMap] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const searchTimeoutRef = useRef(null);
 
   const handleSignOut = async () => {
     try {
@@ -47,11 +48,46 @@ export default function Header() {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/alldetails?search=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery('');
-    }
+    // Prevent default form submission, search happens in real-time
   };
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    
+    // Clear previous timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    
+    // Debounce search for better performance
+    searchTimeoutRef.current = setTimeout(() => {
+      const trimmedQuery = query.trim();
+      if (trimmedQuery) {
+        navigate(`/?search=${encodeURIComponent(trimmedQuery)}`);
+      } else {
+        // If empty search, show all items
+        navigate('/');
+      }
+    }, 300); // 300ms delay
+  };
+
+  const handleClearSearch = () => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    setSearchQuery('');
+    navigate('/');
+  };
+
+  // Cleanup timeout on component unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -246,10 +282,19 @@ export default function Header() {
           border: none !important;
           padding: 12px 16px !important;
           transition: background 0.3s ease;
+          cursor: default !important;
         }
 
         .search-btn:hover {
           background: #2563eb !important;
+        }
+
+        .search-btn.searching {
+          background: #10b981 !important;
+        }
+
+        .search-btn.searching:hover {
+          background: #059669 !important;
         }
 
         /* Navigation Links */
@@ -475,18 +520,29 @@ export default function Header() {
 
           <Navbar.Collapse id="navbar-nav">
             {/* Search Bar - Desktop */}
-            <form className="d-none d-lg-flex align-items-center ms-auto me-3 search-container" onSubmit={handleSearchSubmit}>
+            <div className="d-none d-lg-flex align-items-center ms-auto me-3 search-container">
               <input
                 type="text"
                 placeholder="Search products..."
                 className="form-control search-input"
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                onChange={handleSearchChange}
+                autoComplete="off"
               />
-              <button className="btn search-btn d-flex align-items-center" type="submit">
+              {searchQuery && (
+                <button 
+                  type="button" 
+                  className="btn btn-link text-muted p-1 me-1" 
+                  onClick={handleClearSearch}
+                  style={{fontSize: '0.8rem', minWidth: 'auto'}}
+                >
+                  ✕
+                </button>
+              )}
+              <div className={`btn search-btn d-flex align-items-center ${searchQuery ? 'searching' : ''}`} style={{cursor: 'default'}}>
                 <FaSearch />
-              </button>
-            </form>
+              </div>
+            </div>
 
             {/* Navigation Links */}
             <Nav className="ms-auto align-items-center gap-2">
@@ -503,20 +559,31 @@ export default function Header() {
               </Nav.Link>
 
               {/* Search Bar - Mobile */}
-              <form className="d-lg-none w-100 my-2" onSubmit={handleSearchSubmit}>
+              <div className="d-lg-none w-100 my-2">
                 <div className="search-container d-flex">
                   <input
                     type="text"
                     placeholder="Search products..."
                     className="form-control search-input"
                     value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
+                    onChange={handleSearchChange}
+                    autoComplete="off"
                   />
-                  <button className="btn search-btn d-flex align-items-center" type="submit">
+                  {searchQuery && (
+                    <button 
+                      type="button" 
+                      className="btn btn-link text-muted p-1 me-1" 
+                      onClick={handleClearSearch}
+                      style={{fontSize: '0.8rem', minWidth: 'auto'}}
+                    >
+                      ✕
+                    </button>
+                  )}
+                  <div className={`btn search-btn d-flex align-items-center ${searchQuery ? 'searching' : ''}`} style={{cursor: 'default'}}>
                     <FaSearch />
-                  </button>
+                  </div>
                 </div>
-              </form>
+              </div>
 
               {/* User Account Section */}
               {currentUser ? (

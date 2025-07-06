@@ -23,18 +23,17 @@ function UpdateUser(){
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [updatediscount,setupdatediscount]=useState({
-    petname:"",
-    species:"",
-    breed:"",
-    age:"",
-    gender:"",
-    color:"",
-    weight:"",
+    Name:"",
+    date:"",
+    Description:"",
+    Title:"",
     profilePicture: "",
     alternateProfilePicture: "",
-    price:""
-        
-        
+    thirdProfilePicture: "",
+    fourthProfilePicture: "",
+    productVideo: "",
+    featured: false,
+    onSale: false
   })
   useEffect(() => {
     if (image1) {
@@ -172,6 +171,45 @@ function UpdateUser(){
                         <Form.Label>Title</Form.Label>
                         <Form.Control type="text" name="Title" value={updatediscount.Title} onChange={handleInputChange} />
                       </Form.Group>
+
+                      {/* Featured and On Sale Checkboxes */}
+                      <Form.Group className="mb-3">
+                        <Form.Check 
+                          type="switch"
+                          id="featured-switch"
+                          label={
+                            <span>
+                              <i className="bi bi-star-fill text-warning me-2"></i>
+                              Featured Product
+                            </span>
+                          }
+                          checked={updatediscount.featured || false}
+                          onChange={(e) => setupdatediscount({
+                            ...updatediscount,
+                            featured: e.target.checked
+                          })}
+                          className="feature-switch"
+                        />
+                      </Form.Group>
+                      
+                      <Form.Group className="mb-3">
+                        <Form.Check 
+                          type="switch"
+                          id="onSale-switch"
+                          label={
+                            <span>
+                              <i className="bi bi-tag-fill text-success me-2"></i>
+                              On Sale
+                            </span>
+                          }
+                          checked={updatediscount.onSale || false}
+                          onChange={(e) => setupdatediscount({
+                            ...updatediscount,
+                            onSale: e.target.checked
+                          })}
+                          className="sale-switch"
+                        />
+                      </Form.Group>
                     
                     </Col>
                
@@ -203,6 +241,32 @@ function UpdateUser(){
         .avatar-img:hover {
           box-shadow: 0 2px 12px #0d6efd33;
           border-color: #0d6efd !important;
+        }
+        
+        /* Feature and Sale Switch Styles */
+        .feature-switch .form-check-input:checked {
+          background-color: #f59e0b;
+          border-color: #f59e0b;
+        }
+        .sale-switch .form-check-input:checked {
+          background-color: #10b981;
+          border-color: #10b981;
+        }
+        .form-check-label {
+          font-weight: 500;
+          font-size: 0.95rem;
+        }
+        .form-check {
+          padding: 0.75rem;
+          background: rgba(248, 250, 252, 0.8);
+          border-radius: 12px;
+          border: 1px solid rgba(229, 231, 235, 0.8);
+          transition: all 0.3s ease;
+        }
+        .form-check:hover {
+          background: rgba(240, 244, 255, 0.9);
+          border-color: rgba(59, 130, 246, 0.3);
+          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
         }
       `}</style>
     </div>

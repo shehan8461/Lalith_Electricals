@@ -46,7 +46,9 @@ export const store=async(req,res,next)=>{
         alternateProfilePicture,
         thirdProfilePicture,
         fourthProfilePicture,
-        productVideo} = req.body;
+        productVideo,
+        featured,
+        onSale} = req.body;
 
     //create auto id for orderid
     function idGen(userId){
@@ -57,7 +59,7 @@ export const store=async(req,res,next)=>{
     const petId=idGen(userId)
    
 
-    const newItem=new Item({petId,userId, Name,date,Description,Title,profilePicture,alternateProfilePicture,thirdProfilePicture,fourthProfilePicture,productVideo});
+    const newItem=new Item({petId,userId, Name,date,Description,Title,profilePicture,alternateProfilePicture,thirdProfilePicture,fourthProfilePicture,productVideo,featured,onSale});
     try{
         await newItem.save();
         res.status(202).json({message:"item created successfully"});

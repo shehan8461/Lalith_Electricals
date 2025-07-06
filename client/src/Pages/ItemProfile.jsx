@@ -90,6 +90,8 @@ export default function ItemProfile() {
                     <th>Date</th>
                     <th>Description</th>
                     <th>Title</th>
+                    <th className="text-center">Featured</th>
+                    <th className="text-center">On Sale</th>
                     <th className="text-center">Action</th>
                   </tr>
                 </thead>
@@ -101,6 +103,26 @@ export default function ItemProfile() {
                       <td>{order.date}</td>
                       <td>{order.Description}</td>
                       <td><span className="badge bg-info bg-gradient text-dark fs-6 px-3 py-2 shadow-sm">{order.Title}</span></td>
+                      <td className="text-center">
+                        {order.featured ? (
+                          <span className="badge bg-warning text-dark">
+                            <i className="bi bi-star-fill me-1"></i>
+                            Featured
+                          </span>
+                        ) : (
+                          <span className="text-muted">-</span>
+                        )}
+                      </td>
+                      <td className="text-center">
+                        {order.onSale ? (
+                          <span className="badge bg-success">
+                            <i className="bi bi-tag-fill me-1"></i>
+                            On Sale
+                          </span>
+                        ) : (
+                          <span className="text-muted">-</span>
+                        )}
+                      </td>
                       <td className="text-center">
                         <Link to={`/update-item/${order._id}`} className="me-2">
                           <Button variant="outline-success" size="sm" className="d-inline-flex align-items-center gap-1 action-btn">

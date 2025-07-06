@@ -52,6 +52,14 @@ const itemSchema = new mongoose.Schema({
     productVideo: {
         type: String,
         default: ''
+    },
+    featured: {
+        type: Boolean,
+        default: false
+    },
+    onSale: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true });
 

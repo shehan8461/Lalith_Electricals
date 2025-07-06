@@ -34,6 +34,8 @@ export default function AddItem() {
     thirdProfilePicture: "",
     fourthProfilePicture: "",
     productVideo: "",
+    featured: false,
+    onSale: false,
   });
 
   useEffect(() => {
@@ -127,6 +129,39 @@ export default function AddItem() {
               </div>
               <div className="col-md-6">
                 <input className="form-control" type="text" placeholder="Title" onChange={(e) => setFormData({ ...formData, Title: e.target.value })} />
+              </div>
+
+              {/* Feature and Sale Checkboxes */}
+              <div className="col-md-6">
+                <div className="form-check form-switch">
+                  <input 
+                    className="form-check-input" 
+                    type="checkbox" 
+                    id="featuredSwitch"
+                    checked={formData.featured}
+                    onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                  />
+                  <label className="form-check-label" htmlFor="featuredSwitch">
+                    <i className="bi bi-star-fill text-warning me-2"></i>
+                    Featured Product
+                  </label>
+                </div>
+              </div>
+              
+              <div className="col-md-6">
+                <div className="form-check form-switch">
+                  <input 
+                    className="form-check-input" 
+                    type="checkbox" 
+                    id="onSaleSwitch"
+                    checked={formData.onSale}
+                    onChange={(e) => setFormData({ ...formData, onSale: e.target.checked })}
+                  />
+                  <label className="form-check-label" htmlFor="onSaleSwitch">
+                    <i className="bi bi-tag-fill text-success me-2"></i>
+                    On Sale
+                  </label>
+                </div>
               </div>
 
               <input type="file" ref={fileRef1} hidden accept="image/*" onChange={(e) => setImage1(e.target.files[0])} />
