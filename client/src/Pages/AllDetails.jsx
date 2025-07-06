@@ -272,27 +272,27 @@ export default function AllDetails() {
         )}
       </div>
       {/* Footer - appears at the bottom after content, not fixed */}
-      <footer className="text-white py-2 py-md-2 py-sm-1 px-0 border-top border-primary" style={{fontSize: '0.85rem', lineHeight: '1.1', background: 'linear-gradient(135deg, rgba(31,41,55,0.95) 0%, rgba(17,24,39,0.95) 50%, rgba(15,23,42,0.95) 100%)', backdropFilter: 'blur(10px)', borderTop: '2px solid rgba(59,130,246,0.6) !important'}}>
-        <div className="container">
-          <div className="row g-2 g-md-3 align-items-center">
+      <footer className="text-white py-0 pt-3 px-0 border-top border-primary" style={{paddingTop: '1.5rem', fontSize: '0.75rem', lineHeight: '1.1', background: 'linear-gradient(135deg, rgba(31,41,55,0.95) 0%, rgba(17,24,39,0.95) 50%, rgba(15,23,42,0.95) 100%)', backdropFilter: 'blur(10px)', borderTop: '2px solid rgba(59,130,246,0.6) !important', width: '100%', margin: 0, padding: 0, position: 'relative', left: 0, right: 0}}>
+        <div className="container-fluid px-0" style={{paddingLeft: 0, paddingRight: 0, margin: 0, width: '100%'}}>
+          <div className="row g-1 g-md-2 align-items-center" style={{marginLeft: 0, marginRight: 0}}>
             {/* Contact Information */}
             <div className="col-12 col-md-4 order-1">
-              <h6 className="fw-bold mb-1 mb-md-2 text-primary" style={{fontSize:'0.9rem', letterSpacing:'0.3px'}}>
-                <i className="bi bi-lightning-charge-fill me-2"></i>Contact Us
+              <h6 className="fw-bold mb-2 text-primary" style={{fontSize:'0.8rem', letterSpacing:'0.2px'}}>
+                <i className="bi bi-lightning-charge-fill me-1"></i>Contact Us
               </h6>
-              <div className="mb-1">
+              <div className="mb-2">
                 <i className="bi bi-envelope-fill me-1 text-primary"></i>
                 <a href="mailto:lalitabesinha@gmail.com" className="text-white text-decoration-none hover-link">
                   lalitabesinha@gmail.com
                 </a>
               </div>
-              <div className="mb-1">
+              <div className="mb-2">
                 <i className="bi bi-telephone-fill me-1 text-success"></i>
                 <a href="tel:+94123456789" className="text-white text-decoration-none hover-link">
                   +94 123 456 789
                 </a>
               </div>
-              <div className="mb-1">
+              <div className="mb-2">
                 <i className="bi bi-geo-alt-fill me-1 text-warning"></i>
                 <span className="text-light">8 Family Point, Thoraya, Kurunegala</span>
               </div>
@@ -305,58 +305,58 @@ export default function AllDetails() {
             </div>
             
             {/* Certificates & Credentials */}
-            <div className="col-12 col-md-4 text-center order-3 order-md-2">
-              <h6 className="fw-bold mb-1 mb-md-2 text-warning" style={{fontSize:'0.9rem', letterSpacing:'0.3px'}}>
-                <i className="bi bi-award-fill me-2"></i>Certified & Trusted
+            <div className="col-12 col-md-4 text-center order-2">
+              <h6 className="fw-bold mb-2 text-warning" style={{fontSize:'0.8rem', letterSpacing:'0.2px'}}>
+                <i className="bi bi-award-fill me-1"></i>Certified & Trusted
               </h6>
-              <div className="d-flex justify-content-center gap-2 gap-md-3 mb-1 mb-md-2">
+              <div className="d-flex justify-content-center gap-2 mb-2">
                 <div className="d-flex flex-column align-items-center certificate-item">
                   <div className="certificate-frame position-relative">
-                    <img src={certificate1} alt="Government Electrical License" className="img-fluid rounded-2 shadow border border-1 border-warning mb-1" style={{maxHeight:'60px', objectFit:'cover', background:'#fff'}} />
+                    <img src={certificate1} alt="Government Electrical License" className="img-fluid rounded-1 shadow border border-1 border-warning mb-0" style={{maxHeight:'70px', objectFit:'cover', background:'#fff'}} />
                     <div className="certificate-badge">
                       <i className="bi bi-patch-check-fill text-warning"></i>
                     </div>
                   </div>
-                  <span className="fw-bold text-warning" style={{fontSize:'0.65rem', textShadow: '1px 1px 2px rgba(0,0,0,0.5)'}}>Government License</span>
+                  <span className="fw-bold text-warning" style={{fontSize:'0.7rem', textShadow: '1px 1px 2px rgba(0,0,0,0.5)'}}>Government License</span>
                 </div>
                 <div className="d-flex flex-column align-items-center certificate-item">
                   <div className="certificate-frame position-relative">
-                    <img src={certificate2} alt="Award of Excellence" className="img-fluid rounded-2 shadow border border-1 border-success mb-1" style={{maxHeight:'60px', objectFit:'cover', background:'#fff'}} />
+                    <img src={certificate2} alt="Award of Excellence" className="img-fluid rounded-1 shadow border border-1 border-success mb-0" style={{maxHeight:'70px', objectFit:'cover', background:'#fff'}} />
                     <div className="certificate-badge">
                       <i className="bi bi-trophy-fill text-success"></i>
                     </div>
                   </div>
-                  <span className="fw-bold text-success" style={{fontSize:'0.65rem', textShadow: '1px 1px 2px rgba(0,0,0,0.5)'}}>Excellence Award</span>
+                  <span className="fw-bold text-success" style={{fontSize:'0.7rem', textShadow: '1px 1px 2px rgba(0,0,0,0.5)'}}>Excellence Award</span>
                 </div>
               </div>
-              <div className="text-center">
-                <span className="badge text-white fw-bold px-2 py-1" style={{fontSize:'0.7rem', background: 'linear-gradient(45deg, #f59e0b, #d97706)', textShadow: '1px 1px 2px rgba(0,0,0,0.7)', boxShadow: '0 2px 8px rgba(245,158,11,0.3)'}}>
+              <div className="text-center mb-2">
+                <span className="badge text-white fw-bold px-1 py-0" style={{fontSize:'0.6rem', background: 'linear-gradient(45deg, #f59e0b, #d97706)', textShadow: '1px 1px 2px rgba(0,0,0,0.7)', boxShadow: '0 2px 8px rgba(245,158,11,0.3)'}}>
                   🏆 15+ Years Experience 🏆
                 </span>
               </div>
             </div>
             
             {/* Services & Hours */}
-            <div className="col-12 col-md-4 text-center text-md-end order-2 order-md-3">
-              <h6 className="fw-bold mb-1 mb-md-2 text-success" style={{fontSize:'0.9rem', letterSpacing:'0.3px'}}>
-                <i className="bi bi-clock-fill me-2"></i>Service Hours
+            <div className="col-12 col-md-4 text-center text-md-end order-3">
+              <h6 className="fw-bold mb-2 text-success" style={{fontSize:'0.8rem', letterSpacing:'0.2px'}}>
+                <i className="bi bi-clock-fill me-1"></i>Service Hours
               </h6>
-              <div className="mb-1">
+              <div className="mb-2">
                 <i className="bi bi-calendar-check me-1 text-success"></i>
                 <span className="text-success fw-bold">Mon - Sat:</span>
                 <span className="text-light ms-1">8:00 AM - 6:00 PM</span>
               </div>
-              <div className="mb-1">
+              <div className="mb-2">
                 <i className="bi bi-calendar-x me-1 text-danger"></i>
                 <span className="text-danger fw-bold">Sunday:</span>
                 <span className="text-light ms-1">Closed</span>
               </div>
-              <div className="mb-1">
+              <div className="mb-2">
                 <i className="bi bi-tools me-1 text-primary"></i>
                 <span className="text-primary fw-bold">Emergency Service:</span>
               </div>
               <div className="mb-0">
-                <span className="badge bg-danger px-2 py-1" style={{fontSize:'0.65rem'}}>
+                <span className="badge bg-danger px-1 py-0" style={{fontSize:'0.55rem'}}>
                   🚨 24/7 Available
                 </span>
               </div>
@@ -364,15 +364,15 @@ export default function AllDetails() {
           </div>
           
           {/* Bottom Section */}
-          <hr className="my-2 my-md-3 border-secondary" />
-          <div className="row align-items-center">
-            <div className="col-12 col-md-6 text-center text-md-start mb-1 mb-md-0">
-              <span className="text-light" style={{fontSize:'0.8rem'}}>
+          <hr className="my-1 border-secondary" />
+          <div className="row align-items-center" style={{marginLeft: 0, marginRight: 0}}>
+            <div className="col-12 col-md-6 text-center text-md-start mb-0">
+              <span className="text-light" style={{fontSize:'0.7rem'}}>
                 &copy; {new Date().getFullYear()} <strong className="text-primary">Lalith Electricals</strong>. All rights reserved.
               </span>
             </div>
             <div className="col-12 col-md-6 text-center text-md-end">
-              <span className="text-muted" style={{fontSize:'0.75rem'}}>
+              <span className="text-muted" style={{fontSize:'0.65rem'}}>
                 <i className="bi bi-shield-check me-1 text-success"></i>
                 Trusted • Professional • Reliable
               </span>
@@ -730,8 +730,8 @@ export default function AllDetails() {
         @media (max-width: 768px) {
           footer {
             padding: 0.4rem 0 !important;
-            font-size: 0.7rem !important;
-            line-height: 1.1 !important;
+            font-size: 0.75rem !important;
+            line-height: 1.3 !important;
           }
           footer .container {
             padding: 0 0.4rem !important;
@@ -740,26 +740,26 @@ export default function AllDetails() {
             gap: 0.3rem !important;
           }
           footer h6 {
-            font-size: 0.75rem !important;
+            font-size: 0.8rem !important;
             margin-bottom: 0.2rem !important;
-            line-height: 1 !important;
+            line-height: 1.2 !important;
           }
           footer .certificate-frame img {
-            max-height: 70px !important;
+            max-height: 60px !important;
           }
           footer .badge {
-            font-size: 0.65rem !important;
+            font-size: 0.7rem !important;
             padding: 0.2rem 0.4rem !important;
           }
           footer .mb-2, footer .mb-3 {
-            margin-bottom: 0.15rem !important;
+            margin-bottom: 0.2rem !important;
           }
           footer .col-12.col-md-4 {
-            margin-bottom: 0.4rem !important;
+            margin-bottom: 0.3rem !important;
             padding: 0 0.2rem !important;
           }
           footer .d-flex.gap-4 {
-            gap: 0.6rem !important;
+            gap: 0.5rem !important;
           }
           footer .certificate-badge {
             width: 16px !important;
@@ -774,52 +774,89 @@ export default function AllDetails() {
           }
         }
         @media (max-width: 576px) {
+          footer .row.g-1.g-md-2.align-items-center {
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            align-items: flex-start !important;
+            flex-wrap: nowrap !important;
+            width: 100% !important;
+            overflow-x: auto;
+            column-gap: 0.5rem !important;
+          }
+          footer .col-12.col-md-4 {
+            flex: 1 1 0 !important;
+            min-width: 0 !important;
+            max-width: 33.3333% !important;
+            width: 33.3333% !important;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 0 !important;
+            padding: 0 0.1rem !important;
+            order: unset !important;
+          }
+          footer .col-12.col-md-4 > * {
+            margin-bottom: 0.25rem !important;
+          }
+          footer .col-12.col-md-4 > *:last-child {
+            margin-bottom: 0 !important;
+          }
+          footer .col-12.col-md-4.order-1 {
+            order: 1 !important;
+          }
+          footer .col-12.col-md-4.order-2 {
+            order: 2 !important;
+            align-items: center !important;
+            text-align: center !important;
+          }
+          footer .col-12.col-md-4.order-3 {
+            order: 3 !important;
+            align-items: flex-end !important;
+            text-align: right !important;
+          }
           footer {
-            padding: 0.3rem 0 !important;
+            padding: 0.2rem 0 !important;
             font-size: 0.65rem !important;
-            line-height: 1 !important;
+            line-height: 1.1 !important;
           }
           footer .container {
-            padding: 0 0.2rem !important;
+            padding: 0 0.1rem !important;
           }
-          footer .row.g-4 {
-            gap: 0.2rem !important;
+          footer .row.g-4, footer .row.g-1, footer .row.g-md-2 {
+            gap: 0.1rem !important;
           }
           footer h6 {
             font-size: 0.7rem !important;
-            margin-bottom: 0.15rem !important;
+            margin-bottom: 0.05rem !important;
             line-height: 1 !important;
           }
           footer .certificate-frame img {
-            max-height: 55px !important;
+            max-height: 40px !important;
           }
-          footer .d-flex.gap-4 {
-            gap: 0.4rem !important;
+          footer .d-flex.gap-2, footer .d-flex.gap-3, footer .d-flex.gap-4 {
+            gap: 0.1rem !important;
           }
           footer .badge {
-            font-size: 0.6rem !important;
-            padding: 0.15rem 0.3rem !important;
+            font-size: 0.5rem !important;
+            padding: 0.05rem 0.15rem !important;
           }
-          footer .mb-2, footer .mb-3, footer .mb-0 {
-            margin-bottom: 0.1rem !important;
+          footer .mb-2, footer .mb-1, footer .mb-0 {
+            margin-bottom: 0 !important;
           }
           footer .certificate-item span {
-            font-size: 0.6rem !important;
+            font-size: 0.5rem !important;
           }
           footer hr {
-            margin: 0.2rem 0 !important;
-          }
-          footer .col-12.col-md-4 {
-            margin-bottom: 0.3rem !important;
-            padding: 0 0.1rem !important;
+            margin: 0.1rem 0 !important;
           }
           footer .certificate-badge {
-            width: 14px !important;
-            height: 14px !important;
-            font-size: 0.55rem !important;
+            width: 10px !important;
+            height: 10px !important;
+            font-size: 0.45rem !important;
           }
           footer .row.align-items-center > div {
-            margin-bottom: 0.1rem !important;
+            margin-bottom: 0 !important;
           }
           footer .row.align-items-center > div:last-child {
             margin-bottom: 0 !important;
@@ -828,17 +865,17 @@ export default function AllDetails() {
         @media (max-width: 400px) {
           footer {
             padding: 0.25rem 0 !important;
-            font-size: 0.6rem !important;
-            line-height: 0.9 !important;
+            font-size: 0.65rem !important;
+            line-height: 1.1 !important;
           }
           footer .container {
-            padding: 0 0.15rem !important;
+            padding: 0 0.25rem !important;
           }
           footer .row.g-4 {
-            gap: 0.1rem !important;
+            gap: 0.15rem !important;
           }
           footer h6 {
-            font-size: 0.65rem !important;
+            font-size: 0.7rem !important;
             margin-bottom: 0.1rem !important;
           }
           footer .certificate-frame img {
@@ -848,11 +885,11 @@ export default function AllDetails() {
             gap: 0.3rem !important;
           }
           footer .badge {
-            font-size: 0.55rem !important;
-            padding: 0.1rem 0.2rem !important;
+            font-size: 0.6rem !important;
+            padding: 0.1rem 0.25rem !important;
           }
           footer .mb-2, footer .mb-3, footer .mb-0 {
-            margin-bottom: 0.05rem !important;
+            margin-bottom: 0.1rem !important;
           }
           footer .certificate-item span {
             font-size: 0.55rem !important;
@@ -869,6 +906,10 @@ export default function AllDetails() {
             height: 12px !important;
             font-size: 0.5rem !important;
           }
+        }
+        footer .row {
+          margin-right: 0 !important;
+          margin-left: 0 !important;
         }
       `}</style>
       </div>
