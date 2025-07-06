@@ -18,6 +18,8 @@ export default function AllDetails() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showMap, setShowMap] = useState(false);
   const [bgIndex, setBgIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filterOptions, setFilterOptions] = useState({
     showFeatured: false,
     showOnSale: false,
@@ -92,14 +94,35 @@ export default function AllDetails() {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch(`/api/auth/users/items`);
+      setLoading(true);
+      setError(null);
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+      
+      const response = await fetch(`/api/auth/users/items`, {
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      
       if (!response.ok) {
-        throw new Error('Failed to fetch orders');
+        throw new Error(`Server error: ${response.status} ${response.statusText}`);
       }
+      
       const data = await response.json();
       setOrders(data);
       setFilteredOrders(data);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
+      if (error.name === 'AbortError') {
+        setError('Request timed out. Please check your internet connection and try again.');
+      } else if (error.message.includes('Failed to fetch')) {
+        setError('Unable to connect to server. Please check if the server is running.');
+      } else {
+        setError(`Error loading data: ${error.message}`);
+      }
       console.error('Error fetching orders:', error);
     }
   };
@@ -326,7 +349,45 @@ export default function AllDetails() {
         
         {/* Orders Display */}
         <div className="row g-2 g-md-3" style={{marginLeft: '0', marginRight: '0'}}>
-          {filteredOrders.length > 0 ? (
+          {loading ? (
+            <div className="col-12 d-flex justify-content-center align-items-center" style={{minHeight: '400px'}}>
+              <div className="text-center">
+                <div className="spinner-border text-primary mb-3" role="status" style={{width: '3rem', height: '3rem'}}>
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+                <h5 className="text-primary">Loading Products...</h5>
+                <p className="text-muted">Please wait while we fetch the latest products</p>
+              </div>
+            </div>
+          ) : error ? (
+            <div className="col-12 d-flex justify-content-center align-items-center" style={{minHeight: '400px'}}>
+              <div className="text-center">
+                <div className="alert alert-danger d-inline-block" role="alert" style={{maxWidth: '500px'}}>
+                  <h6 className="alert-heading">
+                    <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                    Connection Error
+                  </h6>
+                  <p className="mb-3">{error}</p>
+                  <div className="d-flex gap-2 justify-content-center">
+                    <button 
+                      className="btn btn-outline-danger btn-sm"
+                      onClick={() => fetchOrders()}
+                    >
+                      <i className="bi bi-arrow-clockwise me-1"></i>
+                      Try Again
+                    </button>
+                    <button 
+                      className="btn btn-outline-secondary btn-sm"
+                      onClick={() => window.location.reload()}
+                    >
+                      <i className="bi bi-bootstrap-reboot me-1"></i>
+                      Refresh Page
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : filteredOrders.length > 0 ? (
             filteredOrders.map((order) => (
               <div className="col-6 col-md-3" key={order.itemId} style={{paddingLeft: '0.15rem', paddingRight: '0.15rem', marginBottom: '1.5rem'}}>
                 <div
