@@ -10,10 +10,14 @@ export default function AddItem() {
   const [imagePercent, setImagePercent] = useState(0);
   const fileRef1 = useRef(null);
   const fileRef2 = useRef(null);
+  const fileRef3 = useRef(null);
+  const fileRef4 = useRef(null);
   const fileRefVideo = useRef(null);
   const [imageError, setImageError] = useState(false);
   const [image1, setImage1] = useState(undefined);
   const [image2, setImage2] = useState(undefined);
+  const [image3, setImage3] = useState(undefined);
+  const [image4, setImage4] = useState(undefined);
   const [video, setVideo] = useState(undefined);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -27,6 +31,8 @@ export default function AddItem() {
     Title: "",
     profilePicture: "",
     alternateProfilePicture: "",
+    thirdProfilePicture: "",
+    fourthProfilePicture: "",
     productVideo: "",
   });
 
@@ -37,6 +43,14 @@ export default function AddItem() {
   useEffect(() => {
     if (image2) handleFileUpload(image2, 'alternateProfilePicture');
   }, [image2]);
+
+  useEffect(() => {
+    if (image3) handleFileUpload(image3, 'thirdProfilePicture');
+  }, [image3]);
+
+  useEffect(() => {
+    if (image4) handleFileUpload(image4, 'fourthProfilePicture');
+  }, [image4]);
 
   useEffect(() => {
     if (video) handleFileUpload(video, 'productVideo');
@@ -68,6 +82,8 @@ export default function AddItem() {
 
   const handleImage1Click = () => fileRef1.current.click();
   const handleImage2Click = () => fileRef2.current.click();
+  const handleImage3Click = () => fileRef3.current.click();
+  const handleImage4Click = () => fileRef4.current.click();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -115,6 +131,8 @@ export default function AddItem() {
 
               <input type="file" ref={fileRef1} hidden accept="image/*" onChange={(e) => setImage1(e.target.files[0])} />
               <input type="file" ref={fileRef2} hidden accept="image/*" onChange={(e) => setImage2(e.target.files[0])} />
+              <input type="file" ref={fileRef3} hidden accept="image/*" onChange={(e) => setImage3(e.target.files[0])} />
+              <input type="file" ref={fileRef4} hidden accept="image/*" onChange={(e) => setImage4(e.target.files[0])} />
               <input type="file" ref={fileRefVideo} hidden accept="video/*" onChange={(e) => setVideo(e.target.files[0])} />
 
               <div className="col-md-6 text-center">
@@ -126,7 +144,7 @@ export default function AddItem() {
                   onClick={handleImage1Click}
                 />
                 <button type="button" className="btn btn-outline-primary mt-2" onClick={handleImage1Click}>
-                  Upload Main Picture
+                  Upload Picture 1
                 </button>
               </div>
 
@@ -139,7 +157,33 @@ export default function AddItem() {
                   onClick={handleImage2Click}
                 />
                 <button type="button" className="btn btn-outline-secondary mt-2" onClick={handleImage2Click}>
-                  Upload Alternate Picture
+                  Upload Picture 2
+                </button>
+              </div>
+
+              <div className="col-md-6 text-center">
+                <img
+                  src={formData.thirdProfilePicture || 'https://media.istockphoto.com/id/1294866141/vector/picture-reload.jpg'}
+                  alt="Third"
+                  className="img-thumbnail"
+                  style={{ height: '200px', cursor: 'pointer' }}
+                  onClick={handleImage3Click}
+                />
+                <button type="button" className="btn btn-outline-success mt-2" onClick={handleImage3Click}>
+                  Upload Picture 3
+                </button>
+              </div>
+
+              <div className="col-md-6 text-center">
+                <img
+                  src={formData.fourthProfilePicture || 'https://media.istockphoto.com/id/1294866141/vector/picture-reload.jpg'}
+                  alt="Fourth"
+                  className="img-thumbnail"
+                  style={{ height: '200px', cursor: 'pointer' }}
+                  onClick={handleImage4Click}
+                />
+                <button type="button" className="btn btn-outline-warning mt-2" onClick={handleImage4Click}>
+                  Upload Picture 4
                 </button>
               </div>
 

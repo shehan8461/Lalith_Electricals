@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import certificate1 from '../components/images/cetificate1_page-0002.jpg';
 import certificate2 from '../components/images/cetificate2_page-0001.jpg';
-import bgImg1 from '../components/images/BackgroundImages/repair.webp';
+import bgImg1 from '../components/images/BackgroundImages/bg6.jpg';
 import bgImg2 from '../components/images/BackgroundImages/back2.webp';
 import bgImg3 from '../components/images/BackgroundImages/back3.png';
 import bgImg4 from '../components/images/BackgroundImages/back4.jpg';
@@ -106,9 +106,13 @@ export default function AllDetails() {
         className="position-fixed top-0 start-0 w-100 h-100"
         style={{
           background: `url(${backgroundImages[bgIndex]}) center center/cover no-repeat`,
+          backgroundPosition: 'center center',
+          backgroundSize: 'cover',
+          backgroundAttachment: 'fixed',
           transition: 'background-image 1.5s cubic-bezier(0.4,0,0.2,1)',
           filter: 'blur(7px)',
-          zIndex: -1
+          zIndex: -1,
+          transform: 'scale(1.1)'
         }}
       ></div>
       
@@ -141,91 +145,123 @@ export default function AllDetails() {
         </div>
       </div>
   
-      <div className="container my-3 flex-grow-1" style={{minHeight: 'calc(100vh - 200px)'}}>
+      <div className="container-fluid my-3 flex-grow-1" style={{minHeight: 'calc(100vh - 200px)', paddingLeft: '0.5rem', paddingRight: '0.5rem'}}>
         
         {/* Orders Display */}
-        <div className="row g-4">
+        <div className="row g-2 g-md-3" style={{marginLeft: '0', marginRight: '0'}}>
           {filteredOrders.length > 0 ? (
             filteredOrders.map((order) => (
-              <div className="col-md-4" key={order.itemId}>
+              <div className="col-6 col-md-3" key={order.itemId} style={{paddingLeft: '0.15rem', paddingRight: '0.15rem', marginBottom: '1.5rem'}}>
                 <div
                   className="card h-100 border-0 shadow-lg rounded-4 overflow-hidden position-relative card-hover"
                   style={{ cursor: 'pointer' }}
                   onClick={() => { setSelectedOrder(order); setShowModal(true); }}
                 >
-                  <div className="position-relative" style={{height: '120px', overflow: 'hidden'}}>
-                    {order.productVideo && (order.profilePicture || order.alternateProfilePicture) ? (
+                  <div className="position-relative" style={{height: '200px', overflow: 'hidden'}}>
+                    {order.productVideo && (order.profilePicture || order.alternateProfilePicture || order.thirdProfilePicture || order.fourthProfilePicture) ? (
                       <div className="d-flex w-100 h-100">
                         <video
                           src={order.productVideo}
                           controls
-                          className="w-50 h-100 object-fit-cover card-img-top transition border-end"
-                          style={{objectFit: 'cover', height: '100%', width: '50%', borderRadius: '0', background: '#000'}}
+                          className="w-75 h-100 object-fit-cover card-img-top transition"
+                          style={{objectFit: 'cover', height: '100%', width: '75%', borderRadius: '0', background: '#000', position: 'relative', zIndex: 2, pointerEvents: 'auto'}}
+                          onClick={(e) => e.stopPropagation()}
                         />
-                        {order.profilePicture && order.alternateProfilePicture ? (
-                          <div className="d-flex w-50 h-100">
+                        <div className="d-flex flex-column w-25 h-100">
+                          {[order.profilePicture, order.alternateProfilePicture, order.thirdProfilePicture, order.fourthProfilePicture].filter(Boolean).slice(0, 3).map((src, index) => (
                             <img
-                              src={order.profilePicture}
-                              alt="Product 1"
-                              className="w-50 h-100 object-fit-cover card-img-top transition border-end"
-                              style={{objectFit: 'cover', height: '100%', width: '50%', borderRadius: '0'}}
+                              key={index}
+                              src={src}
+                              alt={`Product ${index + 1}`}
+                              className="w-100 object-fit-cover card-img-top transition"
+                              style={{objectFit: 'cover', height: `${100/3}%`, width: '100%', borderRadius: '0', borderBottom: index < 2 ? '1px solid rgba(255,255,255,0.3)' : 'none'}}
                             />
-                            <img
-                              src={order.alternateProfilePicture}
-                              alt="Product 2"
-                              className="w-50 h-100 object-fit-cover card-img-top transition"
-                              style={{objectFit: 'cover', height: '100%', width: '50%', borderRadius: '0'}}
-                            />
-                          </div>
-                        ) : (
-                          <img
-                            src={order.profilePicture || order.alternateProfilePicture}
-                            alt="Product"
-                            className="w-50 h-100 object-fit-cover card-img-top transition"
-                            style={{objectFit: 'cover', height: '100%', width: '50%', borderRadius: '0'}}
-                          />
-                        )}
+                          ))}
+                        </div>
                       </div>
                     ) : order.productVideo ? (
                       <video
                         src={order.productVideo}
                         controls
                         className="w-100 h-100 object-fit-cover card-img-top transition"
-                        style={{objectFit: 'cover', height: '100%', width: '100%', borderRadius: '0', background: '#000'}}
+                        style={{objectFit: 'cover', height: '100%', width: '100%', borderRadius: '0', background: '#000', position: 'relative', zIndex: 2, pointerEvents: 'auto'}}
+                        onClick={(e) => e.stopPropagation()}
                       />
-                    ) : order.profilePicture && order.alternateProfilePicture ? (
+                    ) : (order.profilePicture || order.alternateProfilePicture || order.thirdProfilePicture || order.fourthProfilePicture) ? (
                       <div className="d-flex w-100 h-100">
-                        <img
-                          src={order.profilePicture}
-                          alt="Product 1"
-                          className="w-50 h-100 object-fit-cover card-img-top transition border-end"
-                          style={{objectFit: 'cover', height: '100%', width: '50%', borderRadius: '0'}}
-                        />
-                        <img
-                          src={order.alternateProfilePicture}
-                          alt="Product 2"
-                          className="w-50 h-100 object-fit-cover card-img-top transition"
-                          style={{objectFit: 'cover', height: '100%', width: '50%', borderRadius: '0'}}
-                        />
+                        {(() => {
+                          const images = [order.profilePicture, order.alternateProfilePicture, order.thirdProfilePicture, order.fourthProfilePicture].filter(Boolean);
+                          if (images.length === 1) {
+                            return (
+                              <img
+                                src={images[0]}
+                                alt="Product"
+                                className="w-100 h-100 object-fit-cover card-img-top transition"
+                                style={{objectFit: 'cover', height: '100%', width: '100%', borderRadius: '0'}}
+                              />
+                            );
+                          } else {
+                            return (
+                              <>
+                                <img
+                                  src={images[0]}
+                                  alt="Main Product"
+                                  className="h-100 object-fit-cover card-img-top transition"
+                                  style={{objectFit: 'cover', height: '100%', width: '75%', borderRadius: '0'}}
+                                />
+                                <div className="d-flex flex-column h-100" style={{width: '25%'}}>
+                                  {images.slice(1, 4).map((src, index) => (
+                                    <img
+                                      key={index}
+                                      src={src}
+                                      alt={`Product ${index + 2}`}
+                                      className="w-100 object-fit-cover card-img-top transition"
+                                      style={{objectFit: 'cover', height: `${100/Math.min(3, images.length-1)}%`, width: '100%', borderRadius: '0', borderBottom: index < Math.min(2, images.length-2) ? '1px solid rgba(255,255,255,0.3)' : 'none'}}
+                                    />
+                                  ))}
+                                </div>
+                              </>
+                            );
+                          }
+                        })()}
                       </div>
-                    ) : (order.profilePicture || order.alternateProfilePicture) ? (
-                      <img
-                        src={order.profilePicture || order.alternateProfilePicture}
-                        alt="Product"
-                        className="w-100 h-100 object-fit-cover card-img-top transition"
-                        style={{objectFit: 'cover', height: '100%', width: '100%', borderRadius: '0'}}
-                      />
                     ) : null}
-                    <div className="position-absolute top-0 start-0 w-100 h-100" style={{background: 'linear-gradient(180deg,rgba(0,0,0,0.15) 60%,rgba(0,0,0,0.5) 100%)'}}></div>
+                    <div className="position-absolute top-0 start-0 w-100 h-100" style={{background: 'linear-gradient(180deg,rgba(0,0,0,0.15) 60%,rgba(0,0,0,0.5) 100%)', pointerEvents: 'none'}}></div>
                   </div>
-                  <div className="card-body p-3">
-                    <h5 className="card-title text-primary fw-bold mb-2" style={{fontSize: '1.1rem'}}>{order.Title}</h5>
-                    <p className="card-text text-muted mb-2" style={{minHeight: '32px', fontSize: '0.95rem'}}>
-                      <strong>Description:</strong> {order.Description}
-                    </p>
-                    <p className="card-text mb-0" style={{fontSize: '0.9rem'}}>
-                      <strong>Date:</strong> {order.date}
-                    </p>
+                  <div className="card-body p-3 premium-card-content">
+                    <div className="card-title-wrapper mb-2">
+                      <h5 className="card-title text-primary fw-bold mb-1 premium-title" style={{
+                        fontSize: '1.2rem', 
+                        background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 25%, #60a5fa 50%, #93c5fd 75%, #dbeafe 100%)', 
+                        backgroundClip: 'text', 
+                        WebkitBackgroundClip: 'text', 
+                        WebkitTextFillColor: 'transparent', 
+                        textShadow: '0 2px 4px rgba(59,130,246,0.3)',
+                        letterSpacing: '0.5px',
+                        lineHeight: '1.3',
+                        position: 'relative',
+                        overflow: 'hidden'
+                      }}>
+                        <span className="title-shimmer">{order.Name || order.Title}</span>
+                      </h5>
+                      <div className="title-underline"></div>
+                    </div>
+                    <h6 className="card-subtitle text-secondary mb-2 premium-subtitle" style={{fontSize: '0.9rem', fontWeight: '500', color: '#64748b'}}>{order.Title && order.Name ? order.Title : ''}</h6>
+                    <div className="description-box mb-2">
+                      <p className="card-text text-muted mb-0 premium-description" style={{minHeight: '32px', fontSize: '0.95rem', lineHeight: '1.5', color: '#475569'}}>
+                        <span className="description-label">Description:</span> <span className="description-text">{order.Description}</span>
+                      </p>
+                    </div>
+                    <div className="date-section d-flex align-items-center justify-content-end">
+                      <p className="card-text mb-0 premium-date" style={{fontSize: '0.65rem', fontWeight: '400', color: '#6b7280'}}>
+                        <i className="bi bi-calendar-check me-1 text-muted" style={{fontSize: '0.6rem'}}></i>
+                        <span className="date-value">{new Date(order.date).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'short', 
+                          day: '2-digit' 
+                        })}</span>
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -238,33 +274,71 @@ export default function AllDetails() {
         {showModal && selectedOrder && (
           <div className="modal fade show d-flex align-items-center justify-content-center" style={{position:'fixed', top:'90px', left:0, width:'100vw', height:'calc(100vh - 90px)', display:'flex', background:'rgba(0,0,0,0.5)', zIndex:1050, overflowY:'auto', alignItems:'flex-start'}} tabIndex="-1" role="dialog" onClick={()=>setShowModal(false)}>
             <div className="modal-dialog modal-dialog-centered" style={{maxWidth:'480px', width:'96vw', margin:'32px auto'}} role="document" onClick={e => e.stopPropagation()}>
-              <div className="modal-content rounded-5 border-0 shadow-lg" style={{background: 'linear-gradient(120deg, #f0f4ff 70%, #e0e7ef 100%)', width:'100%', boxShadow:'0 8px 48px rgba(0,0,0,0.18)'}}>
-                <div className="modal-header border-0 pb-0 align-items-start d-flex justify-content-between" style={{background:'linear-gradient(90deg,#3b82f6 0%,#60a5fa 100%)', borderTopLeftRadius:'2rem', borderTopRightRadius:'2rem', minHeight:'0', paddingTop:'0.5rem', paddingBottom:'0.5rem'}}>
-                  <h4 className="modal-title text-white fw-bold m-0" style={{letterSpacing:'1px'}}>{selectedOrder.Title}</h4>
-                  <button type="button" className="btn-close btn-close-white ms-2" aria-label="Close" style={{filter:'brightness(2)', fontSize:'1.2rem'}} onClick={()=>setShowModal(false)}></button>
+                <div className="modal-content rounded-5 border-0 shadow-lg premium-modal" style={{background: 'linear-gradient(135deg, #f8faff 0%, #f0f4ff 50%, #e0e7ef 100%)', width:'100%', boxShadow:'0 25px 80px rgba(0,0,0,0.25), 0 10px 30px rgba(59,130,246,0.15)', border: '1px solid rgba(255,255,255,0.8)'}}>
+                <div className="modal-header border-0 pb-0 align-items-start d-flex justify-content-between premium-modal-header" style={{background:'linear-gradient(135deg,#2563eb 0%,#3b82f6 50%,#60a5fa 100%)', borderTopLeftRadius:'2rem', borderTopRightRadius:'2rem', minHeight:'0', paddingTop:'1rem', paddingBottom:'1rem', position: 'relative', overflow: 'hidden'}}>
+                  <div className="modal-header-bg"></div>
+                  <h4 className="modal-title text-white fw-bold m-0 premium-modal-title" style={{letterSpacing:'0.5px', textShadow: '0 2px 4px rgba(0,0,0,0.3)', position: 'relative', zIndex: 2}}>{selectedOrder.Title}</h4>
+                  <button type="button" className="btn-close btn-close-white ms-2 premium-close-btn" aria-label="Close" style={{filter:'brightness(2)', fontSize:'1.2rem', position: 'relative', zIndex: 2}} onClick={()=>setShowModal(false)}></button>
                 </div>
-                <div className="modal-body pt-3 pb-4 px-4">
-                  <div className="mb-4 w-100 d-flex justify-content-center align-items-center flex-nowrap overflow-auto media-scrollbar" style={{height:'220px', gap:'16px', whiteSpace:'nowrap'}}>
+                <div className="modal-body pt-4 pb-4 px-4 premium-modal-body">
+                  <div className="mb-4 w-100 d-flex justify-content-flex-start align-items-center flex-nowrap overflow-auto media-scrollbar premium-media-section" style={{height:'240px', gap:'15px', whiteSpace:'nowrap', paddingBottom:'10px', background: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(248,250,252,0.9) 100%)', borderRadius: '20px', padding: '15px', boxShadow: '0 8px 25px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)'}}>
                     {selectedOrder.productVideo && (
-                      <div className="media-box">
-                        <video src={selectedOrder.productVideo} controls className="media-content" />
+                      <div className="media-box flex-shrink-0 premium-media-item">
+                        <video src={selectedOrder.productVideo} controls className="media-content" onClick={(e) => e.stopPropagation()} />
+                        <div className="media-overlay">
+                          <i className="bi bi-play-circle-fill text-white"></i>
+                        </div>
                       </div>
                     )}
                     {selectedOrder.profilePicture && (
-                      <div className="media-box">
-                        <img src={selectedOrder.profilePicture} alt="Main" className="media-content" />
+                      <div className="media-box flex-shrink-0 premium-media-item">
+                        <img src={selectedOrder.profilePicture} alt="Picture 1" className="media-content" />
+                        <div className="media-overlay">
+                          <i className="bi bi-zoom-in text-white"></i>
+                        </div>
                       </div>
                     )}
                     {selectedOrder.alternateProfilePicture && (
-                      <div className="media-box">
-                        <img src={selectedOrder.alternateProfilePicture} alt="Alt" className="media-content" />
+                      <div className="media-box flex-shrink-0 premium-media-item">
+                        <img src={selectedOrder.alternateProfilePicture} alt="Picture 2" className="media-content" />
+                        <div className="media-overlay">
+                          <i className="bi bi-zoom-in text-white"></i>
+                        </div>
+                      </div>
+                    )}
+                    {selectedOrder.thirdProfilePicture && (
+                      <div className="media-box flex-shrink-0 premium-media-item">
+                        <img src={selectedOrder.thirdProfilePicture} alt="Picture 3" className="media-content" />
+                        <div className="media-overlay">
+                          <i className="bi bi-zoom-in text-white"></i>
+                        </div>
+                      </div>
+                    )}
+                    {selectedOrder.fourthProfilePicture && (
+                      <div className="media-box flex-shrink-0 premium-media-item">
+                        <img src={selectedOrder.fourthProfilePicture} alt="Picture 4" className="media-content" />
+                        <div className="media-overlay">
+                          <i className="bi bi-zoom-in text-white"></i>
+                        </div>
                       </div>
                     )}
                   </div>
-                  <div className="mb-3 p-4 bg-white rounded-4 shadow-sm border border-2 border-primary-subtle" style={{fontSize:'0.98rem', color:'#1e293b', wordBreak:'break-word', minHeight:'50px', maxHeight:'120px', overflowY:'auto', boxShadow:'0 2px 12px rgba(59,130,246,0.07)'}}>
-                    <strong>Description:</strong> {selectedOrder.Description}
+                  <div className="mb-3 p-4 bg-white rounded-4 shadow-sm border border-2 border-primary-subtle premium-description-box" style={{fontSize:'1rem', color:'#1e293b', wordBreak:'break-word', minHeight:'60px', maxHeight:'140px', overflowY:'auto', boxShadow:'0 8px 25px rgba(59,130,246,0.08), inset 0 1px 0 rgba(255,255,255,0.9)', background: 'linear-gradient(135deg, #ffffff 0%, #f8faff 100%)', border: '1px solid rgba(59,130,246,0.15)', position: 'relative'}}>
+                    <div className="description-icon">
+                      <i className="bi bi-card-text text-primary"></i>
+                    </div>
+                    <strong className="description-header">Description:</strong> 
+                    <span className="description-content">{selectedOrder.Description}</span>
                   </div>
-                  <div className="mb-2 text-end" style={{fontSize:'1.08rem', color:'#2563eb'}}><strong>Date:</strong> {selectedOrder.date}</div>
+                  <div className="mb-2 text-end premium-date-section" style={{fontSize:'1.1rem', color:'#2563eb', fontWeight: '600'}}>
+                    <i className="bi bi-calendar-check me-2 text-success"></i>
+                    <span className="date-highlight">{new Date(selectedOrder.date).toLocaleDateString('en-US', { 
+                      weekday: 'long',
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: '2-digit' 
+                    })}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -273,7 +347,7 @@ export default function AllDetails() {
       </div>
       {/* Footer - appears at the bottom after content, not fixed */}
       <footer className="text-white py-0 pt-3 px-0 border-top border-primary" style={{paddingTop: '1.5rem', fontSize: '0.75rem', lineHeight: '1.1', background: 'linear-gradient(135deg, rgba(31,41,55,0.95) 0%, rgba(17,24,39,0.95) 50%, rgba(15,23,42,0.95) 100%)', backdropFilter: 'blur(10px)', borderTop: '2px solid rgba(59,130,246,0.6) !important', width: '100%', margin: 0, padding: 0, position: 'relative', left: 0, right: 0}}>
-        <div className="container-fluid px-0" style={{paddingLeft: 0, paddingRight: 0, margin: 0, width: '100%'}}>
+        <div className="container-fluid" style={{paddingLeft: '0.5rem', paddingRight: '0.5rem', margin: 0, width: '100%'}}>
           <div className="row g-1 g-md-2 align-items-center" style={{marginLeft: 0, marginRight: 0}}>
             {/* Contact Information */}
             <div className="col-12 col-md-4 order-1">
@@ -491,11 +565,22 @@ export default function AllDetails() {
           50% { filter: brightness(1.1) saturate(1.2); }
         }
         .card-hover {
-          backdrop-filter: blur(3px);
-          background: linear-gradient(145deg, rgba(255,255,255,0.98) 0%, rgba(248,250,252,0.95) 100%) !important;
-          border: 2px solid rgba(255,255,255,0.5) !important;
-          transform: translateY(0px);
-          box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 0 20px rgba(59,130,246,0.1);
+          backdrop-filter: blur(12px);
+          background: linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.92) 50%, rgba(240,244,255,0.95) 100%) !important;
+          border: 2px solid transparent !important;
+          background-clip: padding-box;
+          position: relative;
+          transform: translateY(0px) scale(1);
+          box-shadow: 
+            0 10px 40px rgba(0,0,0,0.08), 
+            0 4px 15px rgba(59,130,246,0.12),
+            0 0 0 1px rgba(255,255,255,0.6),
+            inset 0 1px 0 rgba(255,255,255,0.9);
+          overflow: hidden;
+        }
+        .card-hover .card-body {
+          position: relative;
+          z-index: 2;
         }
         .certificates-section {
           background: linear-gradient(135deg, rgba(75,85,99,0.85) 0%, rgba(107,114,128,0.85) 30%, rgba(156,163,175,0.85) 70%, rgba(209,213,219,0.85) 100%);
@@ -506,34 +591,171 @@ export default function AllDetails() {
         }
         .modal-backdrop { display: none; }
         .media-box {
-          width: 180px;
-          height: 180px;
-          min-width: 110px;
+          width: 200px;
+          height: 200px;
+          min-width: 180px;
           max-width: 220px;
-          border-radius: 18px;
+          border-radius: 20px;
           overflow: hidden;
-          background: #000;
-          box-shadow: 0 4px 24px rgba(59,130,246,0.12), 0 0 16px #3b82f6, 0 2px 24px #60a5fa55;
+          background: linear-gradient(135deg, #f8faff 0%, #e0e7ef 100%);
+          box-shadow: 
+            0 8px 25px rgba(0,0,0,0.1), 
+            0 4px 12px rgba(59,130,246,0.1),
+            inset 0 1px 0 rgba(255,255,255,0.9);
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-right: 12px;
+          flex-shrink: 0;
+          position: relative;
+          border: 2px solid rgba(255,255,255,0.8);
+        }
+        .media-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg, rgba(0,0,0,0.1) 0%, rgba(59,130,246,0.1) 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          font-size: 2rem;
+          backdrop-filter: blur(2px);
+          pointer-events: none;
+        }
+        .premium-card-content {
+          background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.9) 100%);
+          border-radius: 0 0 1.5rem 1.5rem;
+          backdrop-filter: blur(10px);
+        }
+        .card-title-wrapper {
+          position: relative;
+        }
+        .title-underline {
+          height: 3px;
+          background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 50%, transparent 100%);
+          border-radius: 2px;
+          margin-top: 4px;
+          width: 100%;
+        }
+        .description-box {
+          background: linear-gradient(135deg, rgba(240,244,255,0.9) 0%, rgba(248,250,252,1) 100%);
+          border-radius: 12px;
+          padding: 12px;
+          border: 1px solid rgba(59,130,246,0.2);
+        }
+        .description-label {
+          font-weight: 600;
+          color: #374151;
+          font-size: 0.9rem;
+        }
+        .description-text {
+          color: #6b7280;
+          line-height: 1.5;
+        }
+        .date-section {
+          padding: 4px 0;
+        }
+        .date-label {
+          font-weight: 600;
+          color: #374151;
+        }
+        .date-value {
+          color: #2563eb;
+          font-weight: 500;
+        }
+        .card-action-icon {
+          opacity: 1;
+          font-size: 1.2rem;
+          transform: translateX(5px);
+        }
+        .modal-header-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>') repeat;
+          opacity: 0.3;
+        }
+        .premium-description-box {
+          position: relative;
+          overflow: hidden;
+        }
+        .premium-description-box::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 4px;
+          background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%);
+        }
+        .description-icon {
+          position: absolute;
+          top: -2px;
+          right: 15px;
+          background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+          border-radius: 50%;
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 0.8rem;
+          box-shadow: 0 4px 8px rgba(59,130,246,0.3);
+        }
+        .description-header {
+          color: #1e40af;
+          font-size: 1rem;
+          margin-bottom: 8px;
+          display: block;
+        }
+        .description-content {
+          color: #475569;
+          line-height: 1.6;
+        }
+        .premium-date-section {
+          background: linear-gradient(135deg, rgba(240,244,255,0.8) 0%, rgba(248,250,252,0.9) 100%);
+          border-radius: 12px;
+          padding: 12px 16px;
+          border: 1px solid rgba(59,130,246,0.15);
+          box-shadow: 0 4px 12px rgba(59,130,246,0.05);
+        }
+        .date-highlight {
+          background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-weight: 700;
         }
         .media-content {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          border-radius: 18px;
-          background: #000;
+          border-radius: 20px;
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
           display: block;
+          position: relative;
+          z-index: 1;
         }
         .media-box video.media-content {
           object-fit: contain;
           width: 100%;
           height: 100%;
-          border-radius: 18px;
-          background: #000;
+          border-radius: 20px;
+          background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
           display: block;
+          position: relative;
+          z-index: 1;
+          pointer-events: auto;
+        }
+        video {
+          position: relative;
+          z-index: 2;
+          pointer-events: auto;
         }
         @media (max-width: 600px) {
           .heading-with-bg {
@@ -547,33 +769,76 @@ export default function AllDetails() {
             border-radius: 25px !important;
           }
           .media-box {
-            width: 110px;
-            height: 110px;
-            min-width: 70px;
-            max-width: 120px;
-            border-radius: 10px;
-            margin-right: 6px;
+            width: 70px;
+            height: 70px;
+            min-width: 65px;
+            max-width: 75px;
+            border-radius: 8px;
           }
           .media-content, .media-box video.media-content {
-            border-radius: 10px;
+            border-radius: 8px;
           }
           .modal-body.pt-3.pb-4.px-4 > .mb-4 {
-            gap: 6px !important;
-            height: 120px !important;
+            gap: 4px !important;
+            height: 80px !important;
+            padding-bottom: 2px !important;
+          }
+          .modal-body .mb-3 {
+            padding: 0.5rem !important;
+            font-size: 0.75rem !important;
+            min-height: 25px !important;
+            max-height: 60px !important;
+          }
+          .modal-body .mb-2 {
+            font-size: 0.8rem !important;
+          }
+          .modal-title {
+            font-size: 0.95rem !important;
+          }
+          .modal-header {
+            padding-top: 0.4rem !important;
+            padding-bottom: 0.4rem !important;
           }
           .modal-dialog {
-            max-width: 98vw !important;
-            width: 98vw !important;
-            margin: 48px auto 8px auto !important;
+            max-width: 75vw !important;
+            width: 75vw !important;
+            margin: 10px auto !important;
           }
           .modal-content {
-            border-radius: 12px !important;
-            width: 100vw !important;
+            border-radius: 10px !important;
+            width: 100% !important;
             min-width: 0 !important;
+            margin: 0 !important;
           }
           .modal-header, .modal-body, .modal-footer {
             padding-left: 0.5rem !important;
             padding-right: 0.5rem !important;
+          }
+          .modal-body.pt-3.pb-4.px-4 {
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+            padding-top: 0.75rem !important;
+            padding-bottom: 0.75rem !important;
+          }
+          .modal-body.pt-3.pb-4.px-4 > .mb-4 {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            align-items: center !important;
+            gap: 3px !important;
+            height: auto !important;
+            min-height: 80px !important;
+            padding-bottom: 2px !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+          }
+          .media-box {
+            width: calc(50% - 1.5px) !important;
+            height: 70px !important;
+            min-width: calc(50% - 1.5px) !important;
+            max-width: calc(50% - 1.5px) !important;
+            border-radius: 8px !important;
+            flex-shrink: 0 !important;
           }
         }
         @media (max-width: 400px) {
@@ -588,19 +853,32 @@ export default function AllDetails() {
             border-radius: 22px !important;
           }
           .media-box {
-            width: 70px;
-            height: 70px;
-            min-width: 40px;
-            max-width: 80px;
-            border-radius: 6px;
-            margin-right: 3px;
+            width: 80px;
+            height: 80px;
+            min-width: 70px;
+            max-width: 90px;
+            border-radius: 8px;
           }
           .media-content, .media-box video.media-content {
-            border-radius: 6px;
+            border-radius: 8px;
           }
           .modal-body.pt-3.pb-4.px-4 > .mb-4 {
-            gap: 3px !important;
-            height: 70px !important;
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            align-items: center !important;
+            gap: 4px !important;
+            height: auto !important;
+            min-height: 90px !important;
+            padding-bottom: 2px !important;
+          }
+          .media-box {
+            width: calc(50% - 2px) !important;
+            height: 80px !important;
+            min-width: calc(50% - 2px) !important;
+            max-width: calc(50% - 2px) !important;
+            border-radius: 8px !important;
+            flex-shrink: 0 !important;
           }
           .modal-dialog {
             max-width: 100vw !important;
@@ -665,20 +943,13 @@ export default function AllDetails() {
           50% { transform: translateY(-5px); }
         }
         .certificate-item {
-          transition: all 0.3s ease;
-        }
-        .certificate-item:hover {
-          transform: translateY(-3px) scale(1.05);
+          /* Removed hover effects */
         }
         .certificate-frame {
           position: relative;
           overflow: hidden;
           border-radius: 12px;
           box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-          transition: all 0.3s ease;
-        }
-        .certificate-frame:hover {
-          box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
         .certificate-frame::before {
           content: '';
@@ -688,10 +959,6 @@ export default function AllDetails() {
           width: 100%;
           height: 100%;
           background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-          transition: left 0.5s;
-        }
-        .certificate-frame:hover::before {
-          left: 100%;
         }
         .certificate-badge {
           position: absolute;
@@ -707,11 +974,7 @@ export default function AllDetails() {
           font-size: 0.7rem;
         }
         .hover-link {
-          transition: all 0.3s ease;
-        }
-        .hover-link:hover {
-          color: #60a5fa !important;
-          text-shadow: 0 0 5px rgba(96,165,250,0.5);
+          /* Removed hover effects */
         }
         footer {
           box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
@@ -727,7 +990,83 @@ export default function AllDetails() {
           0%, 100% { transform: scale(1); }
           50% { transform: scale(1.05); }
         }
+        /* Desktop spacing for cards */
+        @media (min-width: 769px) {
+          .row.g-3.g-md-5 {
+            margin-left: -1rem !important;
+            margin-right: -1rem !important;
+          }
+          .col-6.col-md-6 {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+            margin-bottom: 2rem !important;
+          }
+          .card.h-100 {
+            max-width: 350px !important;
+            max-height: 420px !important;
+            margin: 0 auto !important;
+          }
+          .card .position-relative {
+            height: 180px !important;
+          }
+          .card-body {
+            padding: 1.2rem !important;
+          }
+          .card-title {
+            font-size: 1.1rem !important;
+          }
+          .card-subtitle {
+            font-size: 0.9rem !important;
+          }
+          .card-text {
+            font-size: 0.95rem !important;
+            min-height: 30px !important;
+          }
+        }
         @media (max-width: 768px) {
+          .row.g-3.g-md-5 {
+            display: flex;
+            flex-wrap: wrap;
+            margin-left: -0.5rem !important;
+            margin-right: -0.5rem !important;
+          }
+          .col-6.col-md-6 {
+            display: flex;
+            flex-direction: column;
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+            margin-bottom: 0.5rem !important;
+          }
+          .card.h-100 {
+            height: 100% !important;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.85);
+          }
+          .card-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0.5rem !important;
+          }
+          .card.h-100 .position-relative {
+            height: 120px !important;
+          }
+          .card-title {
+            font-size: 0.8rem !important;
+            margin-bottom: 0.2rem !important;
+          }
+          .card-subtitle {
+            font-size: 0.7rem !important;
+            margin-bottom: 0.2rem !important;
+          }
+          .card-text {
+            font-size: 0.75rem !important;
+            margin-bottom: 0.2rem !important;
+            min-height: 18px !important;
+          }
           footer {
             padding: 0.4rem 0 !important;
             font-size: 0.75rem !important;
