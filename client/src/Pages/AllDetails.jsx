@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import certificate1 from '../components/images/cetificate1_page-0002.jpg';
 import certificate2 from '../components/images/cetificate2_page-0001.jpg';
-import bgImg1 from '../components/images/BackgroundImages/bg6.jpg';
+import bgImg1 from '../components/images/BackgroundImages/bg4.jpg';
 import bgImg2 from '../components/images/BackgroundImages/back2.webp';
 import bgImg3 from '../components/images/BackgroundImages/back3.png';
 import bgImg4 from '../components/images/BackgroundImages/back4.jpg';
@@ -17,6 +17,9 @@ export default function AllDetails() {
   const [showModal, setShowModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showMap, setShowMap] = useState(false);
+  const [showFullscreenImage, setShowFullscreenImage] = useState(false);
+  const [fullscreenImageSrc, setFullscreenImageSrc] = useState('');
+  const [fullscreenImageAlt, setFullscreenImageAlt] = useState('');
   const [bgIndex, setBgIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -53,6 +56,27 @@ export default function AllDetails() {
       applyFilters(orders);
     }
   }, [searchParam, orders, filterOptions, location.search]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape' && showFullscreenImage) {
+        closeFullscreenImage();
+      }
+    };
+
+    if (showFullscreenImage) {
+      document.addEventListener('keydown', handleKeyDown);
+      // Prevent body scrolling when fullscreen is open
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [showFullscreenImage]);
 
   const applyFilters = (ordersToFilter) => {
     let filtered = ordersToFilter;
@@ -163,6 +187,18 @@ export default function AllDetails() {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleImageClick = (imageSrc, imageAlt) => {
+    setFullscreenImageSrc(imageSrc);
+    setFullscreenImageAlt(imageAlt);
+    setShowFullscreenImage(true);
+  };
+
+  const closeFullscreenImage = () => {
+    setShowFullscreenImage(false);
+    setFullscreenImageSrc('');
+    setFullscreenImageAlt('');
   };
 
   return (
@@ -571,7 +607,7 @@ export default function AllDetails() {
                   <button type="button" className="btn-close btn-close-white ms-2 premium-close-btn" aria-label="Close" style={{filter:'brightness(2)', fontSize:'1.2rem', position: 'relative', zIndex: 2}} onClick={()=>setShowModal(false)}></button>
                 </div>
                 <div className="modal-body pt-4 pb-4 px-4 premium-modal-body">
-                  <div className="mb-4 w-100 d-flex justify-content-flex-start align-items-center flex-nowrap overflow-auto media-scrollbar premium-media-section" style={{height:'240px', gap:'15px', whiteSpace:'nowrap', paddingBottom:'10px', background: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(248,250,252,0.9) 100%)', borderRadius: '20px', padding: '15px', boxShadow: '0 8px 25px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)'}}>
+                  <div className="mb-4 w-100 d-flex justify-content-flex-start align-items-center flex-nowrap overflow-auto media-scrollbar premium-media-section modal-media-section" style={{height:'240px', gap:'15px', whiteSpace:'nowrap', paddingBottom:'10px', background: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(248,250,252,0.9) 100%)', borderRadius: '20px', padding: '15px', boxShadow: '0 8px 25px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)'}}>
                     {selectedOrder.productVideo && (
                       <div className="media-box flex-shrink-0 premium-media-item">
                         <video src={selectedOrder.productVideo} controls className="media-content" onClick={(e) => e.stopPropagation()} />
@@ -581,7 +617,7 @@ export default function AllDetails() {
                       </div>
                     )}
                     {selectedOrder.profilePicture && (
-                      <div className="media-box flex-shrink-0 premium-media-item">
+                      <div className="media-box flex-shrink-0 premium-media-item" onClick={() => handleImageClick(selectedOrder.profilePicture, 'Picture 1')}>
                         <img src={selectedOrder.profilePicture} alt="Picture 1" className="media-content" />
                         <div className="media-overlay">
                           <i className="bi bi-zoom-in text-white"></i>
@@ -589,7 +625,7 @@ export default function AllDetails() {
                       </div>
                     )}
                     {selectedOrder.alternateProfilePicture && (
-                      <div className="media-box flex-shrink-0 premium-media-item">
+                      <div className="media-box flex-shrink-0 premium-media-item" onClick={() => handleImageClick(selectedOrder.alternateProfilePicture, 'Picture 2')}>
                         <img src={selectedOrder.alternateProfilePicture} alt="Picture 2" className="media-content" />
                         <div className="media-overlay">
                           <i className="bi bi-zoom-in text-white"></i>
@@ -597,7 +633,7 @@ export default function AllDetails() {
                       </div>
                     )}
                     {selectedOrder.thirdProfilePicture && (
-                      <div className="media-box flex-shrink-0 premium-media-item">
+                      <div className="media-box flex-shrink-0 premium-media-item" onClick={() => handleImageClick(selectedOrder.thirdProfilePicture, 'Picture 3')}>
                         <img src={selectedOrder.thirdProfilePicture} alt="Picture 3" className="media-content" />
                         <div className="media-overlay">
                           <i className="bi bi-zoom-in text-white"></i>
@@ -605,7 +641,7 @@ export default function AllDetails() {
                       </div>
                     )}
                     {selectedOrder.fourthProfilePicture && (
-                      <div className="media-box flex-shrink-0 premium-media-item">
+                      <div className="media-box flex-shrink-0 premium-media-item" onClick={() => handleImageClick(selectedOrder.fourthProfilePicture, 'Picture 4')}>
                         <img src={selectedOrder.fourthProfilePicture} alt="Picture 4" className="media-content" />
                         <div className="media-overlay">
                           <i className="bi bi-zoom-in text-white"></i>
@@ -769,7 +805,219 @@ export default function AllDetails() {
           </div>
         </div>
       )}
+      
+      {/* Fullscreen Image Viewer */}
+      {showFullscreenImage && (
+        <div className="modal fade show d-flex align-items-center justify-content-center fullscreen-image-viewer" 
+             style={{
+               position: 'fixed', 
+               top: 0, 
+               left: 0, 
+               width: '100vw', 
+               height: '100vh', 
+               display: 'flex', 
+               background: 'rgba(0,0,0,0.9)', 
+               zIndex: 2050,
+               backdropFilter: 'blur(5px)'
+             }} 
+             tabIndex="-1" 
+             role="dialog" 
+             onClick={closeFullscreenImage}>
+          <div className="position-relative w-100 h-100 d-flex align-items-center justify-content-center" 
+               style={{padding: '20px'}} 
+               onClick={e => e.stopPropagation()}>
+            
+            {/* Close button */}
+            <button 
+              type="button" 
+              className="position-absolute d-flex align-items-center justify-content-center" 
+              aria-label="Close"
+              onClick={closeFullscreenImage}
+              style={{
+                top: '20px',
+                right: '30px',
+                zIndex: 2051,
+                background: 'rgba(220, 53, 69, 0.8)',
+                borderRadius: '50%',
+                width: '50px',
+                height: '50px',
+                border: '2px solid rgba(255,255,255,0.3)',
+                backdropFilter: 'blur(10px)',
+                fontSize: '1.5rem',
+                color: 'white',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                fontWeight: 'bold'
+              }}
+              onMouseEnter={e => {
+                e.target.style.background = 'rgba(220, 53, 69, 1)';
+                e.target.style.transform = 'scale(1.1)';
+                e.target.style.boxShadow = '0 4px 15px rgba(220, 53, 69, 0.4)';
+              }}
+              onMouseLeave={e => {
+                e.target.style.background = 'rgba(220, 53, 69, 0.8)';
+                e.target.style.transform = 'scale(1)';
+                e.target.style.boxShadow = 'none';
+              }}
+            >
+              ✕
+            </button>
+            
+            {/* Image */}
+            <img 
+              src={fullscreenImageSrc} 
+              alt={fullscreenImageAlt}
+              className="img-fluid fullscreen-image"
+              style={{
+                maxWidth: '90%',
+                maxHeight: '90%',
+                objectFit: 'contain',
+                borderRadius: '10px',
+                boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
+                background: 'rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                minHeight: window.innerWidth <= 768 ? '70vh' : 'auto'
+              }}
+            />
+            
+            {/* Image info */}
+            <div className="position-absolute bottom-0 left-0 right-0 text-center p-3">
+              <p className="text-white mb-0" style={{
+                fontSize: '1.1rem',
+                fontWeight: '500',
+                textShadow: '0 2px 4px rgba(0,0,0,0.7)',
+                background: 'rgba(0,0,0,0.3)',
+                borderRadius: '8px',
+                padding: '8px 16px',
+                display: 'inline-block',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255,255,255,0.1)'
+              }}>
+                {fullscreenImageAlt}
+              </p>
+            </div>
+            
+            {/* Navigation hint */}
+            <div className="position-absolute top-0 left-0 right-0 text-center p-3">
+              <p className="text-white-50 mb-0" style={{
+                fontSize: '0.9rem',
+                textShadow: '0 2px 4px rgba(0,0,0,0.7)'
+              }}>
+                Press <kbd style={{
+                  background: 'rgba(255,255,255,0.2)',
+                  padding: '2px 6px',
+                  borderRadius: '4px',
+                  fontSize: '0.8rem',
+                  border: '1px solid rgba(255,255,255,0.3)'
+                }}>ESC</kbd> or click outside to close
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <style>{`
+        /* Media box hover effects */
+        .media-box:hover {
+          transform: translateY(-2px);
+          box-shadow: 
+            0 12px 35px rgba(0,0,0,0.15), 
+            0 6px 18px rgba(59,130,246,0.15),
+            inset 0 1px 0 rgba(255,255,255,0.9);
+          cursor: pointer;
+        }
+        
+        .media-box:hover .media-overlay {
+          opacity: 1;
+          transition: opacity 0.3s ease;
+        }
+        
+        .media-box .media-overlay {
+          transition: opacity 0.3s ease;
+        }
+        
+        /* Fullscreen image viewer styles */
+        .fullscreen-image-viewer {
+          animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: scale(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        
+        .fullscreen-image-viewer img {
+          animation: imageZoomIn 0.4s ease-out;
+        }
+        
+        @keyframes imageZoomIn {
+          from {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        
+        /* Responsive fullscreen viewer */
+        @media (max-width: 768px) {
+          .fullscreen-image-viewer img {
+            max-width: 95% !important;
+            max-height: 95% !important;
+            min-height: 70vh !important;
+            height: auto !important;
+            width: auto !important;
+          }
+          
+          .fullscreen-image-viewer .btn-close {
+            top: 10px !important;
+            right: 15px !important;
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 1.2rem !important;
+          }
+          
+          .fullscreen-image-viewer .position-relative {
+            padding: 10px !important;
+          }
+          
+          /* Hide image info on mobile to give more space for image */
+          .fullscreen-image-viewer .position-absolute.bottom-0 {
+            display: none !important;
+          }
+          
+          /* Adjust navigation hint position */
+          .fullscreen-image-viewer .position-absolute.top-0 {
+            top: 50px !important;
+          }
+        }
+        
+        /* For very small screens (phones in portrait) */
+        @media (max-width: 480px) {
+          .fullscreen-image-viewer img {
+            max-width: 98% !important;
+            max-height: 98% !important;
+            min-height: 75vh !important;
+          }
+          
+          .fullscreen-image-viewer .position-relative {
+            padding: 5px !important;
+          }
+          
+          /* Hide navigation hint on very small screens */
+          .fullscreen-image-viewer .position-absolute.top-0 {
+            display: none !important;
+          }
+        }
+        
         body { padding-top: 160px !important; }
         
         /* Filter Animation */
@@ -1146,7 +1394,7 @@ export default function AllDetails() {
           }
           .media-box {
             width: 70px;
-            height: 70px;
+            height: 110px;
             min-width: 65px;
             max-width: 75px;
             border-radius: 8px;
@@ -1156,7 +1404,7 @@ export default function AllDetails() {
           }
           .modal-body.pt-3.pb-4.px-4 > .mb-4 {
             gap: 4px !important;
-            height: 80px !important;
+            height: 120px !important;
             padding-bottom: 2px !important;
           }
           .modal-body .mb-3 {
@@ -1203,14 +1451,14 @@ export default function AllDetails() {
             align-items: center !important;
             gap: 3px !important;
             height: auto !important;
-            min-height: 80px !important;
+            min-height: 120px !important;
             padding-bottom: 2px !important;
             margin-left: 0 !important;
             margin-right: 0 !important;
           }
           .media-box {
             width: calc(50% - 1.5px) !important;
-            height: 70px !important;
+            height: 110px !important;
             min-width: calc(50% - 1.5px) !important;
             max-width: calc(50% - 1.5px) !important;
             border-radius: 8px !important;
@@ -1230,7 +1478,7 @@ export default function AllDetails() {
           }
           .media-box {
             width: 80px;
-            height: 80px;
+            height: 120px;
             min-width: 70px;
             max-width: 90px;
             border-radius: 8px;
@@ -1245,12 +1493,12 @@ export default function AllDetails() {
             align-items: center !important;
             gap: 4px !important;
             height: auto !important;
-            min-height: 90px !important;
+            min-height: 130px !important;
             padding-bottom: 2px !important;
           }
           .media-box {
             width: calc(50% - 2px) !important;
-            height: 80px !important;
+            height: 120px !important;
             min-width: calc(50% - 2px) !important;
             max-width: calc(50% - 2px) !important;
             border-radius: 8px !important;
@@ -1283,6 +1531,23 @@ export default function AllDetails() {
         .media-scrollbar::-webkit-scrollbar-thumb {
           background: #2563eb;
           border-radius: 8px;
+        }
+        
+        /* Mobile responsive modal media section */
+        @media (max-width: 768px) {
+          .modal-media-section {
+            height: 120px !important;
+            padding: 10px !important;
+            margin-bottom: 1rem !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .modal-media-section {
+            height: 130px !important;
+            padding: 8px !important;
+            margin-bottom: 1rem !important;
+          }
         }
         .background-animation {
           position: absolute;

@@ -5,6 +5,8 @@ import { app } from '../firebase';
 import { useSelector } from 'react-redux';
 import { getStorage, uploadBytesResumable, ref, getDownloadURL } from 'firebase/storage';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'animate.css';
+import Swal from 'sweetalert2';
 
 export default function AddItem() {
   const [imagePercent, setImagePercent] = useState(0);
@@ -70,13 +72,27 @@ export default function AddItem() {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setImagePercent(Math.round(progress));
       },
-      () => {
+      (error) => {
         setImageError(true);
         setError('File upload failed');
+        
+        Swal.fire({
+          title: 'Upload Failed!',
+          text: 'There was an error uploading your file. Please try again.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#dc3545',
+          background: '#fff',
+          color: '#333',
+          showClass: {
+            popup: 'animate__animated animate__shakeX'
+          }
+        });
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setFormData((prev) => ({ ...prev, [field]: downloadURL }));
+          setImageError(false);
         });
       }
     );
@@ -90,6 +106,31 @@ export default function AddItem() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    // Show confirmation dialog
+    const result = await Swal.fire({
+      title: 'Add Product?',
+      text: 'Are you sure you want to add this product?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Add Product',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#198754',
+      cancelButtonColor: '#6c757d',
+      background: '#fff',
+      color: '#333',
+      showClass: {
+        popup: 'animate__animated animate__fadeInDown'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOutUp'
+      }
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
     try {
       const res = await fetch('/api/auth/store', {
         method: 'POST',
@@ -102,10 +143,39 @@ export default function AddItem() {
         throw new Error(data.message || 'Failed to create item');
       }
 
-      alert('Item added successfully');
+      await Swal.fire({
+        title: 'Success!',
+        text: 'Item added successfully',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#198754',
+        timer: 3000,
+        timerProgressBar: true,
+        background: '#fff',
+        color: '#333',
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      });
+      
       navigate('/items');
-    } catch {
-      setError('Something went wrong!');
+    } catch (error) {
+      await Swal.fire({
+        title: 'Error!',
+        text: error.message || 'Something went wrong!',
+        icon: 'error',
+        confirmButtonText: 'Try Again',
+        confirmButtonColor: '#dc3545',
+        background: '#fff',
+        color: '#333',
+        showClass: {
+          popup: 'animate__animated animate__shakeX'
+        }
+      });
+      setError(error.message || 'Something went wrong!');
     }
   };
 
