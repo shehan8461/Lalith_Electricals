@@ -12,6 +12,8 @@ export default function ItemProfile() {
   const [orders, setOrders] = useState([]);
   const [orderIdToDelete, setOrderIdToDelete] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchOrders();
@@ -19,13 +21,25 @@ export default function ItemProfile() {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch(`/api/user/items`);
+      setLoading(true);
+      setError(null);
+      
+      const response = await fetch(`/api/auth/users/items`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
       if (!response.ok) {
-        throw new Error('Failed to fetch orders');
+        throw new Error(`Server error: ${response.status}`);
       }
+      
       const data = await response.json();
-      setOrders(data.items || []);
-      data.items?.forEach(order => {
+      console.log('Fetched items:', data); // Debug log
+      setOrders(data || []);
+      
+      data?.forEach(order => {
         if (order.profilePicture) {
           fetchFirebaseImage(order.profilePicture, 'profilePicture', order._id);
         }
@@ -35,6 +49,9 @@ export default function ItemProfile() {
       });
     } catch (error) {
       console.error('Error fetching orders:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,6 +77,10 @@ export default function ItemProfile() {
     try {
       const res = await fetch(`/api/user/item/delete/${orderIdToDelete}`, {
         method: 'DELETE',
+        credentials: 'include', // Important: Include cookies for authentication
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
       const data = await res.json();
       if (!res.ok) {
@@ -79,7 +100,23 @@ export default function ItemProfile() {
     <div className="item-profile-bg min-vh-100 py-5">
       <div className="container">
         <h2 className="mb-4 text-center fw-bold display-5 text-primary">My Items</h2>
-        {orders.length > 0 ? (
+        
+        {loading && (
+          <div className="text-center">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <p className="mt-2">Loading your items...</p>
+          </div>
+        )}
+        
+        {error && (
+          <div className="alert alert-danger text-center">
+            <strong>Error:</strong> {error}
+          </div>
+        )}
+        
+        {!loading && !error && orders.length > 0 ? (
           <div className="card shadow-lg border-0 rounded-4 p-3 fade-in-table">
             <div className="table-responsive rounded-4">
               <Table hover bordered className="align-middle mb-0 bg-white">
@@ -148,7 +185,12 @@ export default function ItemProfile() {
             </div>
           </div>
         ) : (
-          <div className="alert alert-info text-center mt-4">You have no items yet!</div>
+          !loading && !error && (
+            <div className="alert alert-info text-center mt-4">
+              You have no items yet! 
+              <Link to="/add-item" className="btn btn-primary ms-2">Add Your First Item</Link>
+            </div>
+          )
         )}
 
         <Modal show={showModal} onHide={() => setShowModal(false)} centered dialogClassName="modal-soft-shadow">
