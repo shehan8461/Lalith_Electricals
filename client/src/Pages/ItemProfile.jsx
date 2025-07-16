@@ -75,24 +75,31 @@ export default function ItemProfile() {
 
   const handleDeleteOrder = async () => {
     try {
-      const res = await fetch(`/api/user/item/delete/${orderIdToDelete}`, {
+      const res = await fetch(`/api/auth/Deletitem/${orderIdToDelete}`, {
         method: 'DELETE',
-        credentials: 'include', // Important: Include cookies for authentication
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      const data = await res.json();
+      
       if (!res.ok) {
-        console.log(data.message);
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      
+      const data = await res.json();
+      console.log('Delete response:', data);
+      
+      if (data.error) {
+        console.log(data.error);
       } else {
         setOrders((prevOrders) =>
           prevOrders.filter((order) => order._id !== orderIdToDelete)
         );
+        console.log('Item deleted successfully');
       }
       setShowModal(false);
     } catch (error) {
-      console.log(error.message);
+      console.error('Delete error:', error);
     }
   };
 

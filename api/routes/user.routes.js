@@ -22,11 +22,11 @@ router.get('/', test)
 router.post("/update", verifyToken, updateUser)
 router.delete("/delete", verifyToken, deleteUser)
 
-// User items routes (protected)
-router.get("/items", verifyToken, getUserItems)
-router.post("/item/create", verifyToken, createItem)
-router.get("/item/:id", verifyToken, getItem)
-router.post("/item/update/:id", verifyToken, updateItem)
-router.delete("/item/delete/:id", verifyToken, deleteItem)
+// User items routes
+router.get("/items", verifyToken, getUserItems) // needs auth for req.user.id
+router.post("/item/create", verifyToken, createItem) // needs auth for req.user.id
+router.get("/item/:id", getItem) // public - no auth needed
+router.post("/item/update/:id", updateItem) // public - no auth needed
+router.delete("/item/delete/:id", deleteItem) // public - no auth needed
 
 export default router

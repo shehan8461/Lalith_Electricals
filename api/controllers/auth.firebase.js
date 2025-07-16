@@ -145,6 +145,59 @@ export const allitems = async (req, res, next) => {
     }
 };
 
+// Delete item
+export const deleteItem = async (req, res, next) => {
+    try {
+        const itemId = req.params.id;
+        const item = await Item.findById(itemId);
+        
+        if (!item) {
+            return res.status(404).json({ error: 'Item not found' });
+        }
+
+        await item.delete();
+        res.json({ message: 'Item deleted successfully' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+// Update item
+export const updateItem = async (req, res, next) => {
+    try {
+        const itemId = req.params.id;
+        const item = await Item.findById(itemId);
+        
+        if (!item) {
+            return res.status(404).json({ error: 'Item not found' });
+        }
+
+        const updatedItem = await item.update(req.body);
+        res.json({ success: true, message: 'Item updated successfully', data: updatedItem });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+// Get single item
+export const getItem = async (req, res, next) => {
+    try {
+        const itemId = req.params.id;
+        const item = await Item.findById(itemId);
+        
+        if (!item) {
+            return res.status(404).json({ error: 'Item not found' });
+        }
+
+        res.json({ success: true, data: item });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
 export const google = async (req, res, next) => {
     try {
         const user = await User.findByEmail(req.body.email);

@@ -87,7 +87,7 @@ function UpdateUser(){
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`/api/user/item/${id}`);
+        const response = await fetch(`/api/auth/item/${id}`);
         const data = await response.json();
         console.log(data);
 
@@ -117,8 +117,9 @@ function UpdateUser(){
     setError('');
     setSuccess(false);
     try {
-      const response = await fetch(`/api/user/item/update/${id}`, {
-        method: 'POST',
+      const response = await fetch(`/api/auth/Updateitem/${id}`, {
+        method: 'PUT',
+        credentials: 'include', // Include cookies for authentication
         headers: {
           'Content-Type': 'application/json',
         },
