@@ -103,6 +103,16 @@ class Item {
         } catch (error) {
             throw new Error(`Failed to save item: ${error.message}`);
         }
+   }
+
+    // Create new item
+    static async create(itemData) {
+        try {
+            const item = new Item(itemData);
+            return await item.save();
+        } catch (error) {
+            throw new Error(`Failed to create item: ${error.message}`);
+        }
     }
 
     // Find item by ID

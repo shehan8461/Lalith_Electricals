@@ -71,12 +71,26 @@ The frontend was trying to access old API endpoints that didn't exist in the Fir
 - All protected routes now use JWT token verification
 - Cookie-based authentication working correctly
 
-## 🧪 **Testing Results**
+## 🚀 **Firebase App Hosting Deployment**
+
+### **✅ Current Status**
+- **Deployment Type**: Firebase App Hosting (Node.js)
+- **Branch**: `shehan` (auto-deploy enabled)
+- **Root Directory**: `/`
+- **Entry Point**: `api/index.js`
+- **Region**: `asia-east1` (Taiwan)
+
+### **✅ Latest Fixes Applied**
+1. **Fixed `package.json`**: Updated `main` field to `api/index.js`
+2. **Added Static File Serving**: Express now serves React build from `client/dist/`
+3. **Fixed File Paths**: Used `process.cwd()` for correct deployment paths
+4. **Included Build Files**: Removed `dist` from `.gitignore` and committed build files
+5. **Added Build Script**: Added `npm run build` to build React frontend
 
 ### **✅ Working**
-- **Health Check**: https://mern-60fd6.web.app/api/health
-- **Public Items**: https://mern-60fd6.web.app/api/public/items
-- **Frontend**: https://mern-60fd6.web.app
+- **App URL**: https://your-app-hosting-url.com (check Firebase Console)
+- **Health Check**: https://your-app-hosting-url.com/api/health
+- **Public Items**: https://your-app-hosting-url.com/api/public/items
 
 ### **✅ Expected Behavior**
 - Sign in page loads without errors

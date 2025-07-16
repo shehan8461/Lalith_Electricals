@@ -114,3 +114,51 @@ export const getItem = async (req, res) => {
         res.status(500).send({ success: false, message: "Internal Server Error" });
     }
 };
+
+// Get all items for user
+export const getUserItems = async (req, res, next) => {
+    try {
+        const items = await Item.findByUserId(req.user.id);
+        res.status(200).json({ items });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Create new item
+export const createItem = async (req, res, next) => {
+    try {
+        const itemData = {
+            ...req.body,
+            userRef: req.user.id
+        };
+        
+        const item = await Item.create(itemData);
+        res.status(201).json({ success: true, message: "Item created successfully", data: item });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Get all items (public endpoint)
+export const getAllItems = async (req, res, next) => {
+    try {
+        const items = await Item.findAll();
+        res.status(200).json({ items });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Get single item by ID (public endpoint)
+export const getItemById = async (req, res, next) => {
+    try {
+        const item = await Item.findById(req.params.id);
+        if (!item) {
+            return res.status(404).json({ success: false, message: "Item not found" });
+        }
+        res.status(200).json({ success: true, data: item });
+    } catch (error) {
+        next(error);
+    }
+};

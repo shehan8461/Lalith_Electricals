@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import userRoutes from './routes/user.routes.js'
 import authroutes from './routes/auth.routes.js'
 import adminroutes from './routes/admin.routes.js'
+import publicroutes from './routes/public.routes.js'
 import cookieParser from 'cookie-parser';
 import { db } from './firebase-config.js';
 import path from 'path';
@@ -96,6 +97,7 @@ process.on('SIGINT', async () => {
 app.use("/api/user",userRoutes)
 app.use("/api/auth",authroutes)
 app.use("/api/admin",adminroutes)
+app.use("/api/public",publicroutes)
 
 // Catch-all handler: send back React's index.html file for any non-API routes
 app.get('*', (req, res) => {
