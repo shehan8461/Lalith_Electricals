@@ -55,7 +55,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Serve static files from React build
-app.use(express.static(path.join(__dirname, '../client/dist')));
+const clientDistPath = path.join(process.cwd(), 'client', 'dist');
+console.log('Static files path:', clientDistPath);
+app.use(express.static(clientDistPath));
 
 // Health check endpoint
 app.get('/api/health', async (req, res) => {
@@ -97,7 +99,9 @@ app.use("/api/admin",adminroutes)
 
 // Catch-all handler: send back React's index.html file for any non-API routes
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+    const indexPath = path.join(process.cwd(), 'client', 'dist', 'index.html');
+    console.log('Serving index.html from:', indexPath);
+    res.sendFile(indexPath);
 });
 
 app.use((err,req,res,next)=>{
