@@ -19,13 +19,13 @@ export default function ItemProfile() {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch(`/api/auth/users/items`);
+      const response = await fetch(`/api/user/items`);
       if (!response.ok) {
         throw new Error('Failed to fetch orders');
       }
       const data = await response.json();
-      setOrders(data);
-      data.forEach(order => {
+      setOrders(data.items || []);
+      data.items?.forEach(order => {
         if (order.profilePicture) {
           fetchFirebaseImage(order.profilePicture, 'profilePicture', order._id);
         }
@@ -58,7 +58,7 @@ export default function ItemProfile() {
 
   const handleDeleteOrder = async () => {
     try {
-      const res = await fetch(`/api/user/deleteitem/${orderIdToDelete}`, {
+      const res = await fetch(`/api/user/item/delete/${orderIdToDelete}`, {
         method: 'DELETE',
       });
       const data = await res.json();

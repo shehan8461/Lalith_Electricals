@@ -81,7 +81,7 @@ function OnePetShow() {
     useEffect(() => {
         const fetchUserData = async () => {
           try {
-            const response = await fetch(`/api/user/getitem/${id}`);
+            const response = await fetch(`/api/public/item/${id}`);
             const data = await response.json();
             console.log(data);
     

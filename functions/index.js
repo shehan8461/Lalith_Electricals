@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 });
 
 // Health check endpoint
-app.get("/health", async (req, res) => {
+app.get("/api/health", async (req, res) => {
   try {
     res.status(200).json({
       status: "OK",
@@ -82,7 +82,7 @@ const createError = (statusCode, message) => {
 };
 
 // AUTH ROUTES
-app.post("/auth/signup", async (req, res, next) => {
+app.post("/api/auth/signup", async (req, res, next) => {
   try {
     const {username, email, password} = req.body;
 
@@ -115,7 +115,7 @@ app.post("/auth/signup", async (req, res, next) => {
   }
 });
 
-app.post("/auth/signin", async (req, res, next) => {
+app.post("/api/auth/signin", async (req, res, next) => {
   try {
     const {email, password} = req.body;
 
@@ -164,7 +164,7 @@ app.post("/auth/signin", async (req, res, next) => {
   }
 });
 
-app.post("/auth/signout", (req, res) => {
+app.post("/api/auth/signout", (req, res) => {
   res.clearCookie("access_token");
   res.status(200).json({
     success: true,
@@ -173,7 +173,7 @@ app.post("/auth/signout", (req, res) => {
 });
 
 // USER ROUTES
-app.get("/user/profile", verifyToken, async (req, res, next) => {
+app.get("/api/user/profile", verifyToken, async (req, res, next) => {
   try {
     const userDoc = await db.collection("users").doc(req.user.id).get();
 
@@ -193,7 +193,7 @@ app.get("/user/profile", verifyToken, async (req, res, next) => {
   }
 });
 
-app.post("/user/update", verifyToken, async (req, res, next) => {
+app.post("/api/user/update", verifyToken, async (req, res, next) => {
   try {
     const {username, email, password} = req.body;
     const updateData = {
@@ -215,7 +215,7 @@ app.post("/user/update", verifyToken, async (req, res, next) => {
   }
 });
 
-app.delete("/user/delete", verifyToken, async (req, res, next) => {
+app.delete("/api/user/delete", verifyToken, async (req, res, next) => {
   try {
     await db.collection("users").doc(req.user.id).delete();
     res.clearCookie("access_token");
@@ -230,7 +230,7 @@ app.delete("/user/delete", verifyToken, async (req, res, next) => {
 });
 
 // ITEM ROUTES
-app.get("/user/items", verifyToken, async (req, res, next) => {
+app.get("/api/user/items", verifyToken, async (req, res, next) => {
   try {
     const itemsQuery = await db.collection("items")
         .where("userId", "==", req.user.id).get();
@@ -249,7 +249,7 @@ app.get("/user/items", verifyToken, async (req, res, next) => {
   }
 });
 
-app.post("/user/item/create", verifyToken, async (req, res, next) => {
+app.post("/api/user/item/create", verifyToken, async (req, res, next) => {
   try {
     const {name, description, price, imageUrls, category} = req.body;
 
@@ -275,7 +275,7 @@ app.post("/user/item/create", verifyToken, async (req, res, next) => {
   }
 });
 
-app.get("/user/item/:id", verifyToken, async (req, res, next) => {
+app.get("/api/user/item/:id", verifyToken, async (req, res, next) => {
   try {
     const itemDoc = await db.collection("items").doc(req.params.id).get();
 
@@ -299,7 +299,7 @@ app.get("/user/item/:id", verifyToken, async (req, res, next) => {
   }
 });
 
-app.post("/user/item/update/:id", verifyToken, async (req, res, next) => {
+app.post("/api/user/item/update/:id", verifyToken, async (req, res, next) => {
   try {
     const {name, description, price, imageUrls, category} = req.body;
 
@@ -335,7 +335,7 @@ app.post("/user/item/update/:id", verifyToken, async (req, res, next) => {
   }
 });
 
-app.delete("/user/item/delete/:id", verifyToken, async (req, res, next) => {
+app.delete("/api/user/item/delete/:id", verifyToken, async (req, res, next) => {
   try {
     // Check if item exists and user owns it
     const itemDoc = await db.collection("items").doc(req.params.id).get();
@@ -360,7 +360,7 @@ app.delete("/user/item/delete/:id", verifyToken, async (req, res, next) => {
 });
 
 // PUBLIC ROUTES (no authentication required)
-app.get("/public/items", async (req, res, next) => {
+app.get("/api/public/items", async (req, res, next) => {
   try {
     const itemsQuery = await db.collection("items").limit(50).get();
 
@@ -378,7 +378,7 @@ app.get("/public/items", async (req, res, next) => {
   }
 });
 
-app.get("/public/item/:id", async (req, res, next) => {
+app.get("/api/public/item/:id", async (req, res, next) => {
   try {
     const itemDoc = await db.collection("items").doc(req.params.id).get();
 
@@ -396,7 +396,7 @@ app.get("/public/item/:id", async (req, res, next) => {
 });
 
 // ADMIN ROUTES
-app.get("/admin/users", verifyToken, async (req, res, next) => {
+app.get("/api/admin/users", verifyToken, async (req, res, next) => {
   try {
     const usersQuery = await db.collection("users").limit(50).get();
 
@@ -415,7 +415,7 @@ app.get("/admin/users", verifyToken, async (req, res, next) => {
   }
 });
 
-app.get("/admin/items", verifyToken, async (req, res, next) => {
+app.get("/api/admin/items", verifyToken, async (req, res, next) => {
   try {
     const itemsQuery = await db.collection("items").limit(50).get();
 

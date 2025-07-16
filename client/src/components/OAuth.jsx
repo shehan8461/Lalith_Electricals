@@ -9,6 +9,10 @@ export default function OAuth() {
   const dispatch=useDispatch();
     const handleGoogleClick =async()=>{
         try{
+            // TODO: Implement Google OAuth with Firebase Functions
+            console.log('Google OAuth not implemented yet');
+            return;
+            
             const provider =new GoogleAuthProvider()
             const auth=getAuth(app)
 

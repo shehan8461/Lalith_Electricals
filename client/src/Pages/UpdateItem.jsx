@@ -87,7 +87,7 @@ function UpdateUser(){
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`/api/user/getitem/${id}`);
+        const response = await fetch(`/api/user/item/${id}`);
         const data = await response.json();
         console.log(data);
 
@@ -117,8 +117,8 @@ function UpdateUser(){
     setError('');
     setSuccess(false);
     try {
-      const response = await fetch(`/api/user/updateitem`, {
-        method: 'PUT',
+      const response = await fetch(`/api/user/item/update/${id}`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },

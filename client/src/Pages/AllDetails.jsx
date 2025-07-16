@@ -121,7 +121,7 @@ export default function AllDetails() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
       
-      const response = await fetch(`/api/auth/users/items`, {
+      const response = await fetch(`/api/public/items`, {
         signal: controller.signal
       });
       
@@ -132,8 +132,8 @@ export default function AllDetails() {
       }
       
       const data = await response.json();
-      setOrders(data);
-      setFilteredOrders(data);
+      setOrders(data.items || []);
+      setFilteredOrders(data.items || []);
       setLoading(false);
     } catch (error) {
       setLoading(false);
