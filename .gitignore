@@ -22,3 +22,20 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Firebase sensitive files - NEVER commit these
+firebase-service-account.json
+firebase-service-account-*.json
+.env
+.env.local
+.env.production
+
+# Firebase hosting
+.firebase/
+*-debug.log
+firebase-debug.log
+firebase-debug.*.log
+
+# Test files
+cookies.txt
+test-*.sh
