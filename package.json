@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon api/index.js",
     "start": "node api/index.js",
+    "build": "cd client && npm install && npm run build",
     "test-firebase": "node test-firebase-connection.js"
   },
   "keywords": [],
