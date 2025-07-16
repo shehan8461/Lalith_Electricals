@@ -1,67 +1,47 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoutes from './routes/user.routes.js'
 import authroutes from './routes/auth.routes.js'
 import adminroutes from './routes/admin.routes.js'
 import cookieParser from 'cookie-parser';
+import { db } from './firebase-config.js';
 
 dotenv.config();
 
-// MongoDB connection with improved settings
-const connectDB = async () => {
+// Firebase connection test
+const connectFirebase = async () => {
     try {
-        const conn = await mongoose.connect(process.env.MONGO, {
-            // Connection timeout settings
-            serverSelectionTimeoutMS: 30000, // 30 seconds
-            socketTimeoutMS: 45000, // 45 seconds
-            maxPoolSize: 10, // Maintain up to 10 socket connections
-            // For development - retry connection
-            retryWrites: true,
-            w: 'majority'
+        // Test Firebase connection by trying to access a collection
+        const testCollection = db.collection('test');
+        await testCollection.doc('connection-test').set({
+            timestamp: new Date(),
+            message: 'Firebase connection successful'
         });
         
-        console.log(`Connected to MongoDB: ${conn.connection.host}`);
+        console.log('✅ Connected to Firebase Firestore');
         
-        // Handle connection events
-        mongoose.connection.on('connected', () => {
-            console.log('Mongoose connected to DB');
-        });
-        
-        mongoose.connection.on('error', (err) => {
-            console.error('Mongoose connection error:', err);
-        });
-        
-        mongoose.connection.on('disconnected', () => {
-            console.log('Mongoose disconnected');
-        });
+        // Clean up test document
+        await testCollection.doc('connection-test').delete();
         
     } catch (error) {
-        console.error('MongoDB connection failed:', error.message);
+        console.error('❌ Firebase connection failed:', error.message);
         
         // Provide specific error messages
-        if (error.message.includes('authentication failed')) {
-            console.error('❌ Check your MongoDB username and password in .env file');
-        } else if (error.message.includes('ENOTFOUND') || error.message.includes('ECONNREFUSED')) {
-            console.error('❌ Check your internet connection and MongoDB Atlas URL');
-        } else if (error.message.includes('IP address') || error.message.includes('whitelist')) {
-            console.error('❌ Add your IP address to MongoDB Atlas Network Access whitelist');
+        if (error.message.includes('permission-denied')) {
+            console.error('❌ Check your Firebase service account credentials');
+        } else if (error.message.includes('project-not-found')) {
+            console.error('❌ Check your Firebase project ID');
+        } else if (error.message.includes('invalid-argument')) {
+            console.error('❌ Check your Firebase private key format');
         }
         
-        // Retry after 5 seconds (max 10 retries to prevent infinite loop)
-        if (!global.retryCount) global.retryCount = 0;
-        if (global.retryCount < 10) {
-            global.retryCount++;
-            console.log(`🔄 Retrying connection in 5 seconds... (attempt ${global.retryCount}/10)`);
-            setTimeout(connectDB, 5000);
-        } else {
-            console.error('❌ Maximum retry attempts reached. Please fix the connection issue and restart the server.');
-        }
+        // Don't exit the process, just log the error
+        console.error('⚠️  Server will continue but database operations may fail');
     }
 };
 
-// Connect to database
-connectDB();
+// Connect to Firebase
+connectFirebase();
 
 const app = express();
 
@@ -70,12 +50,25 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Health check endpoint
-app.get('/api/health', (req, res) => {
-    res.status(200).json({ 
-        status: 'OK', 
-        mongodb: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
-        timestamp: new Date().toISOString()
-    });
+app.get('/api/health', async (req, res) => {
+    try {
+        // Test Firebase connection
+        const testDoc = await db.collection('test').doc('health-check').get();
+        res.status(200).json({ 
+            status: 'OK', 
+            database: 'Firebase Firestore',
+            connection: 'Connected',
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            status: 'ERROR', 
+            database: 'Firebase Firestore',
+            connection: 'Disconnected',
+            error: error.message,
+            timestamp: new Date().toISOString()
+        });
+    }
 });
 
 const PORT = process.env.PORT || 3000;
@@ -87,10 +80,8 @@ app.listen(PORT, () => {
 // Graceful shutdown
 process.on('SIGINT', async () => {
     console.log('Shutting down gracefully...');
-    await mongoose.connection.close();
     process.exit(0);
 });
-
 
 app.use("/api/user",userRoutes)
 app.use("/api/auth",authroutes)
