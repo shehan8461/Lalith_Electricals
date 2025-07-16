@@ -3,10 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import certificate1 from '../components/images/cetificate1_page-0002.jpg';
 import certificate2 from '../components/images/cetificate2_page-0001.jpg';
 import bgImg1 from '../components/images/BackgroundImages/bg4.jpg';
-import bgImg2 from '../components/images/BackgroundImages/back2.webp';
-import bgImg3 from '../components/images/BackgroundImages/back3.png';
-import bgImg4 from '../components/images/BackgroundImages/back4.jpg';
-import bgImg5 from '../components/images/BackgroundImages/back5.jpg';
+
 import { useDispatch } from 'react-redux';
 import { signout } from '../redux/User/userSlice';
 import { useNavigate, useLocation } from 'react-router-dom';
