@@ -82,6 +82,43 @@ app.get('/api/health', async (req, res) => {
     }
 });
 
+// Debug endpoint to check Firebase configuration
+app.get('/api/debug/firebase', async (req, res) => {
+    try {
+        const hasFirebaseConfig = !!process.env.FIREBASE_CONFIG;
+        const hasGCloudProject = !!process.env.GCLOUD_PROJECT;
+        const hasServiceAccount = !!process.env.FIREBASE_CLIENT_EMAIL;
+        
+        const debugInfo = {
+            environment: process.env.NODE_ENV || 'development',
+            hasFirebaseConfig,
+            hasGCloudProject,
+            hasServiceAccount,
+            projectId: process.env.GCLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID || 'unknown',
+            timestamp: new Date().toISOString()
+        };
+        
+        // Test actual Firebase connection
+        try {
+            await db.collection('_debug').doc('test').set({ 
+                timestamp: new Date(),
+                test: 'Firebase connection test from debug endpoint'
+            });
+            debugInfo.firebaseTest = 'SUCCESS';
+        } catch (firebaseError) {
+            debugInfo.firebaseTest = 'FAILED';
+            debugInfo.firebaseError = firebaseError.message;
+        }
+        
+        res.status(200).json(debugInfo);
+    } catch (error) {
+        res.status(500).json({ 
+            error: error.message,
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
