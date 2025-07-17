@@ -83,6 +83,22 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+// Root endpoint
+app.get('/', (req, res) => {
+    res.status(200).json({ 
+        message: 'Lalith Electricals API Server',
+        status: 'Running',
+        mongodb: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
+        timestamp: new Date().toISOString(),
+        availableRoutes: [
+            '/api/auth',
+            '/api/user', 
+            '/api/admin',
+            '/api/health'
+        ]
+    });
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
     res.status(200).json({ 
