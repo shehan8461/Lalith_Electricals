@@ -119,18 +119,7 @@ app.get('/api/debug/firebase', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}!`);
-});
-
-// Graceful shutdown
-process.on('SIGINT', async () => {
-    console.log('Shutting down gracefully...');
-    process.exit(0);
-});
-
+// API Routes - Must be defined BEFORE server starts listening
 app.use("/api/user",userRoutes)
 app.use("/api/auth",authroutes)
 app.use("/api/admin",adminroutes)
@@ -141,6 +130,18 @@ app.get('*', (req, res) => {
     const indexPath = path.join(process.cwd(), 'client', 'dist', 'index.html');
     console.log('Serving index.html from:', indexPath);
     res.sendFile(indexPath);
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}!`);
+});
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+    console.log('Shutting down gracefully...');
+    process.exit(0);
 });
 
 app.use((err,req,res,next)=>{
