@@ -29,7 +29,7 @@ firebase-service-account.json
 service-account-key.json
 
 # Environment variables
-.env
+
 .env.local
 .env.production
 
