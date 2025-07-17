@@ -26,7 +26,7 @@ export default function AddItem() {
   const { currentUser } = useSelector((state) => state.user);
 
   const [formData, setFormData] = useState({
-    userId: currentUser._id,
+    //userId: currentUser._id,
     Name: "",
     date: "",
     Description: "",

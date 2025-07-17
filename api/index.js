@@ -1,17 +1,31 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import userRoutes from './routes/user.routes.js'
 import authroutes from './routes/auth.routes.js'
 import adminroutes from './routes/admin.routes.js'
 import cookieParser from 'cookie-parser';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Configure dotenv to load from the current api directory
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 // MongoDB connection with improved settings
 const connectDB = async () => {
     try {
-        const conn = await mongoose.connect(process.env.MONGO, {
+        console.log('MONGO environment variable:', process.env.MONGO);
+        console.log('All environment variables loaded:', Object.keys(process.env).filter(key => key.includes('MONGO')));
+        
+        const mongoURI = process.env.MONGO;
+        if (!mongoURI) {
+            throw new Error('MONGO environment variable is not defined');
+        }
+        
+        const conn = await mongoose.connect(mongoURI, {
             // Connection timeout settings
             serverSelectionTimeoutMS: 30000, // 30 seconds
             socketTimeoutMS: 45000, // 45 seconds
