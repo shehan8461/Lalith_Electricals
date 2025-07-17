@@ -37,14 +37,15 @@ export default function ItemProfile() {
       
       const data = await response.json();
       console.log('Fetched items:', data); // Debug log
+      console.log('First item structure:', data[0]); // Debug log
       setOrders(data || []);
       
       data?.forEach(order => {
         if (order.profilePicture) {
-          fetchFirebaseImage(order.profilePicture, 'profilePicture', order._id);
+          fetchFirebaseImage(order.profilePicture, 'profilePicture', order.id);
         }
         if (order.alternateProfilePicture) {
-          fetchFirebaseImage(order.alternateProfilePicture, 'alternateProfilePicture', order._id);
+          fetchFirebaseImage(order.alternateProfilePicture, 'alternateProfilePicture', order.id);
         }
       });
     } catch (error) {
@@ -60,7 +61,7 @@ export default function ItemProfile() {
     try {
       const downloadUrl = await getDownloadURL(storageRef);
       setOrders(prevOrders => prevOrders.map(order => {
-        if (order._id === orderId) {
+        if (order.id === orderId) {
           return {
             ...order,
             [field]: downloadUrl
@@ -73,33 +74,31 @@ export default function ItemProfile() {
     }
   };
 
-  const handleDeleteOrder = async () => {
+
+
+    const handleDeleteOrder = async () => {
     try {
-      const res = await fetch(`/api/auth/Deletitem/${orderIdToDelete}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      console.log('Deleting order with ID:', orderIdToDelete); // Debug log
       
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
+      if (!orderIdToDelete) {
+        console.error('Order ID is undefined or null');
+        return;
       }
       
+      const res = await fetch(`/api/auth/deleteItem/${orderIdToDelete}`, {
+        method: 'DELETE',
+      });
       const data = await res.json();
-      console.log('Delete response:', data);
-      
-      if (data.error) {
-        console.log(data.error);
+      if (!res.ok) {
+        console.log(data.message);
       } else {
         setOrders((prevOrders) =>
-          prevOrders.filter((order) => order._id !== orderIdToDelete)
+          prevOrders.filter((order) => order.id !== orderIdToDelete)
         );
-        console.log('Item deleted successfully');
       }
       setShowModal(false);
     } catch (error) {
-      console.error('Delete error:', error);
+      console.log(error.message);
     }
   };
 
@@ -141,7 +140,7 @@ export default function ItemProfile() {
                 </thead>
                 <tbody>
                   {orders.map((order) => (
-                    <tr key={order._id} className="row-border-left">
+                    <tr key={order.id} className="row-border-left">
                    
                       <td className="fw-semibold">{order.Name}</td>
                       <td>{order.date}</td>
@@ -168,7 +167,7 @@ export default function ItemProfile() {
                         )}
                       </td>
                       <td className="text-center">
-                        <Link to={`/update-item/${order._id}`} className="me-2">
+                        <Link to={`/update-item/${order.id}`} className="me-2">
                           <Button variant="outline-success" size="sm" className="d-inline-flex align-items-center gap-1 action-btn">
                             <FaEdit /> Edit
                           </Button>
@@ -178,8 +177,10 @@ export default function ItemProfile() {
                           size="sm"
                           className="d-inline-flex align-items-center gap-1 ms-1 action-btn"
                           onClick={() => {
+                            console.log('Delete button clicked for order:', order); // Debug log
+                            console.log('Order ID:', order.id); // Debug log
                             setShowModal(true);
-                            setOrderIdToDelete(order._id);
+                            setOrderIdToDelete(order.id);
                           }}
                         >
                           <FaTrashAlt /> Delete

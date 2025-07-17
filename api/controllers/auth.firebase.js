@@ -156,12 +156,12 @@ export const deleteItem = async (req, res, next) => {
         }
 
         await item.delete();
-        res.json({ message: 'Item deleted successfully' });
+        res.status(200).json({ message: 'Item deleted successfully' });
     } catch (error) {
-        console.log(error);
+        console.error('Delete error:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
-};
+}
 
 // Update item
 export const updateItem = async (req, res, next) => {

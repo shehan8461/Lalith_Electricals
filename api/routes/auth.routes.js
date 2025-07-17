@@ -14,8 +14,8 @@ router.get("/user/:id", getOrdersByCustomerId)//for data fetch user id
 router.get("/users/items", allitems)
 
 // Item management routes
-router.delete("/Deletitem/:id", deleteItem)
-router.put("/item/:id", verifyToken, updateItem)
+router.delete("/deleteItem/:id", deleteItem)
+router.put("/itemUpdate/:id", verifyToken, updateItem)
 router.get("/item/:id", getItem)
 
 export default router

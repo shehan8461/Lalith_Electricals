@@ -117,14 +117,14 @@ function UpdateUser(){
     setError('');
     setSuccess(false);
     try {
-      const response = await fetch(`/api/auth/Updateitem/${id}`, {
+      const response = await fetch(`/api/auth/itemUpdate/${id}`, {
         method: 'PUT',
         credentials: 'include', // Include cookies for authentication
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          id: updatediscount._id,
+          id: updatediscount.id,
           ...updatediscount,
         }),
       });
