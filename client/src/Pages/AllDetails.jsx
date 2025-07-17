@@ -121,7 +121,7 @@ export default function AllDetails() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
       
-      const response = await fetch(`/api/auth/users/items`, {
+      const response = await fetch(`http://31.97.220.184:3000/api/auth/users/items`, {
         signal: controller.signal
       });
       
