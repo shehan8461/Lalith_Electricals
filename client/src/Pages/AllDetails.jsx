@@ -239,7 +239,7 @@ export default function AllDetails() {
             transform: 'perspective(1000px) rotateX(5deg)',
           // background: 'linear-gradient(135deg, rgba(75,85,99,0.95) 0%, rgba(107,114,128,0.95) 30%, rgba(156,163,175,0.95) 70%, rgba(255,255,255,0.1) 100%)'
           }}>
-            ⚡ Expert Generator Repair & Maintenance services ⚡
+            ⚡ Expert Generator Repair & Maintenance Services ⚡
           </h2>
         </div>
       </div>
