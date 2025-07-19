@@ -27,6 +27,9 @@ import img2 from './images/2.jpeg';
 import img3 from './images/3.jpeg';
 import img4 from './images/4.jpeg';
 import img5 from './images/5.jpeg';
+import lalithWorkplace from './images/BackgroundImages/lalith1.jpeg';
+import logo from './images/BackgroundImages/logo.jpeg';
+
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
@@ -468,13 +471,21 @@ export default function Header() {
 
       {/* Top Brand Header */}
       <div className="brand-header position-fixed w-100 d-flex flex-column justify-content-center align-items-center" 
-           style={{zIndex: 2000, minHeight: '140px', top: 0, left: 0}}>
-        
+           style={{
+             zIndex: 2000,
+             minHeight: '140px',
+             top: 0,
+             left: 0,
+             background: `linear-gradient(135deg, #0f172aee 0%, #1e293bee 50%, #334155ee 100%), url(${lalithWorkplace}) right center/contain no-repeat`,
+             position: 'relative',
+             backgroundBlendMode: 'overlay',
+             overflow: 'hidden',
+           }}>
         {/* Animated Brand Name */}
-        <div className="animated-brand-name">
+        <div className="animated-brand-name mb-2">
           Lalith Electricals
         </div>
-
+        {/* Actual Workplace Image (hidden, now used as background) */}
         {/* Brand Showcase Images */}
         <div className="brand-showcase container-fluid">
           <div className="marquee-container">
@@ -508,7 +519,21 @@ export default function Header() {
       <Navbar expand="lg" sticky="top" className="main-navbar">
         <Container>
           {/* Brand Logo */}
-          <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
+          <Navbar.Brand as={Link} to="/" className="d-flex align-items-center ps-0" style={{marginLeft: 0, paddingLeft: 0}}>
+            <img
+              src={logo}
+              alt="Lalith Electricals Logo"
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: '50%',
+                objectFit: 'cover',
+                marginRight: 20,
+                border: '4px solid #3b82f6',
+                background: '#fff',
+                boxShadow: '0 6px 24px rgba(59,130,246,0.15)'
+              }}
+            />
             <FaStore className="text-primary me-2" size={28} />
             <span className="fs-4">Lalith Electricals</span>
           </Navbar.Brand>
