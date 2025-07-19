@@ -121,8 +121,9 @@ export default function AllDetails() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
       
-      const response = await fetch(`/api/auth/users/items`, {
-        signal: controller.signal
+      const response = await fetch(`https://api.lalithelectrical.com/api/auth/users/items`, {
+        signal: controller.signal, 
+        credentials: 'include'
       });
       
       clearTimeout(timeoutId);

@@ -19,7 +19,7 @@ export default function ItemProfile() {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch(`/api/auth/users/items`);
+      const response = await fetch(`https://api.lalithelectrical.com/api/auth/users/items`,{credentials: 'include'});
       if (!response.ok) {
         throw new Error('Failed to fetch orders');
       }

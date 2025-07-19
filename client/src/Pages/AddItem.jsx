@@ -132,8 +132,9 @@ export default function AddItem() {
     }
 
     try {
-      const res = await fetch('/api/auth/store', {
+      const res = await fetch('https://api.lalithelectrical.com/api/auth/store', {
         method: 'POST',
+         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
