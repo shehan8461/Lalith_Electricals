@@ -88,6 +88,8 @@ export default function AllDetails() {
       }
     }
     
+    // Always sort so newest is first
+    filtered = filtered.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
     setFilteredOrders(filtered);
   };
 
@@ -117,24 +119,21 @@ export default function AllDetails() {
     try {
       setLoading(true);
       setError(null);
-      
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
-      
       const response = await fetch(`https://api.lalithelectrical.com/api/auth/users/items`, {
         signal: controller.signal, 
         credentials: 'include'
       });
-      
       clearTimeout(timeoutId);
-      
       if (!response.ok) {
         throw new Error(`Server error: ${response.status} ${response.statusText}`);
       }
-      
       const data = await response.json();
-      setOrders(data);
-      setFilteredOrders(data);
+      // Sort by date descending (newest first)
+      const sorted = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+      setOrders(sorted);
+      setFilteredOrders(sorted);
       setLoading(false);
     } catch (error) {
       setLoading(false);
