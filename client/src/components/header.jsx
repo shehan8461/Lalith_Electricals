@@ -19,7 +19,8 @@ import {
   FaTools,
   FaSearch,
   FaPhone,
-  FaMapMarkerAlt
+  FaMapMarkerAlt,
+  FaFacebook
 } from 'react-icons/fa';
 import { RiFlashlightFill } from 'react-icons/ri';
 import img1 from './images/1.jpeg';
@@ -519,23 +520,41 @@ export default function Header() {
       <Navbar expand="lg" sticky="top" className="main-navbar">
         <Container>
           {/* Brand Logo */}
-          <Navbar.Brand as={Link} to="/" className="d-flex align-items-center ps-0" style={{marginLeft: 0, paddingLeft: 0}}>
+          <Navbar.Brand as={Link} to="https://www.facebook.com/groups/generatorhelp/?ref=share&mibextid=NSMWBT" className="d-flex align-items-center ps-0" style={{marginLeft: 0, paddingLeft: 0}}>
+            {/* Logo first, then Facebook icon, with more space between */}
             <img
               src={logo}
               alt="Lalith Electricals Logo"
               style={{
-                width: 80,
-                height: 80,
+                width: 110,
+                height: 110,
                 borderRadius: '50%',
                 objectFit: 'cover',
-                marginRight: 20,
-                border: '4px solid #3b82f6',
+                marginRight: 48, // Increased space between logo and FB icon
+                border: '6px solid #3b82f6',
                 background: '#fff',
-                boxShadow: '0 6px 24px rgba(59,130,246,0.15)'
+                boxShadow: '0 8px 32px rgba(59,130,246,0.18)'
               }}
             />
-            <FaStore className="text-primary me-2" size={28} />
-            <span className="fs-4">Lalith Electricals</span>
+            <a
+              href="https://www.facebook.com/groups/generatorhelp/?ref=share&mibextid=NSMWBT"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                color: '#1877f3',
+                width: 100,
+                height: 100,
+                justifyContent: 'center',
+                transition: 'box-shadow 0.2s',
+                textDecoration: 'none',
+              }}
+              className="facebook-icon-link"
+              title="Join our Facebook Group"
+            >
+              <FaFacebook size={74} />
+            </a>
           </Navbar.Brand>
 
           {/* Mobile Toggle */}
