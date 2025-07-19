@@ -7,6 +7,7 @@ import userRoutes from './routes/user.routes.js'
 import authroutes from './routes/auth.routes.js'
 import adminroutes from './routes/admin.routes.js'
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -74,14 +75,29 @@ const connectDB = async () => {
     }
 };
 
-// Connect to database
-connectDB();
+
+
+
+
+
 
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({
+  origin: [
+    'https://www.lalithelectrical.com',     // main frontend domain (with www)
+    'https://lalithelectrical.com',         // main frontend domain (non-www)
+    'https://api.lalithelectrical.com',     // API domain
+    'http://localhost:5173'                 // local dev
+  ],
+  credentials: true,
+}));
+
+// Connect to database
+connectDB();
 
 // Root endpoint
 app.get('/', (req, res) => {
