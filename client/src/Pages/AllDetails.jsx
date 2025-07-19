@@ -121,7 +121,7 @@ export default function AllDetails() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
       
-      const response = await fetch(`http://31.97.220.184:3000/api/auth/users/items`, {
+      const response = await fetch(`/api/auth/users/items`, {
         signal: controller.signal
       });
       
@@ -225,7 +225,7 @@ export default function AllDetails() {
           <h2 className="text-center text-white fw-bold heading-with-bg px-3 py-2 mx-auto" style={{
             letterSpacing: '0.4px', 
             textShadow: '2px 2px 6px rgba(0,0,0,0.8)', 
-            background: 'linear-gradient(135deg, rgba(75,85,99,0.95) 0%, rgba(107,114,128,0.95) 25%, rgba(156,163,175,0.95) 50%, rgba(209,213,219,0.95) 75%, rgba(255,255,255,0.95) 100%)',
+            background: 'linear-gradient(135deg, rgba(75,85,99,0.95) 0%, rgba(107,114,128,0.95) 30%, rgba(156,163,175,0.95) 70%, rgba(209,213,219,0.95) 100%, rgba(255,255,255,0.95) 100%)',
             borderRadius: '20px',
             border: '2px solid rgba(255,255,255,0.4)',
             backdropFilter: 'blur(15px)',
@@ -237,7 +237,7 @@ export default function AllDetails() {
             width: 'fit-content',
             whiteSpace: 'nowrap',
             transform: 'perspective(1000px) rotateX(5deg)',
-            background: 'linear-gradient(135deg, rgba(75,85,99,0.95) 0%, rgba(107,114,128,0.95) 30%, rgba(156,163,175,0.95) 70%, rgba(255,255,255,0.1) 100%)'
+          // background: 'linear-gradient(135deg, rgba(75,85,99,0.95) 0%, rgba(107,114,128,0.95) 30%, rgba(156,163,175,0.95) 70%, rgba(255,255,255,0.1) 100%)'
           }}>
             ⚡ Expert Generator Repair & Maintenance Services ⚡
           </h2>
