@@ -75,13 +75,23 @@ const connectDB = async () => {
     }
 };
 
-// Connect to database
-
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({
+  origin: [
+    'https://www.lalithelectrical.com',     // main frontend domain (with www)
+    'https://lalithelectrical.com',         // main frontend domain (non-www)
+    'https://api.lalithelectrical.com',     // API domain
+    'http://localhost:5173'                 // local dev
+  ],
+  credentials: true,
+}));
+
+// Connect to database
+connectDB();
 
 // Enable CORS for specific origin
 app.use(cors({
