@@ -580,7 +580,7 @@ export default function Header() {
           tabIndex="-1" role="dialog" onClick={() => setShowOwner(false)}
         >
           <div className="modal-dialog modal-dialog-centered"
-            style={{ maxWidth: '98vw', width: '98vw', margin: 'auto' }}
+            style={{ maxWidth: 400, width: '95vw', margin: 'auto' }}
             role="document" onClick={e => e.stopPropagation()}
           >
             <div className="modal-content rounded-4 border-0 shadow-lg p-0" style={{ overflow: 'hidden', background: '#fff' }}>
@@ -596,15 +596,13 @@ export default function Header() {
                     src={ownerImg}
                     alt="Owner"
                     style={{
-                      width: 'min(90vw, 220px)',
-                      height: 'min(90vw, 220px)',
-                      maxWidth: 300,
-                      maxHeight: 300,
+                      width: 120,
+                      height: 120,
                       borderRadius: '50%',
                       objectFit: 'cover',
-                      border: '6px solid #3b82f6',
-                      boxShadow: '0 4px 24px rgba(59,130,246,0.18)',
-                      marginBottom: 28
+                      border: '4px solid #3b82f6',
+                      boxShadow: '0 2px 12px rgba(59,130,246,0.13)',
+                      marginBottom: 18
                     }}
                   />
                   <div className="fw-bold fs-4 text-center mb-3" style={{color:'#2563eb'}}>Lalith Samantha Jayasinghe</div>
