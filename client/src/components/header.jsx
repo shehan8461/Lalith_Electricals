@@ -30,6 +30,7 @@ import img4 from './images/4.jpeg';
 import img5 from './images/5.jpeg';
 import lalithWorkplace from './images/BackgroundImages/lalith1.jpeg';
 import logo from './images/BackgroundImages/logo.jpeg';
+import ownerImg from './images/owner.jpeg';
 
 
 export default function Header() {
@@ -37,6 +38,7 @@ export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showMap, setShowMap] = useState(false);
+  const [showOwner, setShowOwner] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const searchTimeoutRef = useRef(null);
 
@@ -519,23 +521,107 @@ export default function Header() {
       {/* Main Navigation */}
       <Navbar expand="lg" sticky="top" className="main-navbar">
         <Container>
-          {/* Brand Logo */}
-          <Navbar.Brand as={Link} to="https://www.facebook.com/groups/generatorhelp/?ref=share&mibextid=NSMWBT" className="d-flex align-items-center ps-0" style={{marginLeft: 0, paddingLeft: 0}}>
-            {/* Logo first, then Facebook icon, with more space between */}
+          {/* Brand Logo and Facebook Icon with Owner Details Button in between */}
+          <Navbar.Brand className="d-flex align-items-center ps-0" style={{marginLeft: 0, paddingLeft: 0}}>
+            {/* Logo */}
             <img
               src={logo}
               alt="Lalith Electricals Logo"
               style={{
-                width: 110,
-                height: 110,
+                width: 80,
+                height: 80,
                 borderRadius: '50%',
                 objectFit: 'cover',
-                marginRight: 48, // Increased space between logo and FB icon
+                marginRight: 32, // Reduced to fit button
                 border: '6px solid #3b82f6',
                 background: '#fff',
                 boxShadow: '0 8px 32px rgba(59,130,246,0.18)'
               }}
             />
+
+            {/* Owner Details Button */}
+            <button
+              className="btn owner-details-btn mx-2 d-flex align-items-center gap-2"
+              style={{
+                height: 38,
+                minWidth: 110,
+                fontSize: 15,
+                borderRadius: 18,
+                background: 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)',
+                color: '#fff',
+                border: 'none',
+                boxShadow: '0 2px 8px rgba(59,130,246,0.13)',
+                fontWeight: 600,
+                letterSpacing: '0.4px',
+                marginRight: 24,
+                padding: '0 14px',
+                transition: 'background 0.2s, box-shadow 0.2s, transform 0.2s',
+                textShadow: '0 1px 4px rgba(59,130,246,0.08)',
+                outline: 'none',
+              }}
+              onClick={() => setShowOwner(true)}
+              title="View Owner Details"
+              onMouseOver={e => e.currentTarget.style.background = 'linear-gradient(90deg, #60a5fa 0%, #2563eb 100%)'}
+              onMouseOut={e => e.currentTarget.style.background = 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)'}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" fill="#fff" fillOpacity="0.13"/>
+                <path d="M12 12c1.933 0 3.5-1.567 3.5-3.5S13.933 5 12 5s-3.5 1.567-3.5 3.5S10.067 12 12 12zm0 2c-2.33 0-7 1.167-7 3.5V20h14v-2.5c0-2.333-4.67-3.5-7-3.5z" fill="#fff"/>
+              </svg>
+              <span>Owner Details</span>
+            </button>
+      {/* Owner Details Popup */}
+      {showOwner && (
+        <div className="modal fade show d-flex align-items-center justify-content-center"
+          style={{
+            position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+            display: 'flex', background: 'rgba(0,0,0,0.5)', zIndex: 3000
+          }}
+          tabIndex="-1" role="dialog" onClick={() => setShowOwner(false)}
+        >
+          <div className="modal-dialog modal-dialog-centered"
+            style={{ maxWidth: '98vw', width: '98vw', margin: 'auto' }}
+            role="document" onClick={e => e.stopPropagation()}
+          >
+            <div className="modal-content rounded-4 border-0 shadow-lg p-0" style={{ overflow: 'hidden', background: '#fff' }}>
+              <div className="modal-header border-0 pb-0 align-items-start d-flex justify-content-between"
+                style={{ background: '#2563eb', borderTopLeftRadius: '1.5rem', borderTopRightRadius: '1.5rem', minHeight: '0', paddingTop: '0.5rem', paddingBottom: '0.5rem' }}>
+                <h5 className="modal-title text-white fw-bold m-0" style={{ letterSpacing: '1px', fontSize: '1.3rem' }}>Owner Details</h5>
+                <button type="button" className="btn-close btn-close-white ms-2" aria-label="Close"
+                  style={{ filter: 'brightness(2)', fontSize: '1.2rem' }} onClick={() => setShowOwner(false)}></button>
+              </div>
+              <div className="modal-body p-4 d-flex flex-column align-items-center justify-content-center" style={{height: '100%', minHeight: 400, justifyContent: 'center'}}>
+                <div className="w-100 d-flex flex-column align-items-center justify-content-center" style={{height: '100%'}}>
+                  <img
+                    src={ownerImg}
+                    alt="Owner"
+                    style={{
+                      width: 'min(90vw, 220px)',
+                      height: 'min(90vw, 220px)',
+                      maxWidth: 300,
+                      maxHeight: 300,
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: '6px solid #3b82f6',
+                      boxShadow: '0 4px 24px rgba(59,130,246,0.18)',
+                      marginBottom: 28
+                    }}
+                  />
+                  <div className="fw-bold fs-4 text-center mb-3" style={{color:'#2563eb'}}>Lalith Samantha Jayasinghe</div>
+                  <ul className="list-unstyled text-center mb-0" style={{fontSize: '1.18rem', color: '#222', maxWidth: 500, wordBreak: 'break-word', whiteSpace: 'normal'}}>
+                    <li className="mb-2">Successfully completed <b>3 year Vocational Training Technician Course</b> offered by <b>National Apprentice and Industrial Training Authority (NAITA)</b>.</li>
+                    <li className="mb-2">Successfully completed <b>Boiler Operation and Maintenance</b>.</li>
+                    <li className="mb-2">Obtained <b>Certificate of Competency – Class III (Boiler)</b>.</li>
+                    <li className="mb-2" style={{wordBreak: 'break-word', whiteSpace: 'normal'}}>Also completed courses in <b>Electronics, Generators, and Motors</b>.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+            {/* Facebook Icon */}
             <a
               href="https://www.facebook.com/groups/generatorhelp/?ref=share&mibextid=NSMWBT"
               target="_blank"
@@ -544,8 +630,8 @@ export default function Header() {
                 display: 'flex',
                 alignItems: 'center',
                 color: '#1877f3',
-                width: 100,
-                height: 100,
+                width: 60,
+                height: 60,
                 justifyContent: 'center',
                 transition: 'box-shadow 0.2s',
                 textDecoration: 'none',

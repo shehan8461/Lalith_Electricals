@@ -10,16 +10,10 @@ import Swal from 'sweetalert2';
 
 export default function AddItem() {
   const [imagePercent, setImagePercent] = useState(0);
-  const fileRef1 = useRef(null);
-  const fileRef2 = useRef(null);
-  const fileRef3 = useRef(null);
-  const fileRef4 = useRef(null);
+  const fileInputRef = useRef(null);
   const fileRefVideo = useRef(null);
   const [imageError, setImageError] = useState(false);
-  const [image1, setImage1] = useState(undefined);
-  const [image2, setImage2] = useState(undefined);
-  const [image3, setImage3] = useState(undefined);
-  const [image4, setImage4] = useState(undefined);
+  const [images, setImages] = useState([]); // Array of up to 4 File objects
   const [video, setVideo] = useState(undefined);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -41,20 +35,25 @@ export default function AddItem() {
   });
 
   useEffect(() => {
-    if (image1) handleFileUpload(image1, 'profilePicture');
-  }, [image1]);
-
-  useEffect(() => {
-    if (image2) handleFileUpload(image2, 'alternateProfilePicture');
-  }, [image2]);
-
-  useEffect(() => {
-    if (image3) handleFileUpload(image3, 'thirdProfilePicture');
-  }, [image3]);
-
-  useEffect(() => {
-    if (image4) handleFileUpload(image4, 'fourthProfilePicture');
-  }, [image4]);
+    // Upload images in order and set URLs in formData
+    const uploadAll = async () => {
+      if (images.length > 0) {
+        const fields = ['profilePicture', 'alternateProfilePicture', 'thirdProfilePicture', 'fourthProfilePicture'];
+        for (let i = 0; i < 4; i++) {
+          if (images[i]) {
+            await handleFileUpload(images[i], fields[i]);
+          } else {
+            setFormData((prev) => ({ ...prev, [fields[i]]: '' }));
+          }
+        }
+      } else {
+        // If no images, clear all
+        setFormData((prev) => ({ ...prev, profilePicture: '', alternateProfilePicture: '', thirdProfilePicture: '', fourthProfilePicture: '' }));
+      }
+    };
+    uploadAll();
+    // eslint-disable-next-line
+  }, [images]);
 
   useEffect(() => {
     if (video) handleFileUpload(video, 'productVideo');
@@ -98,10 +97,17 @@ export default function AddItem() {
     );
   };
 
-  const handleImage1Click = () => fileRef1.current.click();
-  const handleImage2Click = () => fileRef2.current.click();
-  const handleImage3Click = () => fileRef3.current.click();
-  const handleImage4Click = () => fileRef4.current.click();
+  const handleImageSelectClick = () => fileInputRef.current.click();
+
+  const handleImagesChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length + images.length > 4) {
+      setError('You can only select up to 4 images in total.');
+      return;
+    }
+    setError('');
+    setImages(files.slice(0, 4));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -235,62 +241,52 @@ export default function AddItem() {
                 </div>
               </div>
 
-              <input type="file" ref={fileRef1} hidden accept="image/*" onChange={(e) => setImage1(e.target.files[0])} />
-              <input type="file" ref={fileRef2} hidden accept="image/*" onChange={(e) => setImage2(e.target.files[0])} />
-              <input type="file" ref={fileRef3} hidden accept="image/*" onChange={(e) => setImage3(e.target.files[0])} />
-              <input type="file" ref={fileRef4} hidden accept="image/*" onChange={(e) => setImage4(e.target.files[0])} />
+              <input
+                type="file"
+                ref={fileInputRef}
+                hidden
+                accept="image/*"
+                multiple
+                onChange={handleImagesChange}
+              />
               <input type="file" ref={fileRefVideo} hidden accept="video/*" onChange={(e) => setVideo(e.target.files[0])} />
 
-              <div className="col-md-6 text-center">
-                <img
-                  src={formData.profilePicture || 'https://media.istockphoto.com/id/1294866141/vector/picture-reload.jpg'}
-                  alt="Main"
-                  className="img-thumbnail"
-                  style={{ height: '200px', cursor: 'pointer' }}
-                  onClick={handleImage1Click}
-                />
-                <button type="button" className="btn btn-outline-primary mt-2" onClick={handleImage1Click}>
-                  Upload Picture 1
-                </button>
-              </div>
-
-              <div className="col-md-6 text-center">
-                <img
-                  src={formData.alternateProfilePicture || 'https://media.istockphoto.com/id/1294866141/vector/picture-reload.jpg'}
-                  alt="Alternate"
-                  className="img-thumbnail"
-                  style={{ height: '200px', cursor: 'pointer' }}
-                  onClick={handleImage2Click}
-                />
-                <button type="button" className="btn btn-outline-secondary mt-2" onClick={handleImage2Click}>
-                  Upload Picture 2
-                </button>
-              </div>
-
-              <div className="col-md-6 text-center">
-                <img
-                  src={formData.thirdProfilePicture || 'https://media.istockphoto.com/id/1294866141/vector/picture-reload.jpg'}
-                  alt="Third"
-                  className="img-thumbnail"
-                  style={{ height: '200px', cursor: 'pointer' }}
-                  onClick={handleImage3Click}
-                />
-                <button type="button" className="btn btn-outline-success mt-2" onClick={handleImage3Click}>
-                  Upload Picture 3
-                </button>
-              </div>
-
-              <div className="col-md-6 text-center">
-                <img
-                  src={formData.fourthProfilePicture || 'https://media.istockphoto.com/id/1294866141/vector/picture-reload.jpg'}
-                  alt="Fourth"
-                  className="img-thumbnail"
-                  style={{ height: '200px', cursor: 'pointer' }}
-                  onClick={handleImage4Click}
-                />
-                <button type="button" className="btn btn-outline-warning mt-2" onClick={handleImage4Click}>
-                  Upload Picture 4
-                </button>
+              {/* Image Preview Grid */}
+              <div className="col-12 mb-3">
+                <div className="row g-3 justify-content-center">
+                  {[0,1,2,3].map((idx) => (
+                    <div className="col-md-3 col-6 text-center" key={idx}>
+                      <img
+                        src={
+                          images[idx]
+                            ? URL.createObjectURL(images[idx])
+                            : formData[[
+                                'profilePicture',
+                                'alternateProfilePicture',
+                                'thirdProfilePicture',
+                                'fourthProfilePicture',
+                              ][idx]] || 'https://media.istockphoto.com/id/1294866141/vector/picture-reload.jpg'
+                        }
+                        alt={`Product ${idx+1}`}
+                        className="img-thumbnail"
+                        style={{ height: '200px', width: '100%', objectFit: 'cover', cursor: 'pointer' }}
+                        onClick={handleImageSelectClick}
+                      />
+                      <div>
+                        <button
+                          type="button"
+                          className={`btn mt-2 ${['btn-outline-primary','btn-outline-secondary','btn-outline-success','btn-outline-warning'][idx]}`}
+                          onClick={handleImageSelectClick}
+                        >
+                          {images[idx] ? `Change Picture ${idx+1}` : `Upload Picture ${idx+1}`}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="text-center mt-2">
+                  <small className="text-muted">You can select up to 4 images at once.</small>
+                </div>
               </div>
 
               <div className="col-md-12 text-center mt-3">
