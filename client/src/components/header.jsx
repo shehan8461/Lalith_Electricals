@@ -605,7 +605,7 @@ export default function Header() {
                       marginBottom: 18
                     }}
                   />
-                  <div className="fw-bold fs-4 text-center mb-3" style={{color:'#2563eb'}}>Lalith Samantha Jayasinghe</div>
+                  <div className="fw-bold fs-4 text-center mb-3" style={{color:'#2563eb'}}>Mr.Lalith Jayasinghe</div>
                   <ul className="list-unstyled text-center mb-0" style={{fontSize: '1.18rem', color: '#222', maxWidth: 500, wordBreak: 'break-word', whiteSpace: 'normal'}}>
                     <li className="mb-2">Successfully completed <b>3 year Vocational Training Technician Course</b> offered by <b>National Apprentice and Industrial Training Authority (NAITA)</b>.</li>
                     <li className="mb-2">Successfully completed <b>Boiler Operation and Maintenance</b>.</li>
