@@ -61,7 +61,15 @@ export default function SignIn() {
       <Link to="/sign-up">
       <span className='text-blue-500'>Sign Up</span>
       </Link>
-      <p className='text-red-700 mt-5'>{error ? error || 'Something went wrong!':''}</p>
+      <p className='text-red-700 mt-5'>
+        {error
+          ? typeof error === 'string'
+            ? error
+            : error && error.message
+              ? error.message
+              : 'Something went wrong!'
+          : ''}
+      </p>
     </div>
     
     

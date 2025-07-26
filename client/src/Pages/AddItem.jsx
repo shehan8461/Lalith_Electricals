@@ -56,7 +56,25 @@ export default function AddItem() {
   }, [images]);
 
   useEffect(() => {
-    if (video) handleFileUpload(video, 'productVideo');
+    if (video) {
+      // Check video size limit (10MB)
+      if (video.size > 10 * 1024 * 1024) {
+        Swal.fire({
+          title: 'Video Too Large!',
+          text: 'Video must be less than 10MB.',
+          icon: 'warning',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#dc3545',
+          background: '#fff',
+          color: '#333',
+          showClass: { popup: 'animate__animated animate__shakeX' }
+        });
+        setError('Video must be less than 10MB.');
+        setVideo(undefined);
+        return;
+      }
+      handleFileUpload(video, 'productVideo');
+    }
   }, [video]);
 
   const handleFileUpload = async (file, field) => {
@@ -102,8 +120,35 @@ export default function AddItem() {
   const handleImagesChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length + images.length > 4) {
+      Swal.fire({
+        title: 'Too Many Images!',
+        text: 'You can only select up to 4 images in total.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#dc3545',
+        background: '#fff',
+        color: '#333',
+        showClass: { popup: 'animate__animated animate__shakeX' }
+      });
       setError('You can only select up to 4 images in total.');
       return;
+    }
+    // Check image size limit (2MB)
+    for (let file of files) {
+      if (file.size > 2 * 1024 * 1024) {
+        Swal.fire({
+          title: 'Image Too Large!',
+          text: 'Each image must be less than 2MB.',
+          icon: 'warning',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#dc3545',
+          background: '#fff',
+          color: '#333',
+          showClass: { popup: 'animate__animated animate__shakeX' }
+        });
+        setError('Each image must be less than 2MB.');
+        return;
+      }
     }
     setError('');
     setImages(files.slice(0, 4));

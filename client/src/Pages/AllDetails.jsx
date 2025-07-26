@@ -25,6 +25,8 @@ export default function AllDetails() {
     showOnSale: false,
     showAll: true
   });
+  // Track which video is active (clicked to play)
+  const [activeVideoId, setActiveVideoId] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -88,8 +90,6 @@ export default function AllDetails() {
       }
     }
     
-    // Always sort so newest is first
-    filtered = filtered.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
     setFilteredOrders(filtered);
   };
 
@@ -119,21 +119,26 @@ export default function AllDetails() {
     try {
       setLoading(true);
       setError(null);
+      
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+      
       const response = await fetch(`https://api.lalithelectrical.com/api/auth/users/items`, {
         signal: controller.signal, 
         credentials: 'include'
       });
+      
       clearTimeout(timeoutId);
+      
       if (!response.ok) {
         throw new Error(`Server error: ${response.status} ${response.statusText}`);
       }
-      const data = await response.json();
-      // Sort by date descending (newest first)
-      const sorted = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-      setOrders(sorted);
-      setFilteredOrders(sorted);
+      
+      let data = await response.json();
+      // Sort by date descending (latest first)
+      data = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+      setOrders(data);
+      setFilteredOrders(data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -431,13 +436,32 @@ export default function AllDetails() {
                   <div className="position-relative" style={{height: '200px', overflow: 'hidden'}}>
                     {order.productVideo && (order.profilePicture || order.alternateProfilePicture || order.thirdProfilePicture || order.fourthProfilePicture) ? (
                       <div className="d-flex w-100 h-100">
-                        <video
-                          src={order.productVideo}
-                          controls
-                          className="w-75 h-100 object-fit-cover card-img-top transition"
-                          style={{objectFit: 'cover', height: '100%', width: '75%', borderRadius: '0', background: '#000', position: 'relative', zIndex: 2, pointerEvents: 'auto'}}
-                          onClick={(e) => e.stopPropagation()}
-                        />
+                        {activeVideoId === order.itemId ? (
+                          <video
+                            src={order.productVideo}
+                            controls
+                            autoPlay
+                            className="w-75 h-100 object-fit-cover card-img-top transition"
+                            style={{objectFit: 'cover', height: '100%', width: '75%', borderRadius: '0', background: '#000', position: 'relative', zIndex: 2, pointerEvents: 'auto'}}
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        ) : (
+                          <div
+                            className="w-75 h-100 d-flex align-items-center justify-content-center card-img-top transition"
+                            style={{objectFit: 'cover', height: '100%', width: '75%', borderRadius: '0', background: '#000', position: 'relative', zIndex: 2, cursor: 'pointer'}}
+                            onClick={e => { e.stopPropagation(); setActiveVideoId(order.itemId); }}
+                          >
+                            <img
+                              src={order.profilePicture || order.alternateProfilePicture || order.thirdProfilePicture || order.fourthProfilePicture}
+                              alt="Video Thumbnail"
+                              className="w-100 h-100 object-fit-cover"
+                              style={{objectFit: 'cover', height: '100%', width: '100%', borderRadius: '0', opacity: 0.7}}
+                            />
+                            <div style={{position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', color: '#fff', fontSize: 48, pointerEvents: 'none'}}>
+                              <i className="bi bi-play-circle-fill"></i>
+                            </div>
+                          </div>
+                        )}
                         <div className="d-flex flex-column w-25 h-100">
                           {[order.profilePicture, order.alternateProfilePicture, order.thirdProfilePicture, order.fourthProfilePicture].filter(Boolean).slice(0, 3).map((src, index) => (
                             <img
@@ -451,13 +475,26 @@ export default function AllDetails() {
                         </div>
                       </div>
                     ) : order.productVideo ? (
-                      <video
-                        src={order.productVideo}
-                        controls
-                        className="w-100 h-100 object-fit-cover card-img-top transition"
-                        style={{objectFit: 'cover', height: '100%', width: '100%', borderRadius: '0', background: '#000', position: 'relative', zIndex: 2, pointerEvents: 'auto'}}
-                        onClick={(e) => e.stopPropagation()}
-                      />
+                      activeVideoId === order.itemId ? (
+                        <video
+                          src={order.productVideo}
+                          controls
+                          autoPlay
+                          className="w-100 h-100 object-fit-cover card-img-top transition"
+                          style={{objectFit: 'cover', height: '100%', width: '100%', borderRadius: '0', background: '#000', position: 'relative', zIndex: 2, pointerEvents: 'auto'}}
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      ) : (
+                        <div
+                          className="w-100 h-100 d-flex align-items-center justify-content-center card-img-top transition"
+                          style={{objectFit: 'cover', height: '100%', width: '100%', borderRadius: '0', background: '#000', position: 'relative', zIndex: 2, cursor: 'pointer'}}
+                          onClick={e => { e.stopPropagation(); setActiveVideoId(order.itemId); }}
+                        >
+                          <div style={{position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', color: '#fff', fontSize: 48, pointerEvents: 'none'}}>
+                            <i className="bi bi-play-circle-fill"></i>
+                          </div>
+                        </div>
+                      )
                     ) : (order.profilePicture || order.alternateProfilePicture || order.thirdProfilePicture || order.fourthProfilePicture) ? (
                       <div className="d-flex w-100 h-100">
                         {(() => {
@@ -683,12 +720,12 @@ export default function AllDetails() {
                   lalitabesinha@gmail.com
                 </a>
               </div>
-              <div className="mb-2">
+              {/* <div className="mb-2">
                 <i className="bi bi-telephone-fill me-1 text-success"></i>
                 <a href="tel:+94123456789" className="text-white text-decoration-none hover-link">
                   +94 123 456 789
                 </a>
-              </div>
+              </div> */}
               <div className="mb-2">
                 <i className="bi bi-geo-alt-fill me-1 text-warning"></i>
                 <span className="text-light">8 Family Point, Thoraya, Kurunegala</span>
