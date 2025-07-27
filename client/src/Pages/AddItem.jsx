@@ -78,7 +78,7 @@ export default function AddItem() {
   }, [video]);
 
   // New upload function for images and video
-  const uploadFileToServer = async (file, type) => {
+  const uploadMediaFile = async (file, type) => {
     const formData = new FormData();
     formData.append('file', file);
     let endpoint = '';
@@ -102,7 +102,7 @@ export default function AddItem() {
   const handleFileUpload = async (file, field) => {
     try {
       let type = field === 'productVideo' ? 'video' : 'image';
-      const url = await uploadFileToServer(file, type);
+      const url = await uploadMediaFile(file, type);
       setFormData((prev) => ({ ...prev, [field]: url }));
       setImageError(false);
     } catch (error) {
