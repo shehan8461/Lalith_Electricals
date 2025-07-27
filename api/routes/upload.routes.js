@@ -43,16 +43,16 @@ const uploadVideo = multer({ storage: videoStorage });
 // Image upload endpoint
 router.post('/image', uploadImage.single('file'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-  // Return full URL for frontend
-  const url = `${req.protocol}://${req.get('host')}/Images/${req.file.filename}`;
+  // Always return HTTPS URL for frontend
+  const url = `https://${req.get('host')}/Images/${req.file.filename}`;
   res.json({ url });
 });
 
 // Video upload endpoint
 router.post('/video', uploadVideo.single('file'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-  // Return full URL for frontend
-  const url = `${req.protocol}://${req.get('host')}/Videos/${req.file.filename}`;
+  // Always return HTTPS URL for frontend
+  const url = `https://${req.get('host')}/Videos/${req.file.filename}`;
   res.json({ url });
 });
 
