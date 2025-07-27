@@ -77,42 +77,50 @@ export default function AddItem() {
     }
   }, [video]);
 
-  const handleFileUpload = async (file, field) => {
-    const storage = getStorage(app);
-    const fileName = new Date().getTime() + file.name;
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+  // New upload function for images and video
+  const uploadFileToServer = async (file, type) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    let endpoint = '';
+    if (type === 'video') {
+      endpoint = 'https://api.lalithelectrical.com/api/upload/video';
+    } else {
+      endpoint = 'https://api.lalithelectrical.com/api/upload/image';
+    }
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      body: formData,
+      credentials: 'include',
+    });
+    if (!res.ok) {
+      throw new Error('File upload failed');
+    }
+    const data = await res.json();
+    return data.url; // backend should return { url: 'uploaded_file_url' }
+  };
 
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setImagePercent(Math.round(progress));
-      },
-      (error) => {
-        setImageError(true);
-        setError('File upload failed');
-        
-        Swal.fire({
-          title: 'Upload Failed!',
-          text: 'There was an error uploading your file. Please try again.',
-          icon: 'error',
-          confirmButtonText: 'OK',
-          confirmButtonColor: '#dc3545',
-          background: '#fff',
-          color: '#333',
-          showClass: {
-            popup: 'animate__animated animate__shakeX'
-          }
-        });
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setFormData((prev) => ({ ...prev, [field]: downloadURL }));
-          setImageError(false);
-        });
-      }
-    );
+  const handleFileUpload = async (file, field) => {
+    try {
+      let type = field === 'productVideo' ? 'video' : 'image';
+      const url = await uploadFileToServer(file, type);
+      setFormData((prev) => ({ ...prev, [field]: url }));
+      setImageError(false);
+    } catch (error) {
+      setImageError(true);
+      setError('File upload failed');
+      Swal.fire({
+        title: 'Upload Failed!',
+        text: 'There was an error uploading your file. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#dc3545',
+        background: '#fff',
+        color: '#333',
+        showClass: {
+          popup: 'animate__animated animate__shakeX'
+        }
+      });
+    }
   };
 
   const handleImageSelectClick = () => fileInputRef.current.click();

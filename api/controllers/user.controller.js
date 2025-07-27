@@ -3,6 +3,9 @@ import Item from "../models/item.model.js"
 import { errorHandler } from "../utils/error.js"
 import Admin from "../models/admin.model.js"
 import bcryptjs from 'bcryptjs';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 export const test=(req,res)=>{
     res.json({
@@ -76,11 +79,35 @@ export const updateItem =async(req,res)=>{
 }
 
 export const deleteItem = async (req, res, next) => {
-    let petId=req.params.id;
-    console.log(petId)
+    let petId = req.params.id;
     try {
+        const item = await Item.findById(petId);
+        if (!item) return res.status(404).json({ message: 'Order not found' });
+        // List all file fields you want to delete
+        const fileFields = [
+            'profilePicture',
+            'alternateProfilePicture',
+            'thirdProfilePicture',
+            'fourthProfilePicture',
+            'productVideo'
+        ];
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+        fileFields.forEach(field => {
+            const fileUrl = item[field];
+            if (fileUrl && (fileUrl.includes('/Images/') || fileUrl.includes('/Videos/'))) {
+                // Remove host if present
+                let relPath = fileUrl.replace(/^https?:\/\/[\w\.:\-]+/, '');
+                // Remove leading slash if present
+                if (relPath.startsWith('/')) relPath = relPath.slice(1);
+                const filePath = path.join(__dirname, '../../', relPath);
+                fs.unlink(filePath, err => {
+                    if (err) console.error(`Failed to delete file: ${filePath}`, err);
+                });
+            }
+        });
         await Item.findByIdAndDelete(petId);
-        res.status(200).json('The Order has been deleted');
+        res.status(200).json('The Order and files have been deleted');
     } catch (error) {
         next(error);
     }
@@ -109,5 +136,5 @@ export const getItem= async (req, res) => {
 
 
 
-     
+
 

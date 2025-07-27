@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getDownloadURL, ref } from 'firebase/storage';
-import { storage } from '../firebase';
 import { Table, Button, Modal } from 'react-bootstrap';
 import { FaEdit, FaTrashAlt, FaExclamationTriangle } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -25,34 +23,8 @@ export default function ItemProfile() {
       }
       const data = await response.json();
       setOrders(data);
-      data.forEach(order => {
-        if (order.profilePicture) {
-          fetchFirebaseImage(order.profilePicture, 'profilePicture', order._id);
-        }
-        if (order.alternateProfilePicture) {
-          fetchFirebaseImage(order.alternateProfilePicture, 'alternateProfilePicture', order._id);
-        }
-      });
     } catch (error) {
       console.error('Error fetching orders:', error);
-    }
-  };
-
-  const fetchFirebaseImage = async (imageUrl, field, orderId) => {
-    const storageRef = ref(storage, imageUrl);
-    try {
-      const downloadUrl = await getDownloadURL(storageRef);
-      setOrders(prevOrders => prevOrders.map(order => {
-        if (order._id === orderId) {
-          return {
-            ...order,
-            [field]: downloadUrl
-          };
-        }
-        return order;
-      }));
-    } catch (error) {
-      console.error(`Error fetching image from Firebase for ${field}:`, error);
     }
   };
 
@@ -85,7 +57,6 @@ export default function ItemProfile() {
               <Table hover bordered className="align-middle mb-0 bg-white">
                 <thead className="table-primary">
                   <tr>
-                   
                     <th>Name</th>
                     <th>Date</th>
                     <th>Description</th>
@@ -98,7 +69,6 @@ export default function ItemProfile() {
                 <tbody>
                   {orders.map((order) => (
                     <tr key={order._id} className="row-border-left">
-                   
                       <td className="fw-semibold">{order.Name}</td>
                       <td>{order.date}</td>
                       <td>{order.Description}</td>

@@ -203,6 +203,16 @@ export default function AllDetails() {
     setFullscreenImageAlt('');
   };
 
+  // Utility to ensure full URL for media
+  const API_HOST = import.meta.env.VITE_API_HOST || 'https://api.lalithelectrical.com';
+  const getFullUrl = (url) => {
+    if (!url) return '';
+    // Remove any Firebase storage URLs, only allow your server URLs
+    if (url.includes('firebasestorage.googleapis.com')) return '';
+    if (url.startsWith('http')) return url;
+    return API_HOST + url;
+  };
+
   return (
     <div className="d-flex flex-column min-vh-100 position-relative" style={{ minHeight: '100vh' }}>
       {/* Blurred Background Layer */}
@@ -438,7 +448,7 @@ export default function AllDetails() {
                       <div className="d-flex w-100 h-100">
                         {activeVideoId === order.itemId ? (
                           <video
-                            src={order.productVideo}
+                            src={getFullUrl(order.productVideo)}
                             controls
                             autoPlay
                             className="w-75 h-100 object-fit-cover card-img-top transition"
@@ -452,7 +462,7 @@ export default function AllDetails() {
                             onClick={e => { e.stopPropagation(); setActiveVideoId(order.itemId); }}
                           >
                             <img
-                              src={order.profilePicture || order.alternateProfilePicture || order.thirdProfilePicture || order.fourthProfilePicture}
+                              src={getFullUrl(order.profilePicture || order.alternateProfilePicture || order.thirdProfilePicture || order.fourthProfilePicture)}
                               alt="Video Thumbnail"
                               className="w-100 h-100 object-fit-cover"
                               style={{objectFit: 'cover', height: '100%', width: '100%', borderRadius: '0', opacity: 0.7}}
@@ -466,7 +476,7 @@ export default function AllDetails() {
                           {[order.profilePicture, order.alternateProfilePicture, order.thirdProfilePicture, order.fourthProfilePicture].filter(Boolean).slice(0, 3).map((src, index) => (
                             <img
                               key={index}
-                              src={src}
+                              src={getFullUrl(src)}
                               alt={`Product ${index + 1}`}
                               className="w-100 object-fit-cover card-img-top transition"
                               style={{objectFit: 'cover', height: `${100/3}%`, width: '100%', borderRadius: '0', borderBottom: index < 2 ? '1px solid rgba(255,255,255,0.3)' : 'none'}}
@@ -477,7 +487,7 @@ export default function AllDetails() {
                     ) : order.productVideo ? (
                       activeVideoId === order.itemId ? (
                         <video
-                          src={order.productVideo}
+                          src={getFullUrl(order.productVideo)}
                           controls
                           autoPlay
                           className="w-100 h-100 object-fit-cover card-img-top transition"
@@ -683,7 +693,7 @@ export default function AllDetails() {
                       </div>
                     )}
                   </div>
-                  <div className="mb-3 p-4 bg-white rounded-4 shadow-sm border border-2 border-primary-subtle premium-description-box" style={{fontSize:'1rem', color:'#1e293b', wordBreak:'break-word', minHeight:'60px', maxHeight:'140px', overflowY:'auto', boxShadow:'0 8px 25px rgba(59,130,246,0.08), inset 0 1px 0 rgba(255,255,255,0.9)', background: 'linear-gradient(135deg, #ffffff 0%, #f8faff 100%)', border: '1px solid rgba(59,130,246,0.15)', position: 'relative'}}>
+                  <div className="mb-3 p-4 bg-white rounded-4 shadow border border-2 border-primary-subtle premium-description-box" style={{fontSize:'1rem', color:'#1e293b', wordBreak:'break-word', minHeight:'60px', maxHeight:'140px', overflowY:'auto', boxShadow:'0 8px 25px rgba(59,130,246,0.08), inset 0 1px 0 rgba(255,255,255,0.9)', background: 'linear-gradient(135deg, #ffffff 0%, #f8faff 100%)', border: '1px solid rgba(59,130,246,0.15)', position: 'relative'}}>
                     <div className="description-icon">
                       <i className="bi bi-card-text text-primary"></i>
                     </div>

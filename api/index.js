@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import userRoutes from './routes/user.routes.js'
 import authroutes from './routes/auth.routes.js'
 import adminroutes from './routes/admin.routes.js'
+import uploadRoutes from './routes/upload.routes.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
@@ -105,6 +106,10 @@ app.use(cors({
 }));
 
 connectDB();
+// Serve static files for uploaded images and videos
+app.use('/Images', express.static(path.join(__dirname, '../Images')));
+app.use('/Videos', express.static(path.join(__dirname, '../Videos')));
+
 // Root endpoint
 app.get('/', (req, res) => {
     res.status(200).json({ 
@@ -147,6 +152,7 @@ process.on('SIGINT', async () => {
 app.use("/api/user",userRoutes)
 app.use("/api/auth",authroutes)
 app.use("/api/admin",adminroutes)
+app.use('/api/upload', uploadRoutes);
 
 app.use((err,req,res,next)=>{
     const statusCode=err.statusCode||500;
