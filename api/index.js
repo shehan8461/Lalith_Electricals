@@ -107,8 +107,8 @@ app.use(cors({
 
 connectDB();
 // Serve static files for uploaded images and videos
-app.use('/Images', express.static(path.join(__dirname, '../Images')));
-app.use('/Videos', express.static(path.join(__dirname, '../Videos')));
+app.use('/Images', express.static(path.join(__dirname, './Images')));
+app.use('/Videos', express.static(path.join(__dirname, './Videos')));
 
 // Root endpoint
 app.get('/', (req, res) => {
