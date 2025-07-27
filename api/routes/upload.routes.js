@@ -14,13 +14,13 @@ const router = express.Router();
 const ensureDir = (dir) => {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 };
-ensureDir(path.join(__dirname, '../../Images'));
-ensureDir(path.join(__dirname, '../../Videos'));
+ensureDir(path.join(__dirname, '../Images'));
+ensureDir(path.join(__dirname, '../Videos'));
 
 // Multer storage for images
 const imageStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../../Images'));
+    cb(null, path.join(__dirname, '../Images'));
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + file.originalname);
@@ -30,7 +30,7 @@ const imageStorage = multer.diskStorage({
 // Multer storage for videos
 const videoStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../../Videos'));
+    cb(null, path.join(__dirname, '../Videos'));
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + file.originalname);

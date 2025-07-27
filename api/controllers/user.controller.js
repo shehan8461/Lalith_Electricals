@@ -95,12 +95,12 @@ export const deleteItem = async (req, res, next) => {
         const __dirname = path.dirname(__filename);
         fileFields.forEach(field => {
             const fileUrl = item[field];
-            if (fileUrl && (fileUrl.includes('/Images/') || fileUrl.includes('/Videos/'))) {
+            if (fileUrl && (fileUrl.includes('../Images/') || fileUrl.includes('../Videos/'))) {
                 // Remove host if present
                 let relPath = fileUrl.replace(/^https?:\/\/[\w\.:\-]+/, '');
                 // Remove leading slash if present
                 if (relPath.startsWith('/')) relPath = relPath.slice(1);
-                const filePath = path.join(__dirname, '../../', relPath);
+                const filePath = path.join(__dirname, '../', relPath);
                 fs.unlink(filePath, err => {
                     if (err) console.error(`Failed to delete file: ${filePath}`, err);
                 });
