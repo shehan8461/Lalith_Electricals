@@ -209,7 +209,7 @@ export default function AllDetails() {
     if (!url) return '';
     // Remove any Firebase storage URLs, only allow your server URLs
     if (url.includes('firebasestorage.googleapis.com')) return '';
-    if (url.startsWith('http')) return url;
+    if (url.startsWith('https')) return url;
     return API_HOST + url;
   };
 
