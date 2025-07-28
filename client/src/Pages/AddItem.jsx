@@ -141,12 +141,12 @@ export default function AddItem() {
       setError('You can only select up to 4 images in total.');
       return;
     }
-    // Check image size limit (2MB)
+    // Check image size limit (4MB)
     for (let file of files) {
-      if (file.size > 2 * 1024 * 1024) {
+      if (file.size > 4 * 1024 * 1024) {
         Swal.fire({
           title: 'Image Too Large!',
-          text: 'Each image must be less than 2MB.',
+          text: 'Each image must be less than 4MB.',
           icon: 'warning',
           confirmButtonText: 'OK',
           confirmButtonColor: '#dc3545',
@@ -154,7 +154,7 @@ export default function AddItem() {
           color: '#333',
           showClass: { popup: 'animate__animated animate__shakeX' }
         });
-        setError('Each image must be less than 2MB.');
+        setError('Each image must be less than 4MB.');
         return;
       }
     }
