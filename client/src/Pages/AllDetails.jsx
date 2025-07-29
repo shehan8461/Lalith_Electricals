@@ -440,10 +440,33 @@ const getFullUrl = (url) => {
             filteredOrders.map((order) => (
               <div className="col-6 col-md-3" key={order.itemId} style={{paddingLeft: '0.15rem', paddingRight: '0.15rem', marginBottom: '1.5rem'}}>
                 <div
-                  className="card h-100 border-0 shadow-lg rounded-4 overflow-hidden position-relative card-hover"
-                  style={{ cursor: 'pointer' }}
+                  className="card h-100 border-0 shadow-lg rounded-4 overflow-hidden position-relative card-hover premium-post-border"
+                  style={{ cursor: 'pointer', background: 'linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%)', boxShadow: '0 8px 32px rgba(59,130,246,0.10), 0 1.5px 8px rgba(16,185,129,0.10)', border: '2.5px solid', borderImage: 'linear-gradient(135deg, #3b82f6 0%, #f59e0b 50%, #10b981 100%) 1', transition: 'box-shadow 0.3s, border-color 0.3s' }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.boxShadow = '0 12px 36px rgba(59,130,246,0.18), 0 2.5px 12px rgba(16,185,129,0.18)';
+                    e.currentTarget.style.borderColor = '#f59e0b';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.boxShadow = '0 8px 32px rgba(59,130,246,0.10), 0 1.5px 8px rgba(16,185,129,0.10)';
+                    e.currentTarget.style.borderColor = '';
+                  }}
                   onClick={() => { setSelectedOrder(order); setShowModal(true); }}
                 >
+      <style>{`
+        .premium-post-border {
+          border-radius: 1.5rem !important;
+          border-width: 2.5px !important;
+          border-style: solid !important;
+          border-image: linear-gradient(135deg, #3b82f6 0%, #f59e0b 50%, #10b981 100%) 1 !important;
+          box-shadow: 0 8px 32px rgba(59,130,246,0.10), 0 1.5px 8px rgba(16,185,129,0.10) !important;
+          background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%) !important;
+          transition: box-shadow 0.3s, border-color 0.3s !important;
+        }
+        .premium-post-border:hover {
+          box-shadow: 0 12px 36px rgba(59,130,246,0.18), 0 2.5px 12px rgba(16,185,129,0.18) !important;
+          border-color: #f59e0b !important;
+        }
+      `}</style>
                   <div className="position-relative" style={{height: '200px', overflow: 'hidden'}}>
                     {order.productVideo && (order.profilePicture || order.alternateProfilePicture || order.thirdProfilePicture || order.fourthProfilePicture) ? (
                       <div className="d-flex w-100 h-100">
@@ -604,7 +627,7 @@ const getFullUrl = (url) => {
                     <h6 className="card-subtitle text-secondary mb-2 premium-subtitle" style={{fontSize: '0.9rem', fontWeight: '500', color: '#64748b'}}>{order.Title && order.Name ? order.Title : ''}</h6>
                     <div className="description-box mb-2">
                       <p className="card-text text-muted mb-0 premium-description" style={{minHeight: '32px', fontSize: '0.95rem', lineHeight: '1.5', color: '#475569'}}>
-                        <span className="description-label">Description:</span> <span className="description-text">{order.Description}</span>
+                        <span className="description-label"></span> <span className="description-text">{order.Description}</span>
                       </p>
                     </div>
                     <div className="date-section d-flex align-items-center justify-content-end">
