@@ -10,6 +10,9 @@ import Swal from 'sweetalert2';
 
 export default function AddItem() {
   const [imagePercent, setImagePercent] = useState(0);
+  const [videoPercent, setVideoPercent] = useState(0);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isUploadingVideo, setIsUploadingVideo] = useState(false);
   const fileInputRef = useRef(null);
   const fileRefVideo = useRef(null);
   const [imageError, setImageError] = useState(false);
@@ -57,11 +60,11 @@ export default function AddItem() {
 
   useEffect(() => {
     if (video) {
-      // Check video size limit (10MB)
-      if (video.size > 10 * 1024 * 1024) {
+      // Check video size limit (20MB)
+      if (video.size > 20 * 1024 * 1024) {
         Swal.fire({
           title: 'Video Too Large!',
-          text: 'Video must be less than 10MB.',
+          text: 'Video must be less than 20MB.',
           icon: 'warning',
           confirmButtonText: 'OK',
           confirmButtonColor: '#dc3545',
@@ -69,7 +72,7 @@ export default function AddItem() {
           color: '#333',
           showClass: { popup: 'animate__animated animate__shakeX' }
         });
-        setError('Video must be less than 10MB.');
+        setError('Video must be less than 20MB.');
         setVideo(undefined);
         return;
       }
@@ -87,41 +90,74 @@ export default function AddItem() {
     } else {
       endpoint = 'https://api.lalithelectrical.com/api/upload/image';
     }
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      body: formData,
-      credentials: 'include',
-    });
-    if (!res.ok) {
-      throw new Error('File upload failed');
+    // Show upload state
+    if (type === 'video') {
+      setIsUploadingVideo(true);
+      setVideoPercent(0);
+    } else {
+      setIsUploadingImage(true);
+      setImagePercent(0);
     }
-    const data = await res.json();
-    return data.url; // backend should return { url: 'uploaded_file_url' }
+    try {
+      // Use XMLHttpRequest to track upload progress
+      const xhr = new window.XMLHttpRequest();
+      const promise = new Promise((resolve, reject) => {
+        xhr.open('POST', endpoint);
+        xhr.withCredentials = true;
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            const percent = Math.round((event.loaded / event.total) * 100);
+            if (type === 'video') setVideoPercent(percent);
+            else setImagePercent(percent);
+          }
+        };
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            const data = JSON.parse(xhr.responseText);
+            if (type === 'video') setVideoPercent(100);
+            else setImagePercent(100);
+            resolve(data.url);
+          } else {
+            reject(new Error('File upload failed'));
+          }
+        };
+        xhr.onerror = () => reject(new Error('File upload failed'));
+        xhr.send(formData);
+      });
+      return await promise;
+    } finally {
+      if (type === 'video') setIsUploadingVideo(false);
+      else setIsUploadingImage(false);
+    }
   };
 
-  const handleFileUpload = async (file, field) => {
-    try {
-      let type = field === 'productVideo' ? 'video' : 'image';
-      const url = await uploadMediaFile(file, type);
-      setFormData((prev) => ({ ...prev, [field]: url }));
-      setImageError(false);
-    } catch (error) {
-      setImageError(true);
-      setError('File upload failed');
-      Swal.fire({
-        title: 'Upload Failed!',
-        text: 'There was an error uploading your file. Please try again.',
-        icon: 'error',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#dc3545',
-        background: '#fff',
-        color: '#333',
-        showClass: {
-          popup: 'animate__animated animate__shakeX'
-        }
-      });
-    }
-  };
+const handleFileUpload = async (file, field) => {
+  try {
+    let type = field === 'productVideo' ? 'video' : 'image';
+    const url = await uploadMediaFile(file, type);
+    setFormData((prev) => ({ ...prev, [field]: url }));
+    setImageError(false);
+  } catch (error) {
+    setImageError(true);
+    setError('File upload failed');
+    Swal.fire({
+      title: 'Upload Failed!',
+      text: 'There was an error uploading your file. Please try again.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#dc3545',
+      background: '#fff',
+      color: '#333',
+      showClass: {
+        popup: 'animate__animated animate__shakeX'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOut'
+      }
+    });
+  }
+}
+;
 
   const handleImageSelectClick = () => fileInputRef.current.click();
 
@@ -141,12 +177,12 @@ export default function AddItem() {
       setError('You can only select up to 4 images in total.');
       return;
     }
-    // Check image size limit (4MB)
+    // Check image size limit (6MB)
     for (let file of files) {
-      if (file.size > 4 * 1024 * 1024) {
+      if (file.size > 6 * 1024 * 1024) {
         Swal.fire({
           title: 'Image Too Large!',
-          text: 'Each image must be less than 4MB.',
+          text: 'Each image must be less than 6MB.',
           icon: 'warning',
           confirmButtonText: 'OK',
           confirmButtonColor: '#dc3545',
@@ -154,7 +190,7 @@ export default function AddItem() {
           color: '#333',
           showClass: { popup: 'animate__animated animate__shakeX' }
         });
-        setError('Each image must be less than 4MB.');
+        setError('Each image must be less than 6MB.');
         return;
       }
     }
@@ -359,10 +395,21 @@ export default function AddItem() {
               </div>
             </div>
 
-            {imagePercent > 0 && (
-              <div className="progress mt-3">
-                <div className="progress-bar" role="progressbar" style={{ width: `${imagePercent}%` }} aria-valuenow={imagePercent} aria-valuemin="0" aria-valuemax="100">
-                  {imagePercent}%
+
+            {/* Uploading state for images and video as inline progress bar */}
+            {isUploadingImage && (
+              <div className="alert alert-info mt-3" role="alert">
+                Uploading image(s)... {imagePercent}%
+                <div className="progress mt-2">
+                  <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style={{ width: `${imagePercent}%` }} aria-valuenow={imagePercent} aria-valuemin="0" aria-valuemax="100">{imagePercent}%</div>
+                </div>
+              </div>
+            )}
+            {isUploadingVideo && (
+              <div className="alert alert-info mt-3" role="alert">
+                Uploading video... {videoPercent}%
+                <div className="progress mt-2">
+                  <div className="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style={{ width: `${videoPercent}%` }} aria-valuenow={videoPercent} aria-valuemin="0" aria-valuemax="100">{videoPercent}%</div>
                 </div>
               </div>
             )}
