@@ -203,14 +203,17 @@ export default function AllDetails() {
     setFullscreenImageAlt('');
   };
 
-  // Utility to ensure full URL for media
-  const API_HOST = import.meta.env.VITE_API_HOST || 'https://api.lalithelectrical.com';
-  const getFullUrl = (url) => {
-    if (!url) return '';
-    if (url.startsWith('http')) return url;
-    return `${API_HOST.replace(/\/$/, '')}${url.startsWith('/') ? '' : '/'}${url}`;
-  };
 
+
+
+  const API_HOST = import.meta.env.VITE_API_HOST || 'https://api.lalithelectrical.com';
+const getFullUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('https://')) return url;
+  if (url.startsWith('http://')) return url.replace('http://', 'https://');
+  if (url.startsWith('//')) return 'https:' + url;
+  return `${API_HOST.replace(/\/$/, '')}${url.startsWith('/') ? '' : '/'}${url}`;
+};
   return (
     <div className="d-flex flex-column min-vh-100 position-relative" style={{ minHeight: '100vh' }}>
       {/* Blurred Background Layer */}
