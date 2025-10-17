@@ -3,6 +3,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import certificate1 from '../components/images/cetificate1_page-0002.jpg';
 import certificate2 from '../components/images/cetificate2_page-0001.jpg';
 import bgImg1 from '../components/images/BackgroundImages/bg4.jpg';
+import bgImg2 from '../components/images/BackgroundImages/lalith1.jpeg';
+import bgImg3 from '../components/images/BackgroundImages/logo.jpeg';
+import bgImg4 from '../components/images/1.jpeg';
+import bgImg5 from '../components/images/2.jpeg';
+import bgImg6 from '../components/images/3.jpeg';
 
 import { useDispatch } from 'react-redux';
 import { signout } from '../redux/User/userSlice';
@@ -34,14 +39,14 @@ export default function AllDetails() {
   const searchParam = params.get('search') || '';
 
   // Background images array for animation
-  const backgroundImages = [bgImg1];
+  const backgroundImages = [bgImg1, bgImg2, bgImg3, bgImg4, bgImg5, bgImg6];
 
   useEffect(() => {
     fetchOrders();
   }, []);
 
   useEffect(() => {
-    // Static background - no animation needed since only one image
+    // Static background - no animation needed
     setBgIndex(0);
   }, []);
 
@@ -64,16 +69,42 @@ export default function AllDetails() {
     };
 
     if (showFullscreenImage) {
-      document.addEventListener('keydown', handleKeyDown);
-      // Prevent body scrolling when fullscreen is open
+      // Store current scroll position
+      const scrollY = window.scrollY;
+      const scrollX = window.scrollX;
+
+      // Prevent body scrolling while maintaining scroll position
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = `-${scrollX}px`;
+      document.body.style.width = '100%';
       document.body.style.overflow = 'hidden';
+
+      document.addEventListener('keydown', handleKeyDown);
     } else {
-      document.body.style.overflow = 'unset';
+      // Restore scroll position
+      const scrollY = document.body.style.top;
+      const scrollX = document.body.style.left;
+
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+
+      if (scrollY) {
+        window.scrollTo(parseInt(scrollX || '0') * -1, parseInt(scrollY) * -1);
+      }
     }
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'unset';
+      // Cleanup in case component unmounts
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
     };
   }, [showFullscreenImage]);
 
@@ -236,9 +267,9 @@ const getFullUrl = (url) => {
       {/* Logout Button Top Right */}
       
       {/* Top Heading Section - Full Top */}
-      <div className="w-100 d-flex justify-content-center pt-3 pb-4">
+      <div className="w-100 d-flex justify-content-center pt-4 pb-4">
         <div className="heading-container d-flex justify-content-center">
-          <h2 className="text-center text-white fw-bold heading-with-bg px-3 py-2 mx-auto" style={{
+          <h2 className="text-center fw-bold heading-with-bg px-3 py-2 mx-auto" style={{
             letterSpacing: '0.4px', 
             textShadow: '2px 2px 6px rgba(0,0,0,0.8)', 
             background: 'linear-gradient(135deg, rgba(75,85,99,0.95) 0%, rgba(107,114,128,0.95) 30%, rgba(156,163,175,0.95) 70%, rgba(209,213,219,0.95) 100%, rgba(255,255,255,0.95) 100%)',
@@ -253,6 +284,7 @@ const getFullUrl = (url) => {
             width: 'fit-content',
             whiteSpace: 'nowrap',
             transform: 'perspective(1000px) rotateX(5deg)',
+            color: '#1e293b',
           // background: 'linear-gradient(135deg, rgba(75,85,99,0.95) 0%, rgba(107,114,128,0.95) 30%, rgba(156,163,175,0.95) 70%, rgba(255,255,255,0.1) 100%)'
           }}>
             ⚡ Expert Generator Repair & Maintenance Services ⚡
@@ -260,7 +292,21 @@ const getFullUrl = (url) => {
         </div>
       </div>
   
-      <div className="container-fluid my-3 flex-grow-1" style={{minHeight: 'calc(100vh - 200px)', paddingLeft: '0.5rem', paddingRight: '0.5rem'}}>
+      <div className="container-fluid my-4 flex-grow-1" style={{
+        minHeight: 'calc(100vh - 200px)', 
+        paddingLeft: 'clamp(0.75rem, 3vw, 2rem)', 
+        paddingRight: 'clamp(0.75rem, 3vw, 2rem)',
+        paddingTop: 'clamp(2rem, 5vw, 4rem)',
+        paddingBottom: 'clamp(2rem, 5vw, 4rem)',
+        position: 'relative',
+        zIndex: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        maxWidth: '100%',
+        boxSizing: 'border-box',
+        overflowX: 'hidden'
+      }}>
         
         {/* Search Status Indicator */}
         {searchParam && (
@@ -396,8 +442,17 @@ const getFullUrl = (url) => {
           </div>
         </div>
         
-        {/* Orders Display */}
-        <div className="row g-2 g-md-3" style={{marginLeft: '0', marginRight: '0'}}>
+        <div className="row g-4 g-lg-5 justify-content-center" style={{
+          marginLeft: '0', 
+          marginRight: '0',
+          width: '100%',
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 'clamp(0.5rem, 2.5vw, 1.5rem)',
+          padding: '0 clamp(0.5rem, 2vw, 1rem)',
+          boxSizing: 'border-box',
+          overflowX: 'hidden'
+        }}>
           {loading ? (
             <div className="col-12 d-flex justify-content-center align-items-center" style={{minHeight: '400px'}}>
               <div className="text-center">
@@ -438,10 +493,29 @@ const getFullUrl = (url) => {
             </div>
           ) : filteredOrders.length > 0 ? (
             filteredOrders.map((order) => (
-              <div className="col-6 col-md-3" key={order.itemId} style={{paddingLeft: '0.15rem', paddingRight: '0.15rem', marginBottom: '1.5rem'}}>
+              <div className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3" key={order.itemId} style={{
+                paddingLeft: 'clamp(0.125rem, 0.5vw, 0.25rem)', 
+                paddingRight: 'clamp(0.125rem, 0.5vw, 0.25rem)', 
+                marginBottom: 'clamp(0.5rem, 2vw, 1rem)',
+                flex: '0 0 auto',
+                width: 'clamp(140px, 18vw, 240px)',
+                maxWidth: '100%',
+                boxSizing: 'border-box'
+              }}>
                 <div
                   className="card h-100 border-0 shadow-lg rounded-4 overflow-hidden position-relative card-hover premium-post-border"
-                  style={{ cursor: 'pointer', background: 'linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%)', boxShadow: '0 8px 32px rgba(59,130,246,0.10), 0 1.5px 8px rgba(16,185,129,0.10)', border: '2.5px solid', borderImage: 'linear-gradient(135deg, #3b82f6 0%, #f59e0b 50%, #10b981 100%) 1', transition: 'box-shadow 0.3s, border-color 0.3s' }}
+                  style={{ 
+                    cursor: 'pointer', 
+                    background: 'linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%)', 
+                    boxShadow: '0 8px 32px rgba(59,130,246,0.10), 0 1.5px 8px rgba(16,185,129,0.10)', 
+                    border: '2.5px solid', 
+                    borderImage: 'linear-gradient(135deg, #3b82f6 0%, #f59e0b 50%, #10b981 100%) 1', 
+                    transition: 'box-shadow 0.3s, border-color 0.3s',
+                    width: '100%',
+                    minHeight: 'clamp(280px, 35vh, 420px)',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
                   onMouseEnter={e => {
                     e.currentTarget.style.boxShadow = '0 12px 36px rgba(59,130,246,0.18), 0 2.5px 12px rgba(16,185,129,0.18)';
                     e.currentTarget.style.borderColor = '#f59e0b';
@@ -467,7 +541,11 @@ const getFullUrl = (url) => {
           border-color: #f59e0b !important;
         }
       `}</style>
-                  <div className="position-relative" style={{height: '200px', overflow: 'hidden'}}>
+                  <div className="position-relative" style={{
+                    height: 'clamp(160px, 25vh, 220px)', 
+                    overflow: 'hidden',
+                    width: '100%'
+                  }}>
                     {order.productVideo && (order.profilePicture || order.alternateProfilePicture || order.thirdProfilePicture || order.fourthProfilePicture) ? (
                       <div className="d-flex w-100 h-100">
                         {activeVideoId === order.itemId ? (
@@ -606,7 +684,14 @@ const getFullUrl = (url) => {
                       )}
                     </div>
                   </div>
-                  <div className="card-body p-3 premium-card-content">
+                  <div className="card-body p-3 premium-card-content" style={{
+                    flex: '1',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    padding: 'clamp(0.75rem, 3vw, 1.25rem)',
+                    minHeight: 'clamp(120px, 20vh, 160px)'
+                  }}>
                     <div className="card-title-wrapper mb-2">
                       <h5 className="card-title text-primary fw-bold mb-1 premium-title" style={{
                         fontSize: '1.2rem', 
@@ -1129,7 +1214,7 @@ const getFullUrl = (url) => {
           filter: blur(8px);
         }
         .heading-with-bg {
-          animation: headingFloat 6s ease-in-out infinite, headingGlow 3s ease-in-out infinite alternate;
+          animation: headingGlow 3s ease-in-out infinite alternate;
           position: relative;
           z-index: 1;
         }
@@ -1181,7 +1266,6 @@ const getFullUrl = (url) => {
           height: 100%;
           background: linear-gradient(45deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.08) 100%);
           z-index: -1;
-          animation: bg-shimmer 10s ease-in-out infinite, bg-pulse 8s ease-in-out infinite;
           pointer-events: none;
         }
         @keyframes bg-shimmer {
@@ -1191,6 +1275,11 @@ const getFullUrl = (url) => {
         @keyframes bg-pulse {
           0%, 100% { filter: brightness(1) saturate(1); }
           50% { filter: brightness(1.1) saturate(1.2); }
+        }
+        @keyframes bgShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
         .card-hover {
           backdrop-filter: blur(12px);
