@@ -58,7 +58,7 @@ export default function SignIn() {
     <div>
       <p>Don't have an account </p>
       <Link to="/sign-up">
-      <span className='text-blue-500'>Sign Up</span>
+      {/* <span className='text-blue-500'>Sign Up</span> */}
       </Link>
       <p className='text-red-700 mt-5'>
         {error
