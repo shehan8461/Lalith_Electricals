@@ -431,6 +431,45 @@ export default function Header() {
           overflow-y: auto;
         }
 
+        /* Custom desktop modal positioning: show near top (below fixed header) on desktop, centered on mobile */
+        .custom-modal-overlay {
+          position: fixed !important;
+          left: 0;
+          right: 0;
+          width: 100%;
+          display: flex !important;
+          justify-content: center !important;
+          background: rgba(0,0,0,0.5);
+          z-index: 3000;
+          box-sizing: border-box;
+          overflow-y: auto;
+        }
+        /* Desktop: place overlay below the top header (brand + navbar). Adjust the top offset as needed. */
+        @media (min-width: 769px) {
+          .custom-modal-overlay {
+            top: 200px !important; /* start overlay below header */
+            height: calc(100vh - 200px) !important;
+            align-items: flex-start !important; /* push modal to top of overlay */
+            padding-top: 1rem !important;
+          }
+          .custom-modal-overlay .modal-dialog { margin-top: 8px !important; }
+        }
+        /* Mobile: full-screen overlay and vertically centered dialog */
+        @media (max-width: 768px) {
+          .custom-modal-overlay {
+            top: 0 !important;
+            height: 100vh !important;
+            align-items: center !important;
+            padding-top: 0 !important;
+            background: rgba(0,0,0,0.6) !important;
+          }
+          .custom-modal-overlay .modal-dialog {
+            margin: 12px !important;
+            width: 96vw !important;
+            max-width: 96vw !important;
+          }
+        }
+
         .dropdown-item {
           padding: 10px 20px;
           font-weight: 500;
@@ -683,14 +722,10 @@ export default function Header() {
             </button>
       {/* Owner Details Popup */}
       {showOwner && (
-        <div className="modal fade show d-flex align-items-center justify-content-center"
-          style={{
-            position: 'fixed', top: 0, left: 0, right: 0, width: '100%', maxHeight: '100%',
-            display: 'flex', background: 'rgba(0,0,0,0.5)', zIndex: 3000, overflowY: 'auto'
-          }}
+        <div className="modal fade show custom-modal-overlay d-flex justify-content-center"
           tabIndex="-1" role="dialog" onClick={() => setShowOwner(false)}
         >
-          <div className="modal-dialog modal-dialog-centered"
+          <div className="modal-dialog"
             style={{ maxWidth: 400, width: '85vw', margin: '20px auto' }}
             role="document" onClick={e => e.stopPropagation()}
           >
