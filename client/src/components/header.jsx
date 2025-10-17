@@ -39,6 +39,7 @@ export default function Header() {
   const navigate = useNavigate();
   const [showMap, setShowMap] = useState(false);
   const [showOwner, setShowOwner] = useState(false);
+  const [navExpanded, setNavExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const searchTimeoutRef = useRef(null);
 
@@ -668,10 +669,10 @@ export default function Header() {
       </div>
 
       {/* Main Navigation */}
-  <Navbar expand="lg" className="main-navbar" style={{ top: '140px' }}>
+  <Navbar expand="lg" className="main-navbar" style={{ top: '140px' }} expanded={navExpanded} onToggle={(next) => setNavExpanded(next)}>
         <Container>
           {/* Brand Logo and Facebook Icon with Owner Details Button in between */}
-          <Navbar.Brand className="d-flex align-items-center ps-0" style={{marginLeft: 0, paddingLeft: 0}}>
+          <Navbar.Brand className="d-flex align-items-center ps-0" style={{marginLeft: 0, paddingLeft: 0}} onClick={() => setNavExpanded(false)}>
             {/* Logo */}
             <img
               src={logo}
@@ -703,7 +704,7 @@ export default function Header() {
                 boxShadow: '0 2px 8px rgba(59,130,246,0.13)',
                 fontWeight: 600,
                 letterSpacing: '0.4px',
-                marginRight: 24,
+                marginRight: 40,
                 padding: '0 14px',
                 transition: 'background 0.2s, box-shadow 0.2s, transform 0.2s',
                 textShadow: '0 1px 4px rgba(59,130,246,0.08)',
@@ -720,7 +721,7 @@ export default function Header() {
               </svg>
               <span>Owner</span>
             </button>
-      {/* Owner Details Popup */}
+  {/* Owner Details Popup */}
       {showOwner && (
         <div className="modal fade show custom-modal-overlay d-flex justify-content-center"
           tabIndex="-1" role="dialog" onClick={() => setShowOwner(false)}
@@ -735,8 +736,8 @@ export default function Header() {
                 <h5 className="modal-title text-white fw-bold m-0" style={{ letterSpacing: '1px', fontSize: '1.3rem' }}>Owner Details</h5>
                 <button type="button" className="btn-close btn-close-white ms-2" aria-label="Close"
                   style={{ filter: 'brightness(2)', fontSize: '1.2rem' }} onClick={() => setShowOwner(false)}></button>
-              </div>
-              <div className="modal-body p-4 d-flex flex-column align-items-center justify-content-center" style={{width: '100%', maxWidth: 600, minHeight: 0, justifyContent: 'center'}}>
+                </div>
+                <div className="modal-body p-4 d-flex flex-column align-items-center justify-content-center" style={{width: '100%', maxWidth: 600, minHeight: 0, justifyContent: 'center'}}>
                 <div className="w-100 d-flex flex-column align-items-center justify-content-center" style={{height: '100%'}}>
                   <img
                     src={ownerImg}
@@ -774,8 +775,8 @@ export default function Header() {
                 display: 'flex',
                 alignItems: 'center',
                 color: '#1877f3',
-                width: 60,
-                height: 60,
+                width: 50,
+                height: 50,
                 justifyContent: 'center',
                 transition: 'box-shadow 0.2s',
                 textDecoration: 'none',
@@ -783,7 +784,7 @@ export default function Header() {
               className="facebook-icon-link"
               title="Join our Facebook Group"
             >
-              <FaFacebook size={74} />
+              <FaFacebook size={40} />
             </a>
           </Navbar.Brand>
 
@@ -823,11 +824,11 @@ export default function Header() {
               <Nav.Link
                 className="nav-link-custom d-flex align-items-center"
                 style={{ fontWeight: 600, color: '#2563eb' }}
-                onClick={() => setShowMap(true)}
+                onClick={() => { setShowMap(true); setNavExpanded(false); }}
               >
                 <FaMapMarkerAlt className="me-1" /> View Location
               </Nav.Link>
-              <Nav.Link as={Link} to="/" className="nav-link-custom d-flex align-items-center">
+              <Nav.Link as={Link} to="/" className="nav-link-custom d-flex align-items-center" onClick={() => setNavExpanded(false)}>
                 <FaHome className="me-1" size={16} />
                 <span>Home</span>
               </Nav.Link>
@@ -882,19 +883,19 @@ export default function Header() {
                   id="user-dropdown"
                   align="end"
                 >
-                  <NavDropdown.Item as={Link} to="/profile">
+                  <NavDropdown.Item as={Link} to="/profile" onClick={() => setNavExpanded(false)}>
                     <FaUserCircle className="me-2" /> Profile
                   </NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/items">
+                  <NavDropdown.Item as={Link} to="/items" onClick={() => setNavExpanded(false)}>
                     <FaShoppingCart className="me-2" /> My Orders
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item onClick={handleSignOut} className="text-danger" style={{ cursor: 'pointer' }}>
+                  <NavDropdown.Item onClick={() => { handleSignOut(); setNavExpanded(false); }} className="text-danger" style={{ cursor: 'pointer' }}>
                     <i className="bi bi-box-arrow-right me-2"></i> Logout
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
-                <Nav.Link as={Link} to="/profile" className="signin-btn">
+                <Nav.Link as={Link} to="/profile" className="signin-btn" onClick={() => setNavExpanded(false)}>
                   <FaUserCircle size={14} />
                   <span>Sign In</span>
                 </Nav.Link>
