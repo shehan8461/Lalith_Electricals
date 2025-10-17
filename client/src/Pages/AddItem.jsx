@@ -9,6 +9,7 @@ import 'animate.css';
 import Swal from 'sweetalert2';
 
 export default function AddItem() {
+  const [pageOffset, setPageOffset] = useState(null);
   const [imagePercent, setImagePercent] = useState(0);
   const [videoPercent, setVideoPercent] = useState(0);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
@@ -57,6 +58,24 @@ export default function AddItem() {
     uploadAll();
     // eslint-disable-next-line
   }, [images]);
+
+  useEffect(() => {
+    const computeOffset = () => {
+      try {
+        const brand = document.querySelector('.brand-header');
+        const navbar = document.querySelector('.main-navbar');
+        const brandH = brand ? brand.getBoundingClientRect().height : 0;
+        const navH = navbar ? navbar.getBoundingClientRect().height : 0;
+        const total = Math.ceil(brandH + navH + 24); // add small gap
+        setPageOffset(total);
+      } catch (e) {
+        setPageOffset(320);
+      }
+    };
+    computeOffset();
+    window.addEventListener('resize', computeOffset);
+    return () => window.removeEventListener('resize', computeOffset);
+  }, []);
 
   useEffect(() => {
     if (video) {
@@ -281,7 +300,7 @@ const handleFileUpload = async (file, field) => {
         .page-offset { padding-top: 320px; }
         @media (max-width: 768px) { .page-offset { padding-top: 250px !important; } }
       `}</style>
-      <div className="container page-offset">
+  <div className="container page-offset" style={pageOffset ? { paddingTop: pageOffset } : {}}>
       <div className="card shadow-lg">
         <div className="card-header bg-primary text-white">
           <h3 className="mb-0">Add Product Information</h3>
