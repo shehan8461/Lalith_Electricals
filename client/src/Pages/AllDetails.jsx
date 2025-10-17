@@ -3,6 +3,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import certificate1 from '../components/images/cetificate1_page-0002.jpg';
 import certificate2 from '../components/images/cetificate2_page-0001.jpg';
 import bgImg1 from '../components/images/BackgroundImages/bg4.jpg';
+import bgImg2 from '../components/images/BackgroundImages/lalith1.jpeg';
+import bgImg3 from '../components/images/BackgroundImages/logo.jpeg';
+import bgImg4 from '../components/images/1.jpeg';
+import bgImg5 from '../components/images/2.jpeg';
+import bgImg6 from '../components/images/3.jpeg';
 
 import { useDispatch } from 'react-redux';
 import { signout } from '../redux/User/userSlice';
@@ -34,14 +39,14 @@ export default function AllDetails() {
   const searchParam = params.get('search') || '';
 
   // Background images array for animation
-  const backgroundImages = [bgImg1];
+  const backgroundImages = [bgImg1, bgImg2, bgImg3, bgImg4, bgImg5, bgImg6];
 
   useEffect(() => {
     fetchOrders();
   }, []);
 
   useEffect(() => {
-    // Static background - no animation needed since only one image
+    // Static background - no animation needed
     setBgIndex(0);
   }, []);
 
@@ -64,16 +69,42 @@ export default function AllDetails() {
     };
 
     if (showFullscreenImage) {
-      document.addEventListener('keydown', handleKeyDown);
-      // Prevent body scrolling when fullscreen is open
+      // Store current scroll position
+      const scrollY = window.scrollY;
+      const scrollX = window.scrollX;
+
+      // Prevent body scrolling while maintaining scroll position
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = `-${scrollX}px`;
+      document.body.style.width = '100%';
       document.body.style.overflow = 'hidden';
+
+      document.addEventListener('keydown', handleKeyDown);
     } else {
-      document.body.style.overflow = 'unset';
+      // Restore scroll position
+      const scrollY = document.body.style.top;
+      const scrollX = document.body.style.left;
+
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+
+      if (scrollY) {
+        window.scrollTo(parseInt(scrollX || '0') * -1, parseInt(scrollY) * -1);
+      }
     }
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'unset';
+      // Cleanup in case component unmounts
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
     };
   }, [showFullscreenImage]);
 
@@ -215,30 +246,37 @@ const getFullUrl = (url) => {
   return `${API_HOST.replace(/\/$/, '')}${url.startsWith('/') ? '' : '/'}${url}`;
 };
   return (
-    <div className="d-flex flex-column min-vh-100 position-relative" style={{ minHeight: '100vh' }}>
-      {/* Blurred Background Layer */}
-      <div 
-        className="position-fixed top-0 start-0 w-100 h-100"
-        style={{
-          background: `url(${backgroundImages[bgIndex]}) center center/cover no-repeat`,
-          backgroundPosition: 'center center',
-          backgroundSize: 'cover',
-          backgroundAttachment: 'fixed',
-          transition: 'background-image 1.5s cubic-bezier(0.4,0,0.2,1)',
-          filter: 'blur(7px)',
-          zIndex: -1,
-          transform: 'scale(1.1)'
-        }}
-      ></div>
-      
+    <div className="position-relative min-vh-100" style={{
+      background: 'linear-gradient(135deg, rgba(248,250,252,0.95) 0%, rgba(241,245,249,0.9) 50%, rgba(226,232,240,0.95) 100%)',
+      backdropFilter: 'blur(20px)',
+      overflowX: 'hidden',
+      width: '100vw',
+      maxWidth: '100vw'
+    }}>
+      {/* Background Animation Layer */}
+      <div className="background-animation">
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(45deg, rgba(59,130,246,0.03) 0%, rgba(16,185,129,0.02) 50%, rgba(245,158,11,0.03) 100%)'
+        }}></div>
+      </div>
+
       {/* Content Layer */}
-      <div className="d-flex flex-column min-vh-100 animated-bg">
+      <div className="d-flex flex-column min-vh-100 animated-bg" style={{
+        position: 'relative',
+        zIndex: 1,
+        background: 'transparent'
+      }}>
       {/* Logout Button Top Right */}
       
       {/* Top Heading Section - Full Top */}
-      <div className="w-100 d-flex justify-content-center pt-3 pb-4">
+      <div className="w-100 d-flex justify-content-center pt-4 pb-4">
         <div className="heading-container d-flex justify-content-center">
-          <h2 className="text-center text-white fw-bold heading-with-bg px-3 py-2 mx-auto" style={{
+          <h2 className="text-center fw-bold heading-with-bg px-3 py-2 mx-auto" style={{
             letterSpacing: '0.4px', 
             textShadow: '2px 2px 6px rgba(0,0,0,0.8)', 
             background: 'linear-gradient(135deg, rgba(75,85,99,0.95) 0%, rgba(107,114,128,0.95) 30%, rgba(156,163,175,0.95) 70%, rgba(209,213,219,0.95) 100%, rgba(255,255,255,0.95) 100%)',
@@ -253,6 +291,7 @@ const getFullUrl = (url) => {
             width: 'fit-content',
             whiteSpace: 'nowrap',
             transform: 'perspective(1000px) rotateX(5deg)',
+            color: '#1e293b',
           // background: 'linear-gradient(135deg, rgba(75,85,99,0.95) 0%, rgba(107,114,128,0.95) 30%, rgba(156,163,175,0.95) 70%, rgba(255,255,255,0.1) 100%)'
           }}>
             ⚡ Expert Generator Repair & Maintenance Services ⚡
@@ -260,7 +299,21 @@ const getFullUrl = (url) => {
         </div>
       </div>
   
-      <div className="container-fluid my-3 flex-grow-1" style={{minHeight: 'calc(100vh - 200px)', paddingLeft: '0.5rem', paddingRight: '0.5rem'}}>
+      <div className="container-fluid my-4 flex-grow-1" style={{
+        minHeight: 'calc(100vh - 200px)', 
+        paddingLeft: 'clamp(0.75rem, 3vw, 2rem)', 
+        paddingRight: 'clamp(0.75rem, 3vw, 2rem)',
+        paddingTop: 'clamp(2rem, 5vw, 4rem)',
+        paddingBottom: 'clamp(2rem, 5vw, 4rem)',
+        position: 'relative',
+        zIndex: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        maxWidth: '100%',
+        boxSizing: 'border-box',
+        overflowX: 'hidden'
+      }}>
         
         {/* Search Status Indicator */}
         {searchParam && (
@@ -396,8 +449,17 @@ const getFullUrl = (url) => {
           </div>
         </div>
         
-        {/* Orders Display */}
-        <div className="row g-2 g-md-3" style={{marginLeft: '0', marginRight: '0'}}>
+        <div className="row g-4 g-lg-5 justify-content-center" style={{
+          marginLeft: '0', 
+          marginRight: '0',
+          width: '100%',
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 'clamp(0.5rem, 2.5vw, 1.5rem)',
+          padding: '0 clamp(0.5rem, 2vw, 1rem)',
+          boxSizing: 'border-box',
+          overflowX: 'hidden'
+        }}>
           {loading ? (
             <div className="col-12 d-flex justify-content-center align-items-center" style={{minHeight: '400px'}}>
               <div className="text-center">
@@ -438,10 +500,29 @@ const getFullUrl = (url) => {
             </div>
           ) : filteredOrders.length > 0 ? (
             filteredOrders.map((order) => (
-              <div className="col-6 col-md-3" key={order.itemId} style={{paddingLeft: '0.15rem', paddingRight: '0.15rem', marginBottom: '1.5rem'}}>
+              <div className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3" key={order.itemId} style={{
+                paddingLeft: 'clamp(0.125rem, 0.5vw, 0.25rem)', 
+                paddingRight: 'clamp(0.125rem, 0.5vw, 0.25rem)', 
+                marginBottom: 'clamp(0.5rem, 2vw, 1rem)',
+                flex: '0 0 auto',
+                width: 'clamp(140px, 18vw, 240px)',
+                maxWidth: '100%',
+                boxSizing: 'border-box'
+              }}>
                 <div
                   className="card h-100 border-0 shadow-lg rounded-4 overflow-hidden position-relative card-hover premium-post-border"
-                  style={{ cursor: 'pointer', background: 'linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%)', boxShadow: '0 8px 32px rgba(59,130,246,0.10), 0 1.5px 8px rgba(16,185,129,0.10)', border: '2.5px solid', borderImage: 'linear-gradient(135deg, #3b82f6 0%, #f59e0b 50%, #10b981 100%) 1', transition: 'box-shadow 0.3s, border-color 0.3s' }}
+                  style={{ 
+                    cursor: 'pointer', 
+                    background: 'linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%)', 
+                    boxShadow: '0 8px 32px rgba(59,130,246,0.10), 0 1.5px 8px rgba(16,185,129,0.10)', 
+                    border: '2.5px solid', 
+                    borderImage: 'linear-gradient(135deg, #3b82f6 0%, #f59e0b 50%, #10b981 100%) 1', 
+                    transition: 'box-shadow 0.3s, border-color 0.3s',
+                    width: '100%',
+                    minHeight: 'clamp(280px, 35vh, 420px)',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
                   onMouseEnter={e => {
                     e.currentTarget.style.boxShadow = '0 12px 36px rgba(59,130,246,0.18), 0 2.5px 12px rgba(16,185,129,0.18)';
                     e.currentTarget.style.borderColor = '#f59e0b';
@@ -467,7 +548,11 @@ const getFullUrl = (url) => {
           border-color: #f59e0b !important;
         }
       `}</style>
-                  <div className="position-relative" style={{height: '200px', overflow: 'hidden'}}>
+                  <div className="position-relative" style={{
+                    height: 'clamp(160px, 25vh, 220px)', 
+                    overflow: 'hidden',
+                    width: '100%'
+                  }}>
                     {order.productVideo && (order.profilePicture || order.alternateProfilePicture || order.thirdProfilePicture || order.fourthProfilePicture) ? (
                       <div className="d-flex w-100 h-100">
                         {activeVideoId === order.itemId ? (
@@ -606,7 +691,14 @@ const getFullUrl = (url) => {
                       )}
                     </div>
                   </div>
-                  <div className="card-body p-3 premium-card-content">
+                  <div className="card-body p-3 premium-card-content" style={{
+                    flex: '1',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    padding: 'clamp(0.75rem, 3vw, 1.25rem)',
+                    minHeight: 'clamp(120px, 20vh, 160px)'
+                  }}>
                     <div className="card-title-wrapper mb-2">
                       <h5 className="card-title text-primary fw-bold mb-1 premium-title" style={{
                         fontSize: '1.2rem', 
@@ -740,107 +832,226 @@ const getFullUrl = (url) => {
         )}
       </div>
       {/* Footer - appears at the bottom after content, not fixed */}
-      <footer className="text-white py-0 pt-3 px-0 border-top border-primary" style={{paddingTop: '1.5rem', fontSize: '0.75rem', lineHeight: '1.1', background: 'linear-gradient(135deg, rgba(31,41,55,0.95) 0%, rgba(17,24,39,0.95) 50%, rgba(15,23,42,0.95) 100%)', backdropFilter: 'blur(10px)', borderTop: '2px solid rgba(59,130,246,0.6) !important', width: '100%', margin: 0, padding: 0, position: 'relative', left: 0, right: 0}}>
-        <div className="container-fluid" style={{paddingLeft: '0.5rem', paddingRight: '0.5rem', margin: 0, width: '100%'}}>
-          <div className="row g-1 g-md-2 align-items-center" style={{marginLeft: 0, marginRight: 0}}>
+      <footer className="text-white py-0 pt-3 px-0 border-top border-primary" style={{
+        paddingTop: 'clamp(1rem, 3vw, 2rem)',
+        fontSize: 'clamp(0.7rem, 2vw, 0.9rem)',
+        lineHeight: '1.4',
+        background: 'linear-gradient(135deg, rgba(31,41,55,0.95) 0%, rgba(17,24,39,0.95) 50%, rgba(15,23,42,0.95) 100%)',
+        backdropFilter: 'blur(10px)',
+        borderTop: '2px solid rgba(59,130,246,0.6) !important',
+        width: '100%',
+        margin: 0,
+        padding: 0,
+        position: 'relative',
+        left: 0,
+        right: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: 'auto'
+      }}>
+        <div className="container-fluid" style={{
+          paddingLeft: 'clamp(0.5rem, 3vw, 2rem)',
+          paddingRight: 'clamp(0.5rem, 3vw, 2rem)',
+          margin: 0,
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'clamp(1rem, 3vw, 2rem)'
+        }}>
+          <div className="row g-1 g-md-2 align-items-start" style={{
+            marginLeft: 0,
+            marginRight: 0,
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 'clamp(1rem, 4vw, 2rem)',
+            justifyContent: 'space-between'
+          }}>
             {/* Contact Information */}
-            <div className="col-12 col-md-4 order-1">
-              <h6 className="fw-bold mb-2 text-primary" style={{fontSize:'0.8rem', letterSpacing:'0.2px'}}>
+            <div className="col-12 col-md-4 order-1" style={{
+              flex: '1 1 clamp(250px, 30vw, 350px)',
+              minWidth: 'clamp(250px, 30vw, 300px)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'clamp(0.5rem, 2vw, 1rem)'
+            }}>
+              <h6 className="fw-bold mb-2 text-primary" style={{
+                fontSize: 'clamp(0.8rem, 2.5vw, 1rem)',
+                letterSpacing: '0.2px',
+                marginBottom: 'clamp(0.5rem, 2vw, 1rem)'
+              }}>
                 <i className="bi bi-lightning-charge-fill me-1"></i>Contact Us
               </h6>
-              <div className="mb-2">
+              <div className="mb-2" style={{marginBottom: 'clamp(0.5rem, 2vw, 1rem)'}}>
                 <i className="bi bi-envelope-fill me-1 text-primary"></i>
-                <a href="mailto:lalitabesinha@gmail.com" className="text-white text-decoration-none hover-link">
+                <a href="mailto:lalitabesinha@gmail.com" className="text-white text-decoration-none hover-link" style={{fontSize: 'clamp(0.7rem, 2vw, 0.85rem)'}}>
                   lalitabesinha@gmail.com
                 </a>
               </div>
-              {/* <div className="mb-2">
-                <i className="bi bi-telephone-fill me-1 text-success"></i>
-                <a href="tel:+94123456789" className="text-white text-decoration-none hover-link">
-                  +94 123 456 789
-                </a>
-              </div> */}
-              <div className="mb-2">
+              <div className="mb-2" style={{marginBottom: 'clamp(0.5rem, 2vw, 1rem)'}}>
                 <i className="bi bi-geo-alt-fill me-1 text-warning"></i>
-                <span className="text-light">8 Family Point, Thoraya, Kurunegala</span>
+                <span className="text-light" style={{fontSize: 'clamp(0.7rem, 2vw, 0.85rem)'}}>8 Family Point, Thoraya, Kurunegala</span>
               </div>
               <div className="mb-0">
                 <i className="bi bi-map me-1 text-info"></i>
-                <button onClick={() => setShowMap(true)} className="btn btn-link p-0 m-0 align-baseline text-info text-decoration-none hover-link" style={{fontSize:'inherit'}}>
+                <button onClick={() => setShowMap(true)} className="btn btn-link p-0 m-0 align-baseline text-info text-decoration-none hover-link" style={{
+                  fontSize: 'clamp(0.7rem, 2vw, 0.85rem)',
+                  padding: 'clamp(0.2rem, 1vw, 0.5rem)'
+                }}>
                   📍 View on Google Maps
                 </button>
               </div>
             </div>
-            
+
             {/* Certificates & Credentials */}
-            <div className="col-12 col-md-4 text-center order-2">
-              <h6 className="fw-bold mb-2 text-warning" style={{fontSize:'0.8rem', letterSpacing:'0.2px'}}>
+            <div className="col-12 col-md-4 text-center order-2" style={{
+              flex: '1 1 clamp(250px, 30vw, 350px)',
+              minWidth: 'clamp(250px, 30vw, 300px)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 'clamp(0.5rem, 2vw, 1rem)'
+            }}>
+              <h6 className="fw-bold mb-2 text-warning" style={{
+                fontSize: 'clamp(0.8rem, 2.5vw, 1rem)',
+                letterSpacing: '0.2px',
+                marginBottom: 'clamp(0.5rem, 2vw, 1rem)'
+              }}>
                 <i className="bi bi-award-fill me-1"></i>Certified & Trusted
               </h6>
-              <div className="d-flex justify-content-center gap-2 mb-2">
+              <div className="d-flex justify-content-center gap-2 mb-2" style={{
+                gap: 'clamp(0.5rem, 2vw, 1rem)',
+                marginBottom: 'clamp(0.5rem, 2vw, 1rem)',
+                flexWrap: 'wrap'
+              }}>
                 <div className="d-flex flex-column align-items-center certificate-item">
                   <div className="certificate-frame position-relative">
-                    <img src={certificate1} alt="Government Electrical License" className="img-fluid rounded-1 shadow border border-1 border-warning mb-0" style={{maxHeight:'70px', objectFit:'cover', background:'#fff'}} />
+                    <img src={certificate1} alt="Government Electrical License" className="img-fluid rounded-1 shadow border border-1 border-warning mb-0" style={{
+                      maxHeight: 'clamp(50px, 15vw, 80px)',
+                      objectFit: 'cover',
+                      background: '#fff'
+                    }} />
                     <div className="certificate-badge">
                       <i className="bi bi-patch-check-fill text-warning"></i>
                     </div>
                   </div>
-                  <span className="fw-bold text-warning" style={{fontSize:'0.7rem', textShadow: '1px 1px 2px rgba(0,0,0,0.5)'}}>Government License</span>
+                  <span className="fw-bold text-warning" style={{
+                    fontSize: 'clamp(0.6rem, 2vw, 0.8rem)',
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+                  }}>Government License</span>
                 </div>
                 <div className="d-flex flex-column align-items-center certificate-item">
                   <div className="certificate-frame position-relative">
-                    <img src={certificate2} alt="Award of Excellence" className="img-fluid rounded-1 shadow border border-1 border-success mb-0" style={{maxHeight:'70px', objectFit:'cover', background:'#fff'}} />
+                    <img src={certificate2} alt="Award of Excellence" className="img-fluid rounded-1 shadow border border-1 border-success mb-0" style={{
+                      maxHeight: 'clamp(50px, 15vw, 80px)',
+                      objectFit: 'cover',
+                      background: '#fff'
+                    }} />
                     <div className="certificate-badge">
                       <i className="bi bi-trophy-fill text-success"></i>
                     </div>
                   </div>
-                  <span className="fw-bold text-success" style={{fontSize:'0.7rem', textShadow: '1px 1px 2px rgba(0,0,0,0.5)'}}>Excellence Award</span>
+                  <span className="fw-bold text-success" style={{
+                    fontSize: 'clamp(0.6rem, 2vw, 0.8rem)',
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+                  }}>Excellence Award</span>
                 </div>
               </div>
-              <div className="text-center mb-2">
-                <span className="badge text-white fw-bold px-1 py-0" style={{fontSize:'0.6rem', background: 'linear-gradient(45deg, #f59e0b, #d97706)', textShadow: '1px 1px 2px rgba(0,0,0,0.7)', boxShadow: '0 2px 8px rgba(245,158,11,0.3)'}}>
+              <div className="text-center mb-2" style={{marginBottom: 'clamp(0.5rem, 2vw, 1rem)'}}>
+                <span className="badge text-white fw-bold px-1 py-0" style={{
+                  fontSize: 'clamp(0.5rem, 1.5vw, 0.7rem)',
+                  background: 'linear-gradient(45deg, #f59e0b, #d97706)',
+                  textShadow: '1px 1px 2px rgba(0,0,0,0.7)',
+                  boxShadow: '0 2px 8px rgba(245,158,11,0.3)',
+                  padding: 'clamp(0.1rem, 1vw, 0.2rem) clamp(0.3rem, 2vw, 0.5rem)'
+                }}>
                   🏆 28+ Years Experience 🏆
                 </span>
               </div>
             </div>
-            
+
             {/* Services & Hours */}
-            <div className="col-12 col-md-4 text-center text-md-end order-3">
-              <h6 className="fw-bold mb-2 text-success" style={{fontSize:'0.8rem', letterSpacing:'0.2px'}}>
+            <div className="col-12 col-md-4 text-center text-md-end order-3" style={{
+              flex: '1 1 clamp(250px, 30vw, 350px)',
+              minWidth: 'clamp(250px, 30vw, 300px)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 'clamp(0.5rem, 2vw, 1rem)'
+            }}>
+              <h6 className="fw-bold mb-2 text-success" style={{
+                fontSize: 'clamp(0.8rem, 2.5vw, 1rem)',
+                letterSpacing: '0.2px',
+                marginBottom: 'clamp(0.5rem, 2vw, 1rem)'
+              }}>
                 <i className="bi bi-clock-fill me-1"></i>Service Hours
               </h6>
-              <div className="mb-2">
+              <div className="mb-2" style={{
+                marginBottom: 'clamp(0.3rem, 1vw, 0.5rem)',
+                textAlign: 'center'
+              }}>
                 <i className="bi bi-calendar-check me-1 text-success"></i>
-                <span className="text-success fw-bold">Mon - Sat:</span>
-                <span className="text-light ms-1">8:00 AM - 6:00 PM</span>
+                <span className="text-success fw-bold" style={{fontSize: 'clamp(0.7rem, 2vw, 0.85rem)'}}>Mon - Sat:</span>
+                <span className="text-light ms-1" style={{fontSize: 'clamp(0.7rem, 2vw, 0.85rem)'}}>8:00 AM - 6:00 PM</span>
               </div>
-              <div className="mb-2">
+              <div className="mb-2" style={{
+                marginBottom: 'clamp(0.3rem, 1vw, 0.5rem)',
+                textAlign: 'center'
+              }}>
                 <i className="bi bi-calendar-x me-1 text-danger"></i>
-                <span className="text-danger fw-bold">Sunday:</span>
-                <span className="text-light ms-1">Closed</span>
+                <span className="text-danger fw-bold" style={{fontSize: 'clamp(0.7rem, 2vw, 0.85rem)'}}>Sunday:</span>
+                <span className="text-light ms-1" style={{fontSize: 'clamp(0.7rem, 2vw, 0.85rem)'}}>Closed</span>
               </div>
-              <div className="mb-2">
+              <div className="mb-2" style={{
+                marginBottom: 'clamp(0.3rem, 1vw, 0.5rem)',
+                textAlign: 'center'
+              }}>
                 <i className="bi bi-tools me-1 text-primary"></i>
-                <span className="text-primary fw-bold">Emergency Service:</span>
+                <span className="text-primary fw-bold" style={{fontSize: 'clamp(0.7rem, 2vw, 0.85rem)'}}>Emergency Service:</span>
               </div>
               <div className="mb-0">
-                <span className="badge bg-danger px-1 py-0" style={{fontSize:'0.55rem'}}>
+                <span className="badge bg-danger px-1 py-0" style={{
+                  fontSize: 'clamp(0.5rem, 1.5vw, 0.6rem)',
+                  padding: 'clamp(0.1rem, 1vw, 0.2rem) clamp(0.3rem, 2vw, 0.4rem)'
+                }}>
                   🚨 24/7 Available
                 </span>
               </div>
             </div>
           </div>
-          
+
           {/* Bottom Section */}
-          <hr className="my-1 border-secondary" />
-          <div className="row align-items-center" style={{marginLeft: 0, marginRight: 0}}>
-            <div className="col-12 col-md-6 text-center text-md-start mb-0">
-              <span className="text-light" style={{fontSize:'0.7rem'}}>
+          <hr className="my-1 border-secondary" style={{
+            margin: 'clamp(1rem, 3vw, 2rem) 0',
+            borderColor: 'rgba(255,255,255,0.2)'
+          }} />
+          <div className="row align-items-center" style={{
+            marginLeft: 0,
+            marginRight: 0,
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 'clamp(0.5rem, 2vw, 1rem)',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <div className="col-12 col-md-6 text-center text-md-start mb-0" style={{
+              flex: '1 1 auto',
+              minWidth: 'clamp(200px, 40vw, 300px)'
+            }}>
+              <span className="text-light" style={{
+                fontSize: 'clamp(0.65rem, 2vw, 0.8rem)',
+                display: 'block'
+              }}>
                 &copy; {new Date().getFullYear()} <strong className="text-primary">Lalith Electricals</strong>. All rights reserved.
               </span>
             </div>
-            <div className="col-12 col-md-6 text-center text-md-end">
-              <span className="text-muted" style={{fontSize:'0.65rem'}}>
+            <div className="col-12 col-md-6 text-center text-md-end" style={{
+              flex: '1 1 auto',
+              minWidth: 'clamp(200px, 40vw, 300px)'
+            }}>
+              <span className="text-muted" style={{
+                fontSize: 'clamp(0.6rem, 2vw, 0.75rem)',
+                display: 'block'
+              }}>
                 <i className="bi bi-shield-check me-1 text-success"></i>
                 Trusted • Professional • Reliable
               </span>
@@ -1086,7 +1297,12 @@ const getFullUrl = (url) => {
           }
         }
         
-        body { padding-top: 160px !important; }
+        body { padding-top: 320px !important; }
+        
+        /* Mobile responsive body padding */
+        @media (max-width: 576px) {
+          body { padding-top: 260px !important; }
+        }
         
         /* Filter Animation */
         .transition-all {
@@ -1193,7 +1409,7 @@ const getFullUrl = (url) => {
           filter: blur(8px);
         }
         .heading-with-bg {
-          animation: headingFloat 6s ease-in-out infinite, headingGlow 3s ease-in-out infinite alternate;
+          animation: headingGlow 3s ease-in-out infinite alternate;
           position: relative;
           z-index: 1;
         }
@@ -1245,7 +1461,6 @@ const getFullUrl = (url) => {
           height: 100%;
           background: linear-gradient(45deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.08) 100%);
           z-index: -1;
-          animation: bg-shimmer 10s ease-in-out infinite, bg-pulse 8s ease-in-out infinite;
           pointer-events: none;
         }
         @keyframes bg-shimmer {
@@ -1255,6 +1470,11 @@ const getFullUrl = (url) => {
         @keyframes bg-pulse {
           0%, 100% { filter: brightness(1) saturate(1); }
           50% { filter: brightness(1.1) saturate(1.2); }
+        }
+        @keyframes bgShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
         .card-hover {
           backdrop-filter: blur(12px);
@@ -1958,6 +2178,26 @@ const getFullUrl = (url) => {
         footer .row {
           margin-right: 0 !important;
           margin-left: 0 !important;
+        }
+        
+        /* Prevent scroll position changes during animations */
+        * {
+          scroll-behavior: auto !important;
+        }
+        
+        /* Ensure stable layout during animations */
+        .animated-bg,
+        .background-animation,
+        .heading-container,
+        .heading-with-bg {
+          will-change: auto;
+          transform: translateZ(0);
+          backface-visibility: hidden;
+        }
+        
+        /* Prevent layout shifts */
+        html, body {
+          overflow-anchor: none;
         }
       `}</style>
       </div>

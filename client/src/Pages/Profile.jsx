@@ -113,11 +113,11 @@ export default function Profile() {
     }
   }
   return (
-<div className="container mt-5 mb-5">
+<div className="container mt-5 mb-5" style={{ paddingTop: '250px' }}>
   <div className="row justify-content-center">
     <div className="col-md-8">
-      <div className="card shadow p-4">
-        <h2 className="text-center text-primary mb-4">User Profile</h2>
+      <div className="card shadow p-2">
+        <h2 className="text-center text-primary mb-3" style={{ fontSize: '1.5rem' }}>User Profile</h2>
         
         <form onSubmit={handleSubmit}>
           <div className="text-center mb-4">
@@ -132,7 +132,7 @@ export default function Profile() {
               src={formData.profilePicture || currentUser.profilePicture}
               alt="Profile"
               className="rounded-circle shadow border border-3 border-primary"
-              style={{ width: '130px', height: '130px', cursor: 'pointer', objectFit: 'cover' }}
+              style={{ width: '100px', height: '100px', cursor: 'pointer', objectFit: 'cover' }}
               onClick={() => fileRef.current.click()}
             />
             <div className="mt-2 text-muted small">
@@ -146,41 +146,44 @@ export default function Profile() {
             </div>
           </div>
 
-          <div className="mb-3">
-            <label htmlFor="username" className="form-label">Username</label>
+          <div className="mb-2">
+            <label htmlFor="username" className="form-label" style={{ fontSize: '0.9rem' }}>Username</label>
             <input
               defaultValue={currentUser.username}
               type="text"
               id="username"
               className="form-control"
+              style={{ fontSize: '0.9rem', padding: '0.5rem' }}
               onChange={handlechange}
             />
           </div>
 
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">Email</label>
+          <div className="mb-2">
+            <label htmlFor="email" className="form-label" style={{ fontSize: '0.9rem' }}>Email</label>
             <input
               defaultValue={currentUser.email}
               type="email"
               id="email"
               className="form-control"
+              style={{ fontSize: '0.9rem', padding: '0.5rem' }}
               onChange={handlechange}
             />
           </div>
 
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">Password</label>
+          <div className="mb-2">
+            <label htmlFor="password" className="form-label" style={{ fontSize: '0.9rem' }}>Password</label>
             <input
               type="password"
               id="password"
               className="form-control"
+              style={{ fontSize: '0.9rem', padding: '0.5rem' }}
               onChange={handlechange}
               placeholder="Enter new password"
             />
           </div>
 
-          <div className="d-grid mb-3">
-            <button className="btn btn-primary" type="submit">
+          <div className="d-grid mb-2">
+            <button className="btn btn-primary" type="submit" style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}>
               {loading ? 'Updating...' : 'Update Profile'}
             </button>
           </div>

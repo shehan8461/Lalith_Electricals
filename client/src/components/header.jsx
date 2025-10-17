@@ -105,11 +105,6 @@ export default function Header() {
         * {
           box-sizing: border-box;
         }
-        
-        body { 
-          padding-top: 180px !important; 
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
 
         /* Top Brand Section */
         .brand-header {
@@ -235,12 +230,42 @@ export default function Header() {
 
         /* Main Navbar */
         .main-navbar {
-          background: rgba(255, 255, 255, 0.95) !important;
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 248, 255, 0.98) 50%, rgba(224, 242, 254, 0.98) 100%) !important;
+          backdrop-filter: blur(25px);
+          -webkit-backdrop-filter: blur(25px);
+          border-top: 1px solid rgba(59, 130, 246, 0.15);
           border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-          transition: all 0.3s ease;
-          padding: 1rem 0 !important;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(59, 130, 246, 0.05);
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          padding: 1.2rem 0 !important;
+          position: fixed;
+          top: 140px;
+          left: 0;
+          right: 0;
+          z-index: 1030;
+          animation: navbarSlideIn 0.8s ease-out;
+        }
+
+        @keyframes navbarSlideIn {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .main-navbar::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(90deg, rgba(59, 130, 246, 0.02) 0%, transparent 50%, rgba(16, 185, 129, 0.02) 100%);
+          pointer-events: none;
         }
 
         .navbar-brand {
@@ -309,18 +334,37 @@ export default function Header() {
           font-weight: 500;
           padding: 8px 12px !important;
           border-radius: 8px;
-          transition: all 0.3s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           text-decoration: none;
           position: relative;
           display: inline-flex !important;
           align-items: center;
           white-space: nowrap;
           min-width: fit-content;
+          overflow: hidden;
+        }
+
+        .nav-link-custom::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+          transition: left 0.5s;
+        }
+
+        .nav-link-custom:hover::before {
+          left: 100%;
         }
 
         .nav-link-custom:hover {
           color: #3b82f6 !important;
-          background: rgba(59, 130, 246, 0.08);
+          background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
+          transform: translateY(-3px) scale(1.05);
+          box-shadow: 0 10px 30px rgba(59, 130, 246, 0.25), 0 0 20px rgba(59, 130, 246, 0.1);
+          border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         /* User Dropdown */
@@ -330,21 +374,45 @@ export default function Header() {
           white-space: nowrap;
           padding: 8px 12px !important;
           border-radius: 8px;
-          transition: all 0.3s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           text-decoration: none;
           border: none;
           background: transparent;
           color: #374151 !important;
           font-weight: 500;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .dropdown-toggle::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+          transition: left 0.5s;
+        }
+
+        .dropdown-toggle:hover::before {
+          left: 100%;
         }
 
         .dropdown-toggle:hover {
-          background: rgba(59, 130, 246, 0.08);
+          background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
           color: #3b82f6 !important;
+          transform: translateY(-3px) scale(1.05);
+          box-shadow: 0 10px 30px rgba(59, 130, 246, 0.25), 0 0 20px rgba(59, 130, 246, 0.1);
+          border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .dropdown-toggle::after {
           margin-left: 8px;
+        }
+
+        .dropdown {
+          position: relative;
         }
 
         .dropdown-menu {
@@ -353,6 +421,14 @@ export default function Header() {
           border-radius: 12px;
           padding: 8px 0;
           margin-top: 8px;
+          position: absolute;
+          z-index: 1060;
+          top: 100%;
+          left: auto;
+          right: 0;
+          min-width: 200px;
+          max-height: 400px;
+          overflow-y: auto;
         }
 
         .dropdown-item {
@@ -364,6 +440,11 @@ export default function Header() {
         .dropdown-item:hover {
           background: #f8fafc;
           color: #3b82f6;
+        }
+
+        .facebook-icon-link:hover {
+          transform: scale(1.1) rotate(5deg);
+          filter: drop-shadow(0 4px 12px rgba(24, 119, 243, 0.3));
         }
 
         /* Phone Button */
@@ -459,6 +540,14 @@ export default function Header() {
             font-size: 13px;
             padding: 8px 16px;
           }
+
+          .brand-header {
+            min-height: 120px !important;
+          }
+
+          .main-navbar {
+            top: 120px !important;
+          }
         }
 
         @media (max-width: 576px) {
@@ -466,8 +555,29 @@ export default function Header() {
             font-size: 1.8rem;
           }
           
-          body {
-            padding-top: 160px !important;
+          .brand-header {
+            min-height: 100px !important;
+          }
+
+          .main-navbar {
+            top: 100px !important;
+          }
+
+          .dropdown-menu {
+            position: fixed !important;
+            top: auto !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            max-height: 40vh !important;
+            overflow-y: auto !important;
+            border-radius: 12px 12px 0 0 !important;
+            margin-top: 0 !important;
+          }
+
+          .modal-body {
+            padding-left: 5vw !important;
+            padding-right: 5vw !important;
           }
         }
       `}</style>
@@ -519,7 +629,7 @@ export default function Header() {
       </div>
 
       {/* Main Navigation */}
-      <Navbar expand="lg" sticky="top" className="main-navbar">
+      <Navbar expand="lg" className="main-navbar">
         <Container>
           {/* Brand Logo and Facebook Icon with Owner Details Button in between */}
           <Navbar.Brand className="d-flex align-items-center ps-0" style={{marginLeft: 0, paddingLeft: 0}}>
@@ -528,12 +638,13 @@ export default function Header() {
               src={logo}
               alt="Lalith Electricals Logo"
               style={{
-                width: 80,
-                height: 80,
+                width: 60,
+                height: 60,
                 borderRadius: '50%',
                 objectFit: 'cover',
-                marginRight: 32, // Reduced to fit button
-                border: '6px solid #3b82f6',
+                marginRight: 32,
+                marginTop:10, // Reduced to fit button
+                border: '1px solid #3b82f6',
                 background: '#fff',
                 boxShadow: '0 8px 32px rgba(59,130,246,0.18)'
               }}
@@ -564,23 +675,23 @@ export default function Header() {
               onMouseOver={e => e.currentTarget.style.background = 'linear-gradient(90deg, #60a5fa 0%, #2563eb 100%)'}
               onMouseOut={e => e.currentTarget.style.background = 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)'}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="12" cy="12" r="10" fill="#fff" fillOpacity="0.13"/>
                 <path d="M12 12c1.933 0 3.5-1.567 3.5-3.5S13.933 5 12 5s-3.5 1.567-3.5 3.5S10.067 12 12 12zm0 2c-2.33 0-7 1.167-7 3.5V20h14v-2.5c0-2.333-4.67-3.5-7-3.5z" fill="#fff"/>
               </svg>
-              <span>Owner Details</span>
+              <span>Owner</span>
             </button>
       {/* Owner Details Popup */}
       {showOwner && (
         <div className="modal fade show d-flex align-items-center justify-content-center"
           style={{
-            position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+            position: 'fixed', top: 0, left: 0, width: '100vw', height: '85vh',
             display: 'flex', background: 'rgba(0,0,0,0.5)', zIndex: 3000
           }}
           tabIndex="-1" role="dialog" onClick={() => setShowOwner(false)}
         >
           <div className="modal-dialog modal-dialog-centered"
-            style={{ maxWidth: 400, width: '95vw', margin: 'auto' }}
+            style={{ maxWidth: 400, width: '85vw', margin: '20px auto' }}
             role="document" onClick={e => e.stopPropagation()}
           >
             <div className="modal-content rounded-4 border-0 shadow-lg p-0" style={{ overflow: 'hidden', background: '#fff' }}>
