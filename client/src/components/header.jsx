@@ -590,7 +590,7 @@ export default function Header() {
              top: 0,
              left: 0,
              background: `linear-gradient(135deg, #0f172aee 0%, #1e293bee 50%, #334155ee 100%), url(${lalithWorkplace}) right center/contain no-repeat`,
-             position: 'relative',
+             position: 'fixed',
              backgroundBlendMode: 'overlay',
              overflow: 'hidden',
            }}>
@@ -629,7 +629,7 @@ export default function Header() {
       </div>
 
       {/* Main Navigation */}
-      <Navbar expand="lg" className="main-navbar">
+  <Navbar expand="lg" className="main-navbar" style={{ top: '140px' }}>
         <Container>
           {/* Brand Logo and Facebook Icon with Owner Details Button in between */}
           <Navbar.Brand className="d-flex align-items-center ps-0" style={{marginLeft: 0, paddingLeft: 0}}>
