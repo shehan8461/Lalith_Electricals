@@ -751,7 +751,7 @@ const getFullUrl = (url) => {
         </div>
         {/* Modal Popup */}
         {showModal && selectedOrder && (
-          <div className="modal fade show d-flex align-items-center justify-content-center" style={{position:'fixed', top:'200px', left:0, right:0, width:'100%', height:'calc(100vh - 200px)', display:'flex', background:'rgba(0,0,0,0.5)', zIndex:1050, overflowY:'auto', alignItems:'flex-start'}} tabIndex="-1" role="dialog" onClick={()=>setShowModal(false)}>
+          <div className="modal fade show d-flex align-items-center justify-content-center" style={{position:'fixed', top:250, left:0, right:0, width:'100%', height:'calc(100vh - 200px)', display:'flex', background:'rgba(0,0,0,0.5)', zIndex:1050, overflowY:'auto', alignItems:'flex-start'}} tabIndex="-1" role="dialog" onClick={()=>setShowModal(false)}>
             <div className="modal-dialog modal-dialog-centered" style={{maxWidth:'480px', width:'96vw', margin:'32px auto'}} role="document" onClick={e => e.stopPropagation()}>
                 <div className="modal-content rounded-5 border-0 shadow-lg premium-modal" style={{background: 'linear-gradient(135deg, #f8faff 0%, #f0f4ff 50%, #e0e7ef 100%)', width:'100%', boxShadow:'0 25px 80px rgba(0,0,0,0.25), 0 10px 30px rgba(59,130,246,0.15)', border: '1px solid rgba(255,255,255,0.8)'}}>
                 <div className="modal-header border-0 pb-0 align-items-start d-flex justify-content-between premium-modal-header" style={{background:'linear-gradient(135deg,#2563eb 0%,#3b82f6 50%,#60a5fa 100%)', borderTopLeftRadius:'2rem', borderTopRightRadius:'2rem', minHeight:'0', paddingTop:'1rem', paddingBottom:'1rem', position: 'relative', overflow: 'hidden'}}>
