@@ -276,7 +276,12 @@ const handleFileUpload = async (file, field) => {
   };
 
   return (
-    <div className="container mt-5">
+    <>
+      <style>{`
+        .page-offset { padding-top: 320px; }
+        @media (max-width: 768px) { .page-offset { padding-top: 250px !important; } }
+      `}</style>
+      <div className="container page-offset">
       <div className="card shadow-lg">
         <div className="card-header bg-primary text-white">
           <h3 className="mb-0">Add Product Information</h3>
@@ -437,5 +442,6 @@ const handleFileUpload = async (file, field) => {
         </div>
       </div>
     </div>
+    </>
   );
 }
