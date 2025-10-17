@@ -231,8 +231,8 @@ const getFullUrl = (url) => {
         }}
       ></div>
       
-      {/* Content Layer */}
-      <div className="d-flex flex-column min-vh-100 animated-bg">
+  {/* Content Layer */}
+  <div className="d-flex flex-column min-vh-100 animated-bg" style={{paddingTop: '16rem'}}>
       {/* Logout Button Top Right */}
       
       {/* Top Heading Section - Full Top */}
@@ -666,7 +666,7 @@ const getFullUrl = (url) => {
         </div>
         {/* Modal Popup */}
         {showModal && selectedOrder && (
-          <div className="modal fade show d-flex align-items-center justify-content-center" style={{position:'fixed', top:'90px', left:0, width:'100vw', height:'calc(100vh - 90px)', display:'flex', background:'rgba(0,0,0,0.5)', zIndex:1050, overflowY:'auto', alignItems:'flex-start'}} tabIndex="-1" role="dialog" onClick={()=>setShowModal(false)}>
+          <div className="modal fade show d-flex align-items-center justify-content-center" style={{position:'fixed', top:'200px', left:0, right:0, width:'100%', height:'calc(100vh - 200px)', display:'flex', background:'rgba(0,0,0,0.5)', zIndex:1050, overflowY:'auto', alignItems:'flex-start'}} tabIndex="-1" role="dialog" onClick={()=>setShowModal(false)}>
             <div className="modal-dialog modal-dialog-centered" style={{maxWidth:'480px', width:'96vw', margin:'32px auto'}} role="document" onClick={e => e.stopPropagation()}>
                 <div className="modal-content rounded-5 border-0 shadow-lg premium-modal" style={{background: 'linear-gradient(135deg, #f8faff 0%, #f0f4ff 50%, #e0e7ef 100%)', width:'100%', boxShadow:'0 25px 80px rgba(0,0,0,0.25), 0 10px 30px rgba(59,130,246,0.15)', border: '1px solid rgba(255,255,255,0.8)'}}>
                 <div className="modal-header border-0 pb-0 align-items-start d-flex justify-content-between premium-modal-header" style={{background:'linear-gradient(135deg,#2563eb 0%,#3b82f6 50%,#60a5fa 100%)', borderTopLeftRadius:'2rem', borderTopRightRadius:'2rem', minHeight:'0', paddingTop:'1rem', paddingBottom:'1rem', position: 'relative', overflow: 'hidden'}}>
@@ -739,118 +739,53 @@ const getFullUrl = (url) => {
           </div>
         )}
       </div>
-      {/* Footer - appears at the bottom after content, not fixed */}
-      <footer className="text-white py-0 pt-3 px-0 border-top border-primary" style={{paddingTop: '1.5rem', fontSize: '0.75rem', lineHeight: '1.1', background: 'linear-gradient(135deg, rgba(31,41,55,0.95) 0%, rgba(17,24,39,0.95) 50%, rgba(15,23,42,0.95) 100%)', backdropFilter: 'blur(10px)', borderTop: '2px solid rgba(59,130,246,0.6) !important', width: '100%', margin: 0, padding: 0, position: 'relative', left: 0, right: 0}}>
-        <div className="container-fluid" style={{paddingLeft: '0.5rem', paddingRight: '0.5rem', margin: 0, width: '100%'}}>
-          <div className="row g-1 g-md-2 align-items-center" style={{marginLeft: 0, marginRight: 0}}>
-            {/* Contact Information */}
-            <div className="col-12 col-md-4 order-1">
-              <h6 className="fw-bold mb-2 text-primary" style={{fontSize:'0.8rem', letterSpacing:'0.2px'}}>
-                <i className="bi bi-lightning-charge-fill me-1"></i>Contact Us
-              </h6>
-              <div className="mb-2">
-                <i className="bi bi-envelope-fill me-1 text-primary"></i>
-                <a href="mailto:lalitabesinha@gmail.com" className="text-white text-decoration-none hover-link">
-                  lalitabesinha@gmail.com
-                </a>
-              </div>
-              {/* <div className="mb-2">
-                <i className="bi bi-telephone-fill me-1 text-success"></i>
-                <a href="tel:+94123456789" className="text-white text-decoration-none hover-link">
-                  +94 123 456 789
-                </a>
-              </div> */}
-              <div className="mb-2">
-                <i className="bi bi-geo-alt-fill me-1 text-warning"></i>
-                <span className="text-light">8 Family Point, Thoraya, Kurunegala</span>
-              </div>
-              <div className="mb-0">
-                <i className="bi bi-map me-1 text-info"></i>
-                <button onClick={() => setShowMap(true)} className="btn btn-link p-0 m-0 align-baseline text-info text-decoration-none hover-link" style={{fontSize:'inherit'}}>
-                  📍 View on Google Maps
-                </button>
-              </div>
-            </div>
-            
-            {/* Certificates & Credentials */}
-            <div className="col-12 col-md-4 text-center order-2">
-              <h6 className="fw-bold mb-2 text-warning" style={{fontSize:'0.8rem', letterSpacing:'0.2px'}}>
-                <i className="bi bi-award-fill me-1"></i>Certified & Trusted
-              </h6>
-              <div className="d-flex justify-content-center gap-2 mb-2">
-                <div className="d-flex flex-column align-items-center certificate-item">
-                  <div className="certificate-frame position-relative">
-                    <img src={certificate1} alt="Government Electrical License" className="img-fluid rounded-1 shadow border border-1 border-warning mb-0" style={{maxHeight:'70px', objectFit:'cover', background:'#fff'}} />
-                    <div className="certificate-badge">
-                      <i className="bi bi-patch-check-fill text-warning"></i>
-                    </div>
-                  </div>
-                  <span className="fw-bold text-warning" style={{fontSize:'0.7rem', textShadow: '1px 1px 2px rgba(0,0,0,0.5)'}}>Government License</span>
-                </div>
-                <div className="d-flex flex-column align-items-center certificate-item">
-                  <div className="certificate-frame position-relative">
-                    <img src={certificate2} alt="Award of Excellence" className="img-fluid rounded-1 shadow border border-1 border-success mb-0" style={{maxHeight:'70px', objectFit:'cover', background:'#fff'}} />
-                    <div className="certificate-badge">
-                      <i className="bi bi-trophy-fill text-success"></i>
-                    </div>
-                  </div>
-                  <span className="fw-bold text-success" style={{fontSize:'0.7rem', textShadow: '1px 1px 2px rgba(0,0,0,0.5)'}}>Excellence Award</span>
-                </div>
-              </div>
-              <div className="text-center mb-2">
-                <span className="badge text-white fw-bold px-1 py-0" style={{fontSize:'0.6rem', background: 'linear-gradient(45deg, #f59e0b, #d97706)', textShadow: '1px 1px 2px rgba(0,0,0,0.7)', boxShadow: '0 2px 8px rgba(245,158,11,0.3)'}}>
-                  🏆 28+ Years Experience 🏆
-                </span>
-              </div>
-            </div>
-            
-            {/* Services & Hours */}
-            <div className="col-12 col-md-4 text-center text-md-end order-3">
-              <h6 className="fw-bold mb-2 text-success" style={{fontSize:'0.8rem', letterSpacing:'0.2px'}}>
-                <i className="bi bi-clock-fill me-1"></i>Service Hours
-              </h6>
-              <div className="mb-2">
-                <i className="bi bi-calendar-check me-1 text-success"></i>
-                <span className="text-success fw-bold">Mon - Sat:</span>
-                <span className="text-light ms-1">8:00 AM - 6:00 PM</span>
-              </div>
-              <div className="mb-2">
-                <i className="bi bi-calendar-x me-1 text-danger"></i>
-                <span className="text-danger fw-bold">Sunday:</span>
-                <span className="text-light ms-1">Closed</span>
-              </div>
-              <div className="mb-2">
-                <i className="bi bi-tools me-1 text-primary"></i>
-                <span className="text-primary fw-bold">Emergency Service:</span>
-              </div>
-              <div className="mb-0">
-                <span className="badge bg-danger px-1 py-0" style={{fontSize:'0.55rem'}}>
-                  🚨 24/7 Available
-                </span>
-              </div>
-            </div>
+      {/* Flexible, responsive footer placed as the last child of the flex column so it sits at the bottom */}
+      <footer className="site-footer w-100 text-white" role="contentinfo" style={{background: 'linear-gradient(135deg, rgba(31,41,55,0.95) 0%, rgba(17,24,39,0.95) 50%, rgba(15,23,42,0.95) 100%)', borderTop: '2px solid rgba(59,130,246,0.6)'}}>
+        <div className="container d-flex flex-column flex-md-row align-items-start justify-content-between" style={{maxWidth: 1200, padding: '1.25rem'}}>
+          <div className="footer-col d-flex flex-column" style={{flex: '1 1 0', minWidth: 200}}>
+            <h6 className="fw-bold text-primary mb-2" style={{fontSize: '0.95rem'}}>Contact</h6>
+            <a href="mailto:lalitabesinha@gmail.com" className="text-white text-decoration-none mb-1">lalitabesinha@gmail.com</a>
+            <div className="text-white-50 mb-1">8 Family Point, Thoraya, Kurunegala</div>
+            <button onClick={() => setShowMap(true)} className="btn btn-link p-0 m-0 text-info text-decoration-none" style={{maxWidth: 'fit-content'}}>📍 View on Google Maps</button>
           </div>
-          
-          {/* Bottom Section */}
-          <hr className="my-1 border-secondary" />
-          <div className="row align-items-center" style={{marginLeft: 0, marginRight: 0}}>
-            <div className="col-12 col-md-6 text-center text-md-start mb-0">
-              <span className="text-light" style={{fontSize:'0.7rem'}}>
-                &copy; {new Date().getFullYear()} <strong className="text-primary">Lalith Electricals</strong>. All rights reserved.
-              </span>
+
+          <div className="footer-col d-flex flex-column align-items-center" style={{flex: '1 1 0', minWidth: 200}}>
+            <h6 className="fw-bold text-warning mb-2" style={{fontSize: '0.95rem'}}>Certified & Trusted</h6>
+            <div className="d-flex gap-2 align-items-center justify-content-center mb-2" style={{flexWrap: 'wrap'}}>
+              <img src={certificate1} alt="Government" style={{maxHeight: 64, maxWidth: 120, objectFit: 'cover', borderRadius: 8}} />
+              <img src={certificate2} alt="Award" style={{maxHeight: 64, maxWidth: 120, objectFit: 'cover', borderRadius: 8}} />
             </div>
-            <div className="col-12 col-md-6 text-center text-md-end">
-              <span className="text-muted" style={{fontSize:'0.65rem'}}>
-                <i className="bi bi-shield-check me-1 text-success"></i>
-                Trusted • Professional • Reliable
-              </span>
-            </div>
+            <span className="badge text-white" style={{background: 'linear-gradient(45deg, #f59e0b, #d97706)'}}>🏆 28+ Years Experience</span>
+          </div>
+
+          <div className="footer-col d-flex flex-column align-items-md-end align-items-start" style={{flex: '1 1 0', minWidth: 200}}>
+            <h6 className="fw-bold text-success mb-2" style={{fontSize: '0.95rem'}}>Service Hours</h6>
+            <div className="text-white-50 mb-1"><strong>Mon - Sat:</strong> 8:00 AM - 6:00 PM</div>
+            <div className="text-white-50 mb-1"><strong className="text-danger">Sunday:</strong> Closed</div>
+            <div><span className="badge bg-danger">🚨 24/7 Available</span></div>
           </div>
         </div>
+
+        <div style={{borderTop: '1px solid rgba(255,255,255,0.04)'}} />
+        <div className="container d-flex flex-column flex-md-row justify-content-between align-items-center" style={{maxWidth: 1200, padding: '0.75rem 1.25rem'}}>
+          <div className="text-muted" style={{fontSize: '0.85rem'}}>&copy; {new Date().getFullYear()} <strong className="text-primary">Lalith Electricals</strong>. All rights reserved.</div>
+          <div className="text-muted" style={{fontSize: '0.85rem'}}> <i className="bi bi-shield-check me-1 text-success"></i> Trusted • Professional • Reliable</div>
+        </div>
+
+        {/* Small CSS overrides to keep footer flexible and avoid overflow */}
+        <style>{`
+          .site-footer img { max-width: 100%; height: auto; display: block; }
+          .site-footer .footer-col { box-sizing: border-box; padding: 0.25rem 0.5rem; }
+          @media (max-width: 767px) {
+            .site-footer .container { padding-left: 1rem !important; padding-right: 1rem !important; }
+            .site-footer { text-align: left; }
+            .site-footer .footer-col { width: 100%; }
+          }
+        `}</style>
       </footer>
       {/* Google Maps Popup */}
       {showMap && (
-        <div className="modal fade show d-flex align-items-center justify-content-center" style={{position:'fixed', top:0, left:0, width:'100vw', height:'100vh', display:'flex', background:'rgba(0,0,0,0.5)', zIndex:2000}} tabIndex="-1" role="dialog" onClick={()=>setShowMap(false)}>
+        <div className="modal fade show d-flex align-items-center justify-content-center" style={{position:'fixed', top:0, left:0, right:0, width:'100%', height:'100%', display:'flex', background:'rgba(0,0,0,0.5)', zIndex:2000}} tabIndex="-1" role="dialog" onClick={()=>setShowMap(false)}>
           <div className="modal-dialog modal-dialog-centered" style={{maxWidth:'90vw', width:'90vw', height:'80vh', margin:'auto'}} role="document" onClick={e => e.stopPropagation()}>
             <div className="modal-content rounded-4 border-0 shadow-lg p-0" style={{height:'80vh', width:'100%', overflow:'hidden'}}>
               <div className="modal-header border-0 pb-0 align-items-start d-flex justify-content-between" style={{background:'#2563eb', borderTopLeftRadius:'1.5rem', borderTopRightRadius:'1.5rem', minHeight:'0', paddingTop:'0.5rem', paddingBottom:'0.5rem'}}>
@@ -881,8 +816,9 @@ const getFullUrl = (url) => {
                position: 'fixed', 
                top: 0, 
                left: 0, 
-               width: '100vw', 
-               height: '100vh', 
+               right: 0,
+               width: '100%', 
+               height: '100%', 
                display: 'flex', 
                background: 'rgba(0,0,0,0.9)', 
                zIndex: 2050,
@@ -932,7 +868,7 @@ const getFullUrl = (url) => {
             </button>
             
             {/* Image */}
-            <img 
+              <img 
               src={fullscreenImageSrc} 
               alt={fullscreenImageAlt}
               className="img-fluid fullscreen-image"
@@ -943,8 +879,7 @@ const getFullUrl = (url) => {
                 borderRadius: '10px',
                 boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
                 background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                minHeight: window.innerWidth <= 768 ? '70vh' : 'auto'
+                border: '1px solid rgba(255,255,255,0.1)'
               }}
             />
             
@@ -1086,7 +1021,8 @@ const getFullUrl = (url) => {
           }
         }
         
-        body { padding-top: 160px !important; }
+      /* Removed global body padding to avoid causing overflow on small screens.
+        Header/nav spacing is handled via .main-navbar and .animated-bg rules. */
         
         /* Filter Animation */
         .transition-all {
@@ -1958,6 +1894,11 @@ const getFullUrl = (url) => {
         footer .row {
           margin-right: 0 !important;
           margin-left: 0 !important;
+        }
+        @media (min-width: 769px) {
+          .animated-bg {
+            padding-top: 20rem !important;
+          }
         }
       `}</style>
       </div>

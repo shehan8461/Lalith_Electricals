@@ -145,7 +145,7 @@ function UpdateUser(){
   return (
  
   
-    <div className="update-bg min-vh-100 py-5 d-flex align-items-center fade-in-table">
+    <div className="update-bg min-vh-100 py-5 d-flex align-items-center fade-in-table " style={{ marginTop: '220px' }}>
       <div className="container">
         <Row className="justify-content-center">
           <Col md={8} lg={7}>

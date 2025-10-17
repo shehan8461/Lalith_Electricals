@@ -2,12 +2,96 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/public/images/logo1.png" />
+    <link rel="icon" type="image/png" href="/images/logo1.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lalith Electricals</title>
+    <meta name="description" content="Lalith Electricals - Your trusted partner for electrical solutions, generators, motors, and industrial equipment in Kurunegala, Sri Lanka." />
+    <meta name="keywords" content="electrical, generators, motors, industrial equipment, Kurunegala, Sri Lanka, Lalith Electricals" />
+    <meta name="author" content="Lalith Electricals" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#2563eb" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://lalithelectrical.com/" />
+    <meta property="og:title" content="Lalith Electricals" />
+    <meta property="og:description" content="Your trusted partner for electrical solutions, generators, motors, and industrial equipment in Kurunegala, Sri Lanka." />
+    <meta property="og:image" content="/images/logo1.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://lalithelectrical.com/" />
+    <meta property="twitter:title" content="Lalith Electricals" />
+    <meta property="twitter:description" content="Your trusted partner for electrical solutions, generators, motors, and industrial equipment in Kurunegala, Sri Lanka." />
+    <meta property="twitter:image" content="/images/logo1.png" />
+
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <title>Lalith Electricals - Electrical Solutions & Equipment</title>
+
+    <!-- Loading styles -->
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #root {
+        width: 100%;
+        min-height: 100vh;
+      }
+
+      .loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #2563eb;
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid #e2e8f0;
+        border-top: 4px solid #2563eb;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .loading-text {
+        font-size: 18px;
+        font-weight: 500;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="loading">
+        <div class="spinner"></div>
+        <div class="loading-text">Loading Lalith Electricals...</div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
