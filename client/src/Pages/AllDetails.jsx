@@ -246,7 +246,7 @@ const getFullUrl = (url) => {
   return `${API_HOST.replace(/\/$/, '')}${url.startsWith('/') ? '' : '/'}${url}`;
 };
   return (
-    <div className="d-flex flex-column min-vh-100 position-relative" style={{ minHeight: '100vh' }}>
+    <div className="d-flex flex-column min-vh-100 position-relative" style={{ minHeight: '100vh', overflowX: 'hidden' }}>
       {/* Blurred Background Layer */}
       <div 
         className="position-fixed top-0 start-0 w-100 h-100"
@@ -254,11 +254,11 @@ const getFullUrl = (url) => {
           background: `url(${backgroundImages[bgIndex]}) center center/cover no-repeat`,
           backgroundPosition: 'center center',
           backgroundSize: 'cover',
-          backgroundAttachment: 'fixed',
+          backgroundAttachment: 'scroll',
           transition: 'background-image 1.5s cubic-bezier(0.4,0,0.2,1)',
           filter: 'blur(7px)',
           zIndex: -1,
-          transform: 'scale(1.1)'
+  
         }}
       ></div>
       
@@ -826,24 +826,24 @@ const getFullUrl = (url) => {
       </div>
       {/* Flexible, responsive footer placed as the last child of the flex column so it sits at the bottom */}
       <footer className="site-footer w-100 text-white" role="contentinfo" style={{background: 'linear-gradient(135deg, rgba(31,41,55,0.95) 0%, rgba(17,24,39,0.95) 50%, rgba(15,23,42,0.95) 100%)', borderTop: '2px solid rgba(59,130,246,0.6)'}}>
-        <div className="container d-flex flex-column flex-md-row align-items-start justify-content-between" style={{maxWidth: 1200, padding: '1.25rem'}}>
-          <div className="footer-col d-flex flex-column" style={{flex: '1 1 0', minWidth: 200}}>
+        <div className="container d-flex flex-column flex-md-row align-items-start justify-content-between" style={{width: '100%', maxWidth: '100%', padding: '1.25rem'}}>
+          <div className="footer-col d-flex flex-column" style={{flex: '1 1 0', minWidth: 200, padding: '0.5rem'}}>
             <h6 className="fw-bold text-primary mb-2" style={{fontSize: '0.95rem'}}>Contact</h6>
-            <a href="mailto:lalitabesinha@gmail.com" className="text-white text-decoration-none mb-1">lalitabesinha@gmail.com</a>
+            <a href="mailto:lalithabesingha@gmail.com" className="text-white text-decoration-none mb-1">lalithabesingha@gmail.com</a>
             <div className="text-white-50 mb-1">8 Family Point, Thoraya, Kurunegala</div>
             <button onClick={() => setShowMap(true)} className="btn btn-link p-0 m-0 text-info text-decoration-none" style={{maxWidth: 'fit-content'}}>📍 View on Google Maps</button>
           </div>
 
-          <div className="footer-col d-flex flex-column align-items-center" style={{flex: '1 1 0', minWidth: 200}}>
+          <div className="footer-col d-flex flex-column align-items-center" style={{flex: '1 1 0', minWidth: 200, padding: '0.5rem'}}>
             <h6 className="fw-bold text-warning mb-2" style={{fontSize: '0.95rem'}}>Certified & Trusted</h6>
-            <div className="d-flex gap-2 align-items-center justify-content-center mb-2" style={{flexWrap: 'wrap'}}>
+            <div className="d-flex gap-4 align-items-center justify-content-center mb-2" style={{flexWrap: 'wrap'}}>
               <img src={certificate1} alt="Government" style={{maxHeight: 64, maxWidth: 120, objectFit: 'cover', borderRadius: 8}} />
               <img src={certificate2} alt="Award" style={{maxHeight: 64, maxWidth: 120, objectFit: 'cover', borderRadius: 8}} />
             </div>
             <span className="badge text-white" style={{background: 'linear-gradient(45deg, #f59e0b, #d97706)'}}>🏆 28+ Years Experience</span>
           </div>
 
-          <div className="footer-col d-flex flex-column align-items-md-end align-items-start" style={{flex: '1 1 0', minWidth: 200}}>
+          <div className="footer-col d-flex flex-column align-items-md-end align-items-start" style={{flex: '1 1 0', minWidth: 200, padding: '0.5rem'}}>
             <h6 className="fw-bold text-success mb-2" style={{fontSize: '0.95rem'}}>Service Hours</h6>
             <div className="text-white-50 mb-1"><strong>Mon - Sat:</strong> 8:00 AM - 6:00 PM</div>
             <div className="text-white-50 mb-1"><strong className="text-danger">Sunday:</strong> Closed</div>
@@ -852,7 +852,7 @@ const getFullUrl = (url) => {
         </div>
 
         <div style={{borderTop: '1px solid rgba(255,255,255,0.04)'}} />
-        <div className="container d-flex flex-column flex-md-row justify-content-between align-items-center" style={{maxWidth: 1200, padding: '0.75rem 1.25rem'}}>
+        <div className="container d-flex flex-column flex-md-row justify-content-between align-items-center" style={{width: '100%', maxWidth: '100%', padding: '0.75rem 1.25rem'}}>
           <div className="text-muted" style={{fontSize: '0.85rem'}}>&copy; {new Date().getFullYear()} <strong className="text-primary">Lalith Electricals</strong>. All rights reserved.</div>
           <div className="text-muted" style={{fontSize: '0.85rem'}}> <i className="bi bi-shield-check me-1 text-success"></i> Trusted • Professional • Reliable</div>
         </div>
