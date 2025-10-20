@@ -232,14 +232,14 @@ export default function Header() {
 
         /* Main Navbar */
         .main-navbar {
-          background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 248, 255, 0.98) 50%, rgba(224, 242, 254, 0.98) 100%) !important;
+          background: linear-gradient(135deg, #0f172a 0%,) !important;
           backdrop-filter: blur(25px);
           -webkit-backdrop-filter: blur(25px);
           border-top: 1px solid rgba(59, 130, 246, 0.15);
           border-bottom: 1px solid rgba(0, 0, 0, 0.08);
           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(59, 130, 246, 0.05);
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          padding: 1.2rem 0 !important;
+          padding: 0.8rem 0 !important;
           position: fixed;
           top: 140px;
           left: 0;
@@ -272,7 +272,7 @@ export default function Header() {
 
         .navbar-brand {
           font-weight: 600;
-          color: #1e293b !important;
+          color: #ffffff !important;
           transition: color 0.3s ease;
         }
 
@@ -332,7 +332,7 @@ export default function Header() {
 
         /* Navigation Links */
         .nav-link-custom {
-          color: #374151 !important;
+          color: #000000 !important;
           font-weight: 500;
           padding: 8px 12px !important;
           border-radius: 8px;
@@ -380,7 +380,7 @@ export default function Header() {
           text-decoration: none;
           border: none;
           background: transparent;
-          color: #374151 !important;
+          color: #ffffff !important;
           font-weight: 500;
           position: relative;
           overflow: hidden;
@@ -485,25 +485,25 @@ export default function Header() {
 
         /* Custom Toggler */
         .custom-toggler {
-          background: linear-gradient(135deg, #eff6ff, #dbeafe) !important;
+          background: linear-gradient(135deg, #0f172a 0%,) !important;
           border-radius: 8px !important;
           padding: 4px !important;
-          color: #3b82f6 !important;
+          color: #000000 !important;
           transition: all 0.3s ease !important;
-          border: 1px solid #bfdbfe !important;
-          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2) !important;
+          border: 1px solid rgba(59, 130, 246, 0.15) !important;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
         }
 
         .custom-toggler:hover {
           transform: scale(1.1) !important;
-          box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3) !important;
-          background: linear-gradient(135deg, #dbeafe, #bfdbfe) !important;
-          border-color: #3b82f6 !important;
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+          background: linear-gradient(135deg, #1e293b 0%,) !important;
+          border-color: rgba(59, 130, 246, 0.3) !important;
         }
 
         .custom-toggler:focus {
           outline: none !important;
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5) !important;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3) !important;
         }
 
         /* Phone Button */
@@ -605,7 +605,8 @@ export default function Header() {
           }
 
           .main-navbar {
-            top: 120px !important;
+            top: 140px !important;
+            justify-content: center !important;
           }
 
           /* Mobile spacing for logo, owner button, and Facebook icon */
@@ -648,7 +649,7 @@ export default function Header() {
           }
 
           .main-navbar {
-            top: 100px !important;
+            top: 120px !important;
           }
 
           .dropdown-menu {
@@ -874,7 +875,7 @@ export default function Header() {
             <Nav className="ms-auto align-items-center gap-2">
               <Nav.Link
                 className="nav-link-custom d-flex align-items-center"
-                style={{ fontWeight: 600, color: '#2563eb' }}
+                style={{ fontWeight: 600, color: '#000000' }}
                 onClick={() => { setShowMap(true); setNavExpanded(false); }}
               >
                 <FaMapMarkerAlt className="me-1" /> View Location
@@ -928,7 +929,7 @@ export default function Header() {
                       ) : (
                         <FaUserCircle className="me-2 text-primary" size={20} />
                       )}
-                      <span className="fw-medium text-dark">{currentUser.username || 'Account'}</span>
+                      <span className="fw-medium" style={{ color: '#000000' }}>{currentUser.username || 'Account'}</span>
                     </div>
                   }
                   id="user-dropdown"
