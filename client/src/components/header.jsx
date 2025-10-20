@@ -20,7 +20,8 @@ import {
   FaSearch,
   FaPhone,
   FaMapMarkerAlt,
-  FaFacebook
+  FaFacebook,
+  FaBars
 } from 'react-icons/fa';
 import { RiFlashlightFill } from 'react-icons/ri';
 import img1 from './images/1.jpeg';
@@ -29,7 +30,7 @@ import img3 from './images/3.jpeg';
 import img4 from './images/4.jpeg';
 import img5 from './images/5.jpeg';
 import lalithWorkplace from './images/BackgroundImages/lalith1.jpeg';
-import logo from './images/BackgroundImages/logo.jpeg';
+import logo from './images/BackgroundImages/logo1.png';
 import ownerImg from './images/owner.jpeg';
 
 
@@ -482,9 +483,27 @@ export default function Header() {
           color: #3b82f6;
         }
 
-        .facebook-icon-link:hover {
-          transform: scale(1.1) rotate(5deg);
-          filter: drop-shadow(0 4px 12px rgba(24, 119, 243, 0.3));
+        /* Custom Toggler */
+        .custom-toggler {
+          background: linear-gradient(135deg, #eff6ff, #dbeafe) !important;
+          border-radius: 8px !important;
+          padding: 4px !important;
+          color: #3b82f6 !important;
+          transition: all 0.3s ease !important;
+          border: 1px solid #bfdbfe !important;
+          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2) !important;
+        }
+
+        .custom-toggler:hover {
+          transform: scale(1.1) !important;
+          box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3) !important;
+          background: linear-gradient(135deg, #dbeafe, #bfdbfe) !important;
+          border-color: #3b82f6 !important;
+        }
+
+        .custom-toggler:focus {
+          outline: none !important;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5) !important;
         }
 
         /* Phone Button */
@@ -588,6 +607,35 @@ export default function Header() {
           .main-navbar {
             top: 120px !important;
           }
+
+          /* Mobile spacing for logo, owner button, and Facebook icon */
+          .navbar-brand .d-flex.align-items-center > * {
+            margin-right: 12px !important;
+          }
+
+          .navbar-brand .d-flex.align-items-center > *:last-child {
+            margin-right: 0 !important;
+          }
+
+          .navbar-brand img {
+            width: 45px !important;
+            height: 45px !important;
+            margin-right: 12px !important;
+          }
+
+                    .owner-details-btn {
+            min-width: 90px !important;
+            height: 32px !important;
+            font-size: 13px !important;
+            padding: 0 10px !important;
+            margin-right: 12px !important;
+          }
+
+          .facebook-icon-link {
+            width: 40px !important;
+            height: 40px !important;
+            margin-right: 0 !important;
+          }
         }
 
         @media (max-width: 576px) {
@@ -690,108 +738,111 @@ export default function Header() {
               }}
             />
 
-            {/* Owner Details Button */}
-            <button
-              className="btn owner-details-btn mx-2 d-flex align-items-center gap-2"
-              style={{
-                height: 38,
-                minWidth: 110,
-                fontSize: 15,
-                borderRadius: 18,
-                background: 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)',
-                color: '#fff',
-                border: 'none',
-                boxShadow: '0 2px 8px rgba(59,130,246,0.13)',
-                fontWeight: 600,
-                letterSpacing: '0.4px',
-                marginRight: 40,
-                padding: '0 14px',
-                transition: 'background 0.2s, box-shadow 0.2s, transform 0.2s',
-                textShadow: '0 1px 4px rgba(59,130,246,0.08)',
-                outline: 'none',
-              }}
-              onClick={() => setShowOwner(true)}
-              title="View Owner Details"
-              onMouseOver={e => e.currentTarget.style.background = 'linear-gradient(90deg, #60a5fa 0%, #2563eb 100%)'}
-              onMouseOut={e => e.currentTarget.style.background = 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)'}
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" fill="#fff" fillOpacity="0.13"/>
-                <path d="M12 12c1.933 0 3.5-1.567 3.5-3.5S13.933 5 12 5s-3.5 1.567-3.5 3.5S10.067 12 12 12zm0 2c-2.33 0-7 1.167-7 3.5V20h14v-2.5c0-2.333-4.67-3.5-7-3.5z" fill="#fff"/>
-              </svg>
-              <span>Owner</span>
-            </button>
-  {/* Owner Details Popup */}
-      {showOwner && (
-        <div className="modal fade show custom-modal-overlay d-flex justify-content-center"
-          tabIndex="-1" role="dialog" onClick={() => setShowOwner(false)}
-        >
-          <div className="modal-dialog"
-            style={{ maxWidth: 400, width: '85vw', margin: '20px auto' }}
-            role="document" onClick={e => e.stopPropagation()}
+          </Navbar.Brand>
+
+          {/* Owner Details Button - Mobile */}
+          <button
+            className="btn owner-details-btn d-flex align-items-center gap-2"
+            style={{
+              height: 32,
+              minWidth: 90,
+              fontSize: 13,
+              borderRadius: 16,
+              background: 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)',
+              color: '#fff',
+              border: 'none',
+              boxShadow: '0 2px 8px rgba(59,130,246,0.13)',
+              fontWeight: 600,
+              letterSpacing: '0.4px',
+              marginRight: 8,
+              padding: '0 10px',
+              transition: 'background 0.2s, box-shadow 0.2s, transform 0.2s',
+              textShadow: '0 1px 4px rgba(59,130,246,0.08)',
+              outline: 'none',
+            }}
+            onClick={() => setShowOwner(true)}
+            title="View Owner Details"
+            onMouseOver={e => e.currentTarget.style.background = 'linear-gradient(90deg, #60a5fa 0%, #2563eb 100%)'}
+            onMouseOut={e => e.currentTarget.style.background = 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)'}
           >
-            <div className="modal-content rounded-4 border-0 shadow-lg p-0" style={{ overflow: 'hidden', background: '#fff' }}>
-              <div className="modal-header border-0 pb-0 align-items-start d-flex justify-content-between"
-                style={{ background: '#2563eb', borderTopLeftRadius: '1.5rem', borderTopRightRadius: '1.5rem', minHeight: '0', paddingTop: '0.5rem', paddingBottom: '0.5rem' }}>
-                <h5 className="modal-title text-white fw-bold m-0" style={{ letterSpacing: '1px', fontSize: '1.3rem' }}>Owner Details</h5>
-                <button type="button" className="btn-close btn-close-white ms-2" aria-label="Close"
-                  style={{ filter: 'brightness(2)', fontSize: '1.2rem' }} onClick={() => setShowOwner(false)}></button>
-                </div>
-                <div className="modal-body p-4 d-flex flex-column align-items-center justify-content-center" style={{width: '100%', maxWidth: 600, minHeight: 0, justifyContent: 'center'}}>
-                <div className="w-100 d-flex flex-column align-items-center justify-content-center" style={{height: '100%'}}>
-                  <img
-                    src={ownerImg}
-                    alt="Owner"
-                    style={{
-                      width: 120,
-                      height: 120,
-                      borderRadius: '50%',
-                      objectFit: 'cover',
-                      border: '4px solid #3b82f6',
-                      boxShadow: '0 2px 12px rgba(59,130,246,0.13)',
-                      marginBottom: 18
-                    }}
-                  />
-                  <div className="fw-bold fs-4 text-center mb-3" style={{color:'#2563eb'}}>Mr.Lalith Abeysinghe</div>
-                  <ul className="list-unstyled text-center mb-0" style={{fontSize: '1.18rem', color: '#222', maxWidth: 500, wordBreak: 'break-word', whiteSpace: 'normal'}}>
-                    <li className="mb-2">Successfully completed <b>3 year Vocational Training Technician Course</b> offered by <b>National Apprentice and Industrial Training Authority (NAITA)</b>.</li>
-                    <li className="mb-2">Successfully completed <b>Boiler Operation and Maintenance</b>.</li>
-                    <li className="mb-2">Obtained <b>Certificate of Competency – Class III (Boiler)</b>.</li>
-                    <li className="mb-2" style={{wordBreak: 'break-word', whiteSpace: 'normal'}}>Also completed courses in <b>Electronics, Generators, and Motors</b>.</li>
-                  </ul>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" fill="#fff" fillOpacity="0.13"/>
+              <path d="M12 12c1.933 0 3.5-1.567 3.5-3.5S13.933 5 12 5s-3.5 1.567-3.5 3.5S10.067 12 12 12zm0 2c-2.33 0-7 1.167-7 3.5V20h14v-2.5c0-2.333-4.67-3.5-7-3.5z" fill="#fff"/>
+            </svg>
+            <span>Owner</span>
+          </button>
+
+          {/* Facebook Icon - Mobile */}
+          <a
+            href="https://www.facebook.com/groups/generatorhelp/?ref=share&mibextid=NSMWBT"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              color: '#1877f3',
+              width: 40,
+              height: 40,
+              justifyContent: 'center',
+              transition: 'box-shadow 0.2s',
+              textDecoration: 'none',
+              marginRight: 8,
+            }}
+            className="facebook-icon-link"
+            title="Join our Facebook Group"
+          >
+            <FaFacebook size={32} />
+          </a>
+
+          {/* Mobile Toggle */}
+          <Navbar.Toggle aria-controls="navbar-nav" className="border-0 shadow-none custom-toggler">
+            <FaBars size={24} />
+          </Navbar.Toggle>
+
+          {/* Owner Details Popup */}
+          {showOwner && (
+            <div className="modal fade show custom-modal-overlay d-flex justify-content-center"
+              tabIndex="-1" role="dialog" onClick={() => setShowOwner(false)}
+            >
+              <div className="modal-dialog"
+                style={{ maxWidth: 400, width: '85vw', margin: '20px auto' }}
+                role="document" onClick={e => e.stopPropagation()}
+              >
+                <div className="modal-content rounded-4 border-0 shadow-lg p-0" style={{ overflow: 'hidden', background: '#fff' }}>
+                  <div className="modal-header border-0 pb-0 align-items-start d-flex justify-content-between"
+                    style={{ background: '#2563eb', borderTopLeftRadius: '1.5rem', borderTopRightRadius: '1.5rem', minHeight: '0', paddingTop: '0.5rem', paddingBottom: '0.5rem' }}>
+                    <h5 className="modal-title text-white fw-bold m-0" style={{ letterSpacing: '1px', fontSize: '1.3rem' }}>Owner Details</h5>
+                    <button type="button" className="btn-close btn-close-white ms-2" aria-label="Close"
+                      style={{ filter: 'brightness(2)', fontSize: '1.2rem' }} onClick={() => setShowOwner(false)}></button>
+                    </div>
+                    <div className="modal-body p-4 d-flex flex-column align-items-center justify-content-center" style={{width: '100%', maxWidth: 600, minHeight: 0, justifyContent: 'center'}}>
+                    <div className="w-100 d-flex flex-column align-items-center justify-content-center" style={{height: '100%'}}>
+                      <img
+                        src={ownerImg}
+                        alt="Owner"
+                        style={{
+                          width: 120,
+                          height: 120,
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                          border: '4px solid #3b82f6',
+                          boxShadow: '0 2px 12px rgba(59,130,246,0.13)',
+                          marginBottom: 18
+                        }}
+                      />
+                      <div className="fw-bold fs-4 text-center mb-3" style={{color:'#2563eb'}}>Mr.Lalith Abeysinghe</div>
+                      <ul className="list-unstyled text-center mb-0" style={{fontSize: '1.18rem', color: '#222', maxWidth: 500, wordBreak: 'break-word', whiteSpace: 'normal'}}>
+                        <li className="mb-2">Successfully completed <b>3 year Vocational Training Technician Course</b> offered by <b>National Apprentice and Industrial Training Authority (NAITA)</b>.</li>
+                        <li className="mb-2">Successfully completed <b>Boiler Operation and Maintenance</b>.</li>
+                        <li className="mb-2">Obtained <b>Certificate of Competency – Class III (Boiler)</b>.</li>
+                        <li className="mb-2" style={{wordBreak: 'break-word', whiteSpace: 'normal'}}>Also completed courses in <b>Electronics, Generators, and Motors</b>.</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
-
-            {/* Facebook Icon */}
-            <a
-              href="https://www.facebook.com/groups/generatorhelp/?ref=share&mibextid=NSMWBT"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                color: '#1877f3',
-                width: 50,
-                height: 50,
-                justifyContent: 'center',
-                transition: 'box-shadow 0.2s',
-                textDecoration: 'none',
-              }}
-              className="facebook-icon-link"
-              title="Join our Facebook Group"
-            >
-              <FaFacebook size={40} />
-            </a>
-          </Navbar.Brand>
-
-          {/* Mobile Toggle */}
-          <Navbar.Toggle aria-controls="navbar-nav" className="border-0 shadow-none">
-            <span className="navbar-toggler-icon"></span>
-          </Navbar.Toggle>
+          )}
 
           <Navbar.Collapse id="navbar-nav">
             {/* Search Bar - Desktop */}

@@ -266,8 +266,9 @@ const getFullUrl = (url) => {
   <div className="d-flex flex-column min-vh-100 animated-bg" style={{paddingTop: '16rem'}}>
       {/* Logout Button Top Right */}
       
-      {/* Top Heading Section - Full Top */}
-      <div className="w-100 d-flex justify-content-center pt-4 pb-4">
+     
+
+      <div className="w-100 d-flex justify-content-center pt-0 pb-0">
         <div className="heading-container d-flex justify-content-center">
           <h2 className="text-center fw-bold heading-with-bg px-3 py-2 mx-auto" style={{
             letterSpacing: '0.4px', 
@@ -291,13 +292,13 @@ const getFullUrl = (url) => {
           </h2>
         </div>
       </div>
-  
-      <div className="container-fluid my-4 flex-grow-1" style={{
+
+      <div className="container-fluid my-0 flex-grow-1" style={{
         minHeight: 'calc(100vh - 200px)', 
-        paddingLeft: 'clamp(0.75rem, 3vw, 2rem)', 
-        paddingRight: 'clamp(0.75rem, 3vw, 2rem)',
-        paddingTop: 'clamp(2rem, 5vw, 4rem)',
-        paddingBottom: 'clamp(2rem, 5vw, 4rem)',
+        paddingLeft: 'clamp(1.25rem, 5vw, 3rem)', 
+        paddingRight: 'clamp(1.25rem, 5vw, 3rem)',
+        paddingTop: 'clamp(1rem, 3vw, 2rem)',
+        paddingBottom: 'clamp(3rem, 8vw, 5rem)',
         position: 'relative',
         zIndex: 2,
         display: 'flex',
@@ -331,7 +332,7 @@ const getFullUrl = (url) => {
         )}
         
         {/* Filter Options - Full Width Tab Style */}
-        <div className="mb-4 w-100">
+        <div className="mb-5 w-100">
           <div className="d-flex justify-content-center align-items-center w-100" style={{
             background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.9) 100%)',
             backdropFilter: 'blur(15px)',
@@ -448,7 +449,7 @@ const getFullUrl = (url) => {
           width: '100%',
           display: 'flex',
           flexWrap: 'wrap',
-          gap: 'clamp(0.5rem, 2.5vw, 1.5rem)',
+          gap: 'clamp(1.5rem, 6vw, 3.5rem)',
           padding: '0 clamp(0.5rem, 2vw, 1rem)',
           boxSizing: 'border-box',
           overflowX: 'hidden'
@@ -493,10 +494,10 @@ const getFullUrl = (url) => {
             </div>
           ) : filteredOrders.length > 0 ? (
             filteredOrders.map((order) => (
-              <div className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3" key={order.itemId} style={{
+              <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" key={order.itemId} style={{
                 paddingLeft: 'clamp(0.125rem, 0.5vw, 0.25rem)', 
                 paddingRight: 'clamp(0.125rem, 0.5vw, 0.25rem)', 
-                marginBottom: 'clamp(0.5rem, 2vw, 1rem)',
+                marginBottom: 'clamp(1.5rem, 4vw, 2rem)',
                 flex: '0 0 auto',
                 width: 'clamp(140px, 18vw, 240px)',
                 maxWidth: '100%',
@@ -512,7 +513,7 @@ const getFullUrl = (url) => {
                     borderImage: 'linear-gradient(135deg, #3b82f6 0%, #f59e0b 50%, #10b981 100%) 1', 
                     transition: 'box-shadow 0.3s, border-color 0.3s',
                     width: '100%',
-                    minHeight: 'clamp(280px, 35vh, 420px)',
+                    minHeight: 'clamp(200px, 25vh, 300px)',
                     display: 'flex',
                     flexDirection: 'column'
                   }}
@@ -542,7 +543,7 @@ const getFullUrl = (url) => {
         }
       `}</style>
                   <div className="position-relative" style={{
-                    height: 'clamp(160px, 25vh, 220px)', 
+                    height: 'clamp(180px, 25vh, 220px)', 
                     overflow: 'hidden',
                     width: '100%'
                   }}>
@@ -690,7 +691,7 @@ const getFullUrl = (url) => {
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                     padding: 'clamp(0.75rem, 3vw, 1.25rem)',
-                    minHeight: 'clamp(120px, 20vh, 160px)'
+                    minHeight: 'clamp(80px, 15vh, 120px)'
                   }}>
                     <div className="card-title-wrapper mb-2">
                       <h5 className="card-title text-primary fw-bold mb-1 premium-title" style={{
@@ -712,7 +713,7 @@ const getFullUrl = (url) => {
                     <h6 className="card-subtitle text-secondary mb-2 premium-subtitle" style={{fontSize: '0.9rem', fontWeight: '500', color: '#64748b'}}>{order.Title && order.Name ? order.Title : ''}</h6>
                     <div className="description-box mb-2">
                       <p className="card-text text-muted mb-0 premium-description" style={{minHeight: '32px', fontSize: '0.95rem', lineHeight: '1.5', color: '#475569'}}>
-                        <span className="description-label"></span> <span className="description-text">{order.Description}</span>
+                        <span className="description-label"></span> <span className="description-text">{order.Description ? order.Description.length > 150 ? order.Description.substring(0, 150) + '...' : order.Description : ''}</span>
                       </p>
                     </div>
                     <div className="date-section d-flex align-items-center justify-content-end">
@@ -807,7 +808,7 @@ const getFullUrl = (url) => {
                       <i className="bi bi-card-text text-primary"></i>
                     </div>
                     <strong className="description-header">Description:</strong> 
-                    <span className="description-content">{selectedOrder.Description}</span>
+                    <span className="description-content">{selectedOrder.Description ? selectedOrder.Description.length > 200 ? selectedOrder.Description.substring(0, 200) + '...' : selectedOrder.Description : ''}</span>
                   </div>
                   <div className="mb-2 text-end premium-date-section" style={{fontSize:'1.1rem', color:'#2563eb', fontWeight: '600'}}>
                     <i className="bi bi-calendar-check me-2 text-success"></i>
@@ -837,8 +838,12 @@ const getFullUrl = (url) => {
           <div className="footer-col d-flex flex-column align-items-center" style={{flex: '1 1 0', minWidth: 200, padding: '0.5rem'}}>
             <h6 className="fw-bold text-warning mb-2" style={{fontSize: '0.95rem'}}>Certified & Trusted</h6>
             <div className="d-flex gap-4 align-items-center justify-content-center mb-2" style={{flexWrap: 'wrap'}}>
-              <img src={certificate1} alt="Government" style={{maxHeight: 64, maxWidth: 120, objectFit: 'cover', borderRadius: 8}} />
-              <img src={certificate2} alt="Award" style={{maxHeight: 64, maxWidth: 120, objectFit: 'cover', borderRadius: 8}} />
+              <div className="certificate-frame">
+                <img src={certificate1} alt="Government" style={{maxHeight: 64, maxWidth: 120, objectFit: 'cover', borderRadius: 8}} />
+              </div>
+              <div className="certificate-frame">
+                <img src={certificate2} alt="Award" style={{maxHeight: 64, maxWidth: 120, objectFit: 'cover', borderRadius: 8}} />
+              </div>
             </div>
             <span className="badge text-white" style={{background: 'linear-gradient(45deg, #f59e0b, #d97706)'}}>🏆 28+ Years Experience</span>
           </div>
@@ -853,8 +858,8 @@ const getFullUrl = (url) => {
 
         <div style={{borderTop: '1px solid rgba(255,255,255,0.04)'}} />
         <div className="container d-flex flex-column flex-md-row justify-content-between align-items-center" style={{width: '100%', maxWidth: '100%', padding: '0.75rem 1.25rem'}}>
-          <div className="text-muted" style={{fontSize: '0.85rem'}}>&copy; {new Date().getFullYear()} <strong className="text-primary">Lalith Electricals</strong>. All rights reserved.</div>
-          <div className="text-muted" style={{fontSize: '0.85rem'}}> <i className="bi bi-shield-check me-1 text-success"></i> Trusted • Professional • Reliable</div>
+          <div className="text-white" style={{fontSize: '0.85rem'}}>&copy; {new Date().getFullYear()} <strong className="text-primary">Lalith Electricals</strong>. All rights reserved.</div>
+          <div className="text-white" style={{fontSize: '0.85rem'}}> <i className="bi bi-shield-check me-1 text-success"></i> Trusted • Professional • Reliable</div>
         </div>
 
         {/* Small CSS overrides to keep footer flexible and avoid overflow */}
@@ -1767,16 +1772,16 @@ const getFullUrl = (url) => {
           .col-6.col-md-6 {
             display: flex;
             flex-direction: column;
-            padding-left: 0.5rem !important;
-            padding-right: 0.5rem !important;
-            margin-bottom: 0.5rem !important;
+            padding-left: 1.5rem !important;
+            padding-right: 1.5rem !important;
+            margin-bottom: 1.5rem !important;
           }
           .card.h-100 {
             height: 100% !important;
-            min-height: 180px;
+            min-height: 140px;
             display: flex;
             flex-direction: column;
-            transform: scale(0.85);
+            transform: scale(1.1);
           }
           .card-body {
             flex-grow: 1;
@@ -1786,7 +1791,7 @@ const getFullUrl = (url) => {
             padding: 0.5rem !important;
           }
           .card.h-100 .position-relative {
-            height: 120px !important;
+            height: 90px !important;
           }
           .card-title {
             font-size: 0.8rem !important;
@@ -1817,8 +1822,11 @@ const getFullUrl = (url) => {
             margin-bottom: 0.2rem !important;
             line-height: 1.2 !important;
           }
-          footer .certificate-frame img {
-            max-height: 60px !important;
+          footer .certificate-frame {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            max-width: 100% !important;
           }
           footer .badge {
             font-size: 0.7rem !important;
@@ -1832,7 +1840,10 @@ const getFullUrl = (url) => {
             padding: 0 0.2rem !important;
           }
           footer .d-flex.gap-4 {
-            gap: 0.5rem !important;
+            gap: 0.8rem !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            align-items: center !important;
           }
           footer .certificate-badge {
             width: 16px !important;
@@ -1882,6 +1893,8 @@ const getFullUrl = (url) => {
             order: 2 !important;
             align-items: center !important;
             text-align: center !important;
+            max-width: 100% !important;
+            overflow: hidden !important;
           }
           footer .col-12.col-md-4.order-3 {
             order: 3 !important;
@@ -1905,10 +1918,15 @@ const getFullUrl = (url) => {
             line-height: 1 !important;
           }
           footer .certificate-frame img {
-            max-height: 40px !important;
+            max-height: 60px !important;
+            max-width: 100% !important;
+            object-fit: contain !important;
           }
           footer .d-flex.gap-2, footer .d-flex.gap-3, footer .d-flex.gap-4 {
-            gap: 0.1rem !important;
+            gap: 0.6rem !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            align-items: center !important;
           }
           footer .badge {
             font-size: 0.5rem !important;
@@ -1952,10 +1970,15 @@ const getFullUrl = (url) => {
             margin-bottom: 0.1rem !important;
           }
           footer .certificate-frame img {
-            max-height: 45px !important;
+            max-height: 70px !important;
+            max-width: 100% !important;
+            object-fit: contain !important;
           }
           footer .d-flex.gap-4 {
-            gap: 0.3rem !important;
+            gap: 0.5rem !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            align-items: center !important;
           }
           footer .badge {
             font-size: 0.6rem !important;
