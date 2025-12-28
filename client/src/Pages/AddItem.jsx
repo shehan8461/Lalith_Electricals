@@ -298,7 +298,7 @@ const handleFileUpload = async (file, field) => {
     <>
       <style>{`
         .page-offset { padding-top: 320px; }
-        @media (max-width: 768px) { .page-offset { padding-top: 250px !important; } }
+        @media (max-width: 768px) { .page-offset { padding-top: 25px !important; } }
       `}</style>
   <div className="container page-offset" style={pageOffset ? { paddingTop: pageOffset } : {}}>
       <div className="card shadow-lg">

@@ -4,14 +4,21 @@ import About from './Pages/About';
 import Signin from './Pages/Signin';
 import SignUp from './Pages/SignUp';
 import Profile from './Pages/Profile';
-import Header from './components/header';
+
 import PrivateRoutes from './components/PrivateRoutes';
 import AddItem from './Pages/AddItem';
 import ItemProfile from './Pages/ItemProfile';
 
-import AllDetails from './Pages/AllDetails';
+
 import UpdateItem from './Pages/UpdateItem';
 import OnePetShow from './Pages/OnePetShow'
+
+import AllDetailsModern from './Pages/AllDetailsModern';
+
+import Header from './components/header';
+import AllDetailsModernNew from './Pages/AllDetailsModernNew';
+import HeaderModern from './components/HeaderModern';
+
 
 
 
@@ -25,9 +32,9 @@ function AppContent() {
 
   return (
     <>
-      {showHeader && <Header />}
+      {showHeader && <HeaderModern/>}
       <Routes>
-        <Route path="/" element={<AllDetails/>}></Route>
+        <Route path="/" element={<AllDetailsModernNew/>}></Route>
         <Route path="/about" element={<About/>}></Route>
         <Route path="/sign-in" element={<Signin/>}></Route>
         <Route path="/additem" element={<AddItem/>}></Route>

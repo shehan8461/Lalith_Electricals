@@ -2,6 +2,7 @@ import  { useState } from 'react'
 import {Link,useNavigate} from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { signInFailure, signInStart, signInSuccess } from '../redux/User/userSlice';
+import { FaArrowLeft } from 'react-icons/fa';
 
 
 export default function SignIn() {
@@ -11,6 +12,10 @@ export default function SignIn() {
   const dispatch=useDispatch();
   const handleChange=(e)=>{
     setFormdata({...formdata,[e.target.id]:e.target.value})
+  }
+
+  const handleBack = () => {
+    navigate('/');
   }
 
 
@@ -34,7 +39,7 @@ export default function SignIn() {
         return;
        }
        dispatch(signInSuccess(data))
-    navigate('/')
+       navigate('/', { replace: true })
     }catch(error){
      dispatch(signInFailure(error))
     }
@@ -43,7 +48,15 @@ export default function SignIn() {
 
 
   return (
-    <div className='p-3 max-w-lg mx-auto'><h1 className='text-3xl text-center font-semibold my-7'>SignIn</h1>
+    <div className='p-3 max-w-lg mx-auto'>
+      <button 
+        onClick={handleBack}
+        type="button"
+        className='flex items-center gap-2 text-slate-700 hover:text-slate-900 mb-4 mt-7 cursor-pointer bg-transparent border-none'
+      >
+        <FaArrowLeft /> Back
+      </button>
+      <h1 className='text-3xl text-center font-semibold my-7'>SignIn</h1>
      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
 
       

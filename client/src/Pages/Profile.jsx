@@ -113,7 +113,7 @@ export default function Profile() {
     }
   }
   return (
-<div className="container mt-5 mb-5" style={{ paddingTop: '250px' }}>
+<div className="container mt-5 mb-5" style={{ paddingTop: '25px' }}>
   <div className="row justify-content-center">
     <div className="col-md-8">
       <div className="card shadow p-2">

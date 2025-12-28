@@ -48,7 +48,7 @@ export default function ItemProfile() {
   };
 
   return (
-    <div className="item-profile-bg min-vh-100 py-5" style={{ marginTop: '220px' }}>
+    <div className="item-profile-bg min-vh-100 py-5" style={{ marginTop: '22px' }}>
       <div className="container">
         <h2 className="mb-4 text-center fw-bold display-5 text-primary">My Items</h2>
         {orders.length > 0 ? (
