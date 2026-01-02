@@ -1390,22 +1390,33 @@ export default function HeaderModern() {
           }
 
           .brand-showcase {
-            margin: 20px 10px !important;
+            margin: 20px 0 !important;
             padding: 20px 0;
+            border-radius: 0;
           }
 
           .showcase-title {
             font-size: 1.4rem;
+            padding: 0 15px;
+          }
+
+          .brand-images-wrapper {
+            padding: 20px 0;
           }
 
           .brand-images-wrapper::before,
           .brand-images-wrapper::after {
-            width: 50px;
+            width: 30px;
+          }
+
+          .brand-images-track {
+            gap: 20px;
+            padding-left: 15px;
           }
 
           .brand-item {
-            min-width: 120px;
-            height: 120px;
+            min-width: 140px;
+            height: 140px;
           }
         }
 
@@ -1434,12 +1445,16 @@ export default function HeaderModern() {
 
           .brand-images-wrapper::before,
           .brand-images-wrapper::after {
-            width: 30px;
+            width: 20px;
+          }
+
+          .brand-images-track {
+            gap: 15px;
           }
 
           .brand-item {
-            min-width: 100px;
-            height: 100px;
+            min-width: 130px;
+            height: 130px;
           }
         }
       `}</style>
@@ -1630,7 +1645,7 @@ export default function HeaderModern() {
         </div>
 
         {/* Brand Showcase Section */}
-        <div className="brand-showcase" style={{maxWidth: '1400px', margin: '0 auto', marginLeft: '20px', marginRight: '20px'}}>
+        <div className="brand-showcase" style={{maxWidth: '1400px', margin: '0 auto'}}>
           <h3 className="showcase-title">Our Premium Electrical Equipment & Brands</h3>
           <div className="brand-images-wrapper">
             <div className="brand-images-track">
