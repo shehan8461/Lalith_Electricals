@@ -38,7 +38,7 @@ function AppContent() {
         <Route path="/about" element={<About/>}></Route>
         <Route path="/sign-in" element={<Signin/>}></Route>
         <Route path="/additem" element={<AddItem/>}></Route>
-        <Route path="/sign-up" element={<SignUp/>}></Route>
+        {/* <Route path="/sign-up" element={<SignUp/>}></Route> */}
        
         <Route path="/onepet/:id" element={<OnePetShow/>}></Route>
      
