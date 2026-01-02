@@ -1397,26 +1397,28 @@ export default function HeaderModern() {
 
           .showcase-title {
             font-size: 1.4rem;
-            padding: 0 15px;
+            padding: 0 20px;
+            margin-bottom: 20px;
           }
 
           .brand-images-wrapper {
             padding: 20px 0;
+            overflow: visible;
           }
 
           .brand-images-wrapper::before,
           .brand-images-wrapper::after {
-            width: 30px;
+            display: none;
           }
 
           .brand-images-track {
             gap: 20px;
-            padding-left: 15px;
+            padding: 0 20px;
           }
 
           .brand-item {
-            min-width: 140px;
-            height: 140px;
+            min-width: 150px;
+            height: 150px;
           }
         }
 
@@ -1445,16 +1447,17 @@ export default function HeaderModern() {
 
           .brand-images-wrapper::before,
           .brand-images-wrapper::after {
-            width: 20px;
+            display: none;
           }
 
           .brand-images-track {
             gap: 15px;
+            padding: 0 15px;
           }
 
           .brand-item {
-            min-width: 130px;
-            height: 130px;
+            min-width: 140px;
+            height: 140px;
           }
         }
       `}</style>
