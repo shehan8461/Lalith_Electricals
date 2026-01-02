@@ -16,7 +16,9 @@ import {
   FaClock,
   FaWhatsapp,
   FaInstagram,
-  FaBolt
+  FaBolt,
+  FaPlus,
+  FaSignOutAlt
 } from 'react-icons/fa';
 import logo from './images/BackgroundImages/logo1.png';
 import ownerImg from './images/owner.jpeg';
@@ -49,7 +51,9 @@ export default function HeaderModern() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const searchTimeoutRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   // Handle scroll effect
   useEffect(() => {
@@ -110,6 +114,17 @@ export default function HeaderModern() {
         clearTimeout(searchTimeoutRef.current);
       }
     };
+  }, []);
+
+  // Handle click outside dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setUserDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
@@ -686,6 +701,67 @@ export default function HeaderModern() {
           image-rendering: crisp-edges;
           image-rendering: high-quality;
           background: var(--white);
+        }
+
+        /* User Dropdown */
+        .user-dropdown-container {
+          position: relative;
+        }
+
+        .user-dropdown-menu {
+          position: absolute;
+          top: calc(100% + 10px);
+          right: 0;
+          background: var(--white);
+          border-radius: 12px;
+          box-shadow: var(--shadow-lg);
+          min-width: 200px;
+          overflow: hidden;
+          z-index: 1000;
+          animation: dropdownSlide 0.3s ease-out;
+        }
+
+        @keyframes dropdownSlide {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .dropdown-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 14px 18px;
+          color: var(--text-dark);
+          text-decoration: none;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          border: none;
+          background: none;
+          width: 100%;
+          text-align: left;
+          font-family: 'Raleway', sans-serif;
+          font-weight: 500;
+          font-size: 14px;
+        }
+
+        .dropdown-item:hover {
+          background: var(--light-bg);
+          color: var(--highlight-color);
+        }
+
+        .dropdown-item.logout {
+          color: var(--highlight-color);
+          border-top: 1px solid var(--light-bg);
+        }
+
+        .dropdown-item.logout:hover {
+          background: rgba(233, 69, 96, 0.1);
         }
 
         /* Mobile Menu Toggle */
@@ -1466,14 +1542,50 @@ export default function HeaderModern() {
             </a>
             
             {currentUser ? (
-              <button className="user-menu-btn" onClick={() => navigate('/profile')}>
-                {currentUser.profilePicture ? (
-                  <img src={currentUser.profilePicture} alt="Profile" className="user-avatar" />
-                ) : (
-                  <FaUserCircle size={20} />
+              <div className="user-dropdown-container" ref={dropdownRef}>
+                <button 
+                  className="user-menu-btn" 
+                  onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                >
+                  {currentUser.profilePicture ? (
+                    <img src={currentUser.profilePicture} alt="Profile" className="user-avatar" />
+                  ) : (
+                    <FaUserCircle size={20} />
+                  )}
+                  <span>{currentUser.username}</span>
+                </button>
+                
+                {userDropdownOpen && (
+                  <div className="user-dropdown-menu">
+                    <Link 
+                      to="/additem" 
+                      className="dropdown-item"
+                      onClick={() => setUserDropdownOpen(false)}
+                    >
+                      <FaPlus size={16} />
+                      Add Orders
+                    </Link>
+                    <Link 
+                      to="/profile" 
+                      className="dropdown-item"
+                      onClick={() => setUserDropdownOpen(false)}
+                    >
+                      <FaUserCircle size={16} />
+                      Profile
+                    </Link>
+                    <button 
+                      className="dropdown-item logout"
+                      onClick={() => {
+                        handleSignOut();
+                        setUserDropdownOpen(false);
+                      }}
+                    >
+                      <FaSignOutAlt size={16} />
+                      Logout
+                    </button>
+                  </div>
                 )}
-                <span>{currentUser.username}</span>
-              </button>
+              </div>
             ) : (
               <Link to="/profile" className="action-btn btn-secondary-modern">
                 <FaUserCircle size={16} />
@@ -1602,12 +1714,16 @@ export default function HeaderModern() {
           
           {currentUser ? (
             <>
+              <Link to="/additem" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+                <FaPlus size={18} />
+                Add Orders
+              </Link>
               <Link to="/profile" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
                 <FaUserCircle size={18} />
                 Profile
               </Link>
               <button onClick={() => { handleSignOut(); setMobileMenuOpen(false); }} className="mobile-nav-link" style={{width: '100%', textAlign: 'left', background: 'none', border: 'none', color: 'var(--highlight-color)'}}>
-                <FaTimes size={18} />
+                <FaSignOutAlt size={18} />
                 Logout
               </button>
             </>
