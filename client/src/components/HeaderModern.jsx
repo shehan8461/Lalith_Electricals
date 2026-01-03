@@ -1169,11 +1169,14 @@ export default function HeaderModern() {
           height: 100%;
           object-fit: cover;
           border-radius: 8px;
-          image-rendering: -moz-crisp-edges;
-          image-rendering: -o-crisp-edges;
-          image-rendering: pixelated;
+          image-rendering: -webkit-optimize-contrast;
+          image-rendering: crisp-edges;
+          image-rendering: high-quality;
           transition: transform 0.3s ease;
           box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+          -webkit-backface-visibility: hidden;
+          -moz-backface-visibility: hidden;
+          backface-visibility: hidden;
         }
 
         .brand-item:hover .brand-img {
