@@ -1147,7 +1147,7 @@ export default function HeaderModern() {
         .brand-item {
           background: var(--white);
           border-radius: 12px;
-          padding: 5px;
+          padding: 10px;
           box-shadow: var(--shadow-sm);
           transition: all 0.3s ease;
           display: flex;
@@ -1157,6 +1157,7 @@ export default function HeaderModern() {
           min-width: 150px;
           height: 150px;
           flex-shrink: 0;
+          position: relative;
         }
 
         .brand-item:hover {
@@ -1165,18 +1166,19 @@ export default function HeaderModern() {
         }
 
         .brand-img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
+          max-width: 100%;
+          max-height: 100%;
+          width: auto;
+          height: auto;
+          object-fit: contain;
           border-radius: 8px;
-          image-rendering: -webkit-optimize-contrast;
-          image-rendering: crisp-edges;
-          image-rendering: high-quality;
           transition: transform 0.3s ease;
           box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+          -webkit-transform: translateZ(0);
+          transform: translateZ(0);
           -webkit-backface-visibility: hidden;
-          -moz-backface-visibility: hidden;
           backface-visibility: hidden;
+          will-change: transform;
         }
 
         .brand-item:hover .brand-img {
